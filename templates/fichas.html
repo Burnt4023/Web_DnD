@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="static/css/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <title>Fichas</title>
+</head>
+<body>
+    <header class="header">
+        <img src="static/img/logo.png" alt="Logo" class="logo">
+        <div>
+            <h1>Bienvenido, {{ username }}!</h1>
+        </div>
+        <button class="btn btn-primary" id="uploadBtn">Subir</button>
+    </header>
+    <div class="container mt-5">
+        <div class="row">
+            <input type="file" id="uploadInput" accept=".pdf" style="display: none;">
+            {% for pdf in pdfs %}
+                <div class="col-md-4 mb-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                {% if pdf[2] == username %}
+                                    <span class="text-success">{{ pdf[1] }}</span>  
+                                {% else %}
+                                    <span>{{ pdf[1] }}</span>
+                                {% endif %}
+                            </h5>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <a class="btn btn-primary" href="/pdf/{{ pdf[1] }}">Ver PDF</a>
+                                
+                                <!-- Botón de borrar si eres el dueño o admin -->
+                                {% if pdf[2] == username or role == 'admin' %}
+                                    <form action="/delete_pdf/{{ pdf[0] }}" method="POST" style="display:inline;">
+                                        <button type="submit" class="btn btn-danger">Borrar PDF</button>
+                                    </form>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <script src="static/js/modal.js"></script>
+    <script>
+    const uploadBtn = document.getElementById('uploadBtn');
+    const uploadInput = document.getElementById('uploadInput');
+    uploadBtn.addEventListener('click', () => {
+        uploadInput.click(); // Trigger the file input click
+    });
+    uploadInput.addEventListener('change', (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const formData = new FormData();
+            formData.append('pdf_file', file);
+            fetch('/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('PDF uploaded successfully!');
+                    // You might want to refresh the page or update the PDF list
+                } else {
+                    response.json().then(data => {
+                        alert(data.error);
+                    });
+                }
+            });
+        }
+    });
+    </script>
+</body>
+</html>
