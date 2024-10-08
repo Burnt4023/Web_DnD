@@ -7,9 +7,19 @@
     <title>B&B PDF Manager</title>
 </head>
 <body>
+    {% if username %}
+    <script>
+        // Si hay username, redirige a la página /principal
+        window.location.href = "/principal.html";
+    </script>
+    {% endif %}
     <header class="header">
         <img src="static/img/logo.png" alt="Logo" class="logo">
+        {% if username %}
         <h1>Bienvenido, {{ username }}!</h1>
+        {% else %}
+        <h1>Bienvenido!</h1>
+        {%endif%}
         <div>
             <button class="login-button" id="loginBtn">Login</button>
             <button class="register-button" id="registerBtn">Registrarse</button>

@@ -4,6 +4,8 @@ import os
 from database import get_db, init_db, close_connection
 import bcrypt
 from flask_session import Session
+
+
 app = Flask(__name__)
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
@@ -60,22 +62,22 @@ def register():
 # Redirect to Login Page (If not authenticated)
 @app.before_request
 def require_login():
-    if 'user_id' not in session and request.endpoint in ['index', 'principal', 'fichas', 'mapas', 'wiki']:
+    if 'user_id' not in session and request.endpoint in ['principal', 'fichas', 'mapas', 'wiki']:
         return redirect('/login')
 # Serve static files
 @app.route('/')
 def index():
     if 'user_id' in session:
-        with app.app_context():
-            db = get_db()
-            cursor = db.cursor()
-            cursor.execute("SELECT username FROM users WHERE id = ?", (session['user_id'],))
-            user = cursor.fetchone()
-            username = user[0] if user else 'User'
-            print(f"Username: {username}")  # Debugging line
-        return render_template('index.html', username=username)
+        db = get_db()
+        cursor = db.cursor()
+        cursor.execute("SELECT username FROM users WHERE id = ?", (session['user_id'],))
+        user = cursor.fetchone()
+        username = user[0] if user else 'User'
+        
     else:
-        return redirect('/login')
+        username = None
+    return render_template('index.html', username=username)
+
 
 
 @app.route('/principal.html')
@@ -109,12 +111,6 @@ def fichas():
     else:
         return jsonify({'error': 'Not authenticated'}), 401
     
-    
-
-    if 'user_id' in session:
-        return render_template('wiki.html')
-    else:
-        return jsonify({'error': 'Not authenticated'}), 401
 # Upload PDF Route
 @app.route('/upload', methods=['POST'])
 def upload_pdf():
@@ -205,6 +201,12 @@ def delete_pdf(pdf_id):
                 return jsonify({'error': 'PDF not found'}), 404
     else:
         return jsonify({'error': 'Not authenticated'}), 401
+    
+   
+@app.route('/logout', methods=['GET'])
+def logout_view():
+    session.pop('user_id', None)  # Elimina el user_id de la sesión
+    return redirect('/')
     
     
 if __name__ == '__main__':
