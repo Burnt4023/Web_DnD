@@ -28,6 +28,13 @@ def init_db():
                 role TEXT NOT NULL
             )
         ''')
+        db.execute('''
+            CREATE TABLE IF NOT EXISTS maps (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                filename TEXT NOT NULL,
+                owner TEXT NOT NULL
+            )
+        ''')
 
 def close_connection(exception):
     db = getattr(g, '_database', None)

@@ -4,48 +4,76 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="static/css/style.css">
-    <title>B&B PDF Manager</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <title>Fichas</title>
 </head>
 <body>
     <header class="header">
         <img src="static/img/logo.png" alt="Logo" class="logo">
         <div>
-            <button class="login-button" id="loginBtn">Login</button>
-            <button class="register-button" id="registerBtn">Registrarse</button>
+            <h1>Bienvenido, {{ username }}!</h1>
         </div>
+        <button class="btn btn-primary" id="uploadBtn">Subir Mapa</button>
     </header>
-    <!-- Modal para el login -->
-    <div id="loginModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>Login</h2>
-            <form id="loginForm">
-                <label for="username">Username</label>
-                <input type="text" id="username" name="username" required>
-                <br><br>
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" required>
-                <br><br>
-                <button type="submit">Login</button>
-            </form>
-        </div>
-    </div>
-    <!-- Modal para el registro -->
-    <div id="registerModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>Registrarse</h2>
-            <form id="registerForm">
-                <label for="new_username">Username</label>
-                <input type="text" id="new_username" name="new_username" required>
-                <br><br>
-                <label for="new_password">Password</label>
-                <input type="password" id="new_password" name="new_password" required>
-                <br><br>
-                <button type="submit">Registrarse</button>
-            </form>
+    <div class="container mt-5">
+        <div class="row">
+            <input type="file" id="uploadInput" accept=".png, .jpg, .jpeg" style="display: none;">
+            {% for map in maps %}
+                <div class="col-md-4 mb-3">
+                    <div class="card">
+                        <img class="card-img-top" src="static/img/maps/{{ map[1] }}" alt="{{ map[1] }}" style="height: 200px; object-fit: cover;">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                {% if map[2] == username %}
+                                    <span class="text-success">{{ map[1] }}</span>
+                                {% else %}
+                                    <span>{{ map[1] }}</span>
+                                {% endif %}
+                            </h5>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <a class="btn btn-primary" href="map_view.html?map={{ map[1] }}">Ver Mapa</a>
+                                
+                                <!-- Botón de borrar si eres el dueño o admin -->
+                                {% if map[2] == username or role == 'admin' %}
+                                    <form action="/delete_map/{{ map[0] }}" method="POST" style="display:inline;">
+                                        <button type="submit" class="btn btn-danger">Borrar Mapa</button>
+                                    </form>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
         </div>
     </div>
     <script src="static/js/modal.js"></script>
+    <script>
+    const uploadBtn = document.getElementById('uploadBtn');
+    const uploadInput = document.getElementById('uploadInput');
+    uploadBtn.addEventListener('click', () => {
+        uploadInput.click(); // Trigger the file input click
+    });
+    uploadInput.addEventListener('change', (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const formData = new FormData();
+            formData.append('map_file', file);
+            fetch('/upload_map', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('Map uploaded successfully!');
+                    location.reload(); // Refresh the page to see the new map
+                } else {
+                    response.json().then(data => {
+                        alert(data.error);
+                    });
+                }
+            });
+        }
+    });
+    </script>
 </body>
 </html>

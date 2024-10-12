@@ -12,9 +12,13 @@ app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 app.config['SECRET_KEY'] = 'your_secret_key'  # Replace with a strong secret key
 socketio = SocketIO(app)
+
+
 # Database initialization
 with app.app_context():
     init_db()
+    
+
 @app.teardown_appcontext
 def teardown_db(exception):
     close_connection(exception)
@@ -59,6 +63,8 @@ def register():
     cursor.execute("INSERT INTO users (username, password, role) VALUES (?, ?, 'user')", (username, password_hash))
     db.commit()
     return jsonify({'message': 'User registered successfully'}), 201
+
+
 # Redirect to Login Page (If not authenticated)
 @app.before_request
 def require_login():
@@ -110,7 +116,68 @@ def fichas():
         return render_template('fichas.html', pdfs=pdfs, username=username, role=role)  # Pass pdfs to the template
     else:
         return jsonify({'error': 'Not authenticated'}), 401
+
+@app.route('/mapas.html')
+def mapas():
+    if 'user_id' in session:
+        with app.app_context():
+            db = get_db()
+            cursor = db.cursor()
+            cursor.execute("SELECT * FROM maps")
+            maps = cursor.fetchall() 
+            cursor.execute("SELECT username, role FROM users WHERE id = ?", (session['user_id'],))
+            user = cursor.fetchone()
+            username = user[0] if user else 'User'
+            role = user[1] if user else "usuario"
+        return render_template('mapas.html', maps=maps, username=username, role=role)  # Pass pdfs to the template
+    else:
+        return jsonify({'error': 'Not authenticated'}), 401
+
+@app.route('/map_view.html')
+def map_view():
+    if 'user_id' in session:
+        map_name = request.args.get('map')  # Obtener el nombre del mapa de los parámetros de la URL
+        
+        if not map_name:
+            return jsonify({'error': 'Map name is required'}), 400
+        
+        # Aquí podrías verificar si el mapa existe en la base de datos si es necesario.
+        
+        return render_template('map_view.html', map_name=map_name)  # Pasar el nombre del mapa a la plantilla
+    else:
+        return jsonify({'error': 'Not authenticated'}), 401
     
+@app.route('/upload_map', methods=['POST'])
+def upload_map():
+    if 'user_id' in session:  # Check if the user is logged in
+        file = request.files['map_file']  # Assuming the file input has the name 'map_file'
+        if file:
+            db = get_db()
+            cursor = db.cursor()
+            cursor.execute("SELECT username FROM users WHERE id = ?", (session['user_id'],))
+            user = cursor.fetchone()
+            username = user[0] if user else 'User'
+            filename = username + "_" + file.filename
+            map_folder = os.path.join('static', 'img', 'maps')  # Ensure the map folder is correct
+            filepath = os.path.join(map_folder, filename)
+            
+            # Make sure the static/img/maps folder exists
+            if not os.path.exists(map_folder):
+                os.makedirs(map_folder)
+                
+            # Save the file
+            file.save(filepath)
+            
+            # Store the file information in the database (including the owner_id)
+            with app.app_context():
+                cursor.execute("INSERT INTO maps (filename, owner) VALUES (?, ?)", (filename, username))
+                db.commit()
+                return jsonify({'message': 'Map uploaded successfully'}), 200
+        else:
+            return jsonify({'error': 'No file uploaded'}), 400
+    else:
+        return jsonify({'error': 'Not authenticated'}), 401
+        
 # Upload PDF Route
 @app.route('/upload', methods=['POST'])
 def upload_pdf():
