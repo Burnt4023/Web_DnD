@@ -206,7 +206,7 @@ def modificar_ficha(nombre_ficha):
             'vida_actual', 'vida_maxima',
             'mana_actual', 'mana_maximo',
             'resistencia_actual', 'resistencia_maxima',
-            'sobrecarga', 'velocidad', 'tiradas_exito', 'tiradas_fallo'
+            'sobrecarga', 'velocidad', 'tiradas_exito', 'tiradas_fallo',
         ]
 
         # Validar que todos los campos obligatorios estén presentes
@@ -223,11 +223,50 @@ def modificar_ficha(nombre_ficha):
         hechizos = request.form.getlist('hechizos[]')
         objetos = request.form.getlist('objetos[]')  # Nueva lista de objetos
         equipo = request.form.getlist('equipo[]')
+        
+        # Definir las claves para las destrezas y estadísticas
+        destrezas_claves = [
+            'mineria', 'herreria', 'costura', 'carpinteria',
+            'arcano', 'supervivencia', 'pesca', 'alquimia',
+            'cocina', 'medicina', 'sigilo', 'arco',
+            'espada', 'bloqueo', 'engano', 'percepcion'
+        ]
+
+        estadisticas_claves = [
+            'fuerza', 'resistencia', 'agilidad', 'poder',
+            'control', 'capacidad', 'carisma', 'inteligencia', 'sabiduria'
+        ]
+
+        # Captura de destrezas
+        destrezas = {clave: request.form.get(clave, 0) for clave in destrezas_claves}
+
+        # Captura de estadísticas
+        estadisticas = {clave: request.form.get(clave, 0) for clave in estadisticas_claves}
+
         # Construir el nuevo contenido
+        # Captura de los valores de dinero enviados por el formulario
+        dinero = request.form.getlist('dinero[]')
+
+        magia = request.form.get('magia')
+        talento = request.form.get('talento')
+        alineamiento = request.form.get('alineamiento')
+        historia = request.form.get('historia')
+        
+        # Asegúrate de que los valores estén en el orden correcto: cobre, plata, oro, platino
+        cobre = int(dinero[0]) if len(dinero) > 0 else 0
+        plata = int(dinero[1]) if len(dinero) > 1 else 0
+        oro = int(dinero[2]) if len(dinero) > 2 else 0
+        platino = int(dinero[3]) if len(dinero) > 3 else 0
+
+        # Agrega el dinero al diccionario final
         nuevo_contenido = {
             "nombre": datos_ficha['nombre_personaje'],
             "nivel": int(datos_ficha['nivel']),
             "clase": datos_ficha['clase'],
+            "magia": magia,
+            "talento": talento,
+            "alineamiento": alineamiento,
+            "historia": historia,  # Agregar historia
             "vida": {
                 "actual": int(datos_ficha['vida_actual']),
                 "maxima": int(datos_ficha['vida_maxima'])
@@ -250,6 +289,9 @@ def modificar_ficha(nombre_ficha):
             "hechizos": hechizos,  # Agregar hechizos
             "objetos": objetos,  # Agregar objetos (armas, armaduras y objetos)
             "equipamiento": equipo,
+            "destrezas": destrezas,  # Agregar destrezas si es necesario
+            "estadisticas": estadisticas,  # Agregar estadísticas si es necesario
+            "dinero": [cobre, plata, oro, platino],  # Usar el array de dinero
             "publica": ficha_publica  # Agregar el valor de "publica" al contenido
         }
 
@@ -275,17 +317,19 @@ def modificar_ficha(nombre_ficha):
     nombres_objetos = lista_armas + lista_armaduras + [objeto['nombre'] for objeto in get_all_objetos()]  # Lista de nombres de todos los objetos
 
     return render_template(
-    'modificar_ficha.html',
-    nombre_ficha=nombre_ficha,
-    contenido=contenido,
-    ficha_publica=contenido.get('publica', False),
-    equipo=contenido.get('equipamiento', []),  # Pasar solo el equipo actual
-    objetos=contenido.get('objetos', []),
-    lista_habilidades=lista_habilidades,
-    lista_hechizos=lista_hechizos,
-    nombres_objetos=nombres_objetos
+        'modificar_ficha.html',
+        nombre_ficha=nombre_ficha,
+        contenido=contenido,
+        ficha_publica=contenido.get('publica', False),
+        equipo=contenido.get('equipamiento', []),  # Pasar solo el equipo actual
+        objetos=contenido.get('objetos', []),
+        lista_habilidades=lista_habilidades,
+        lista_hechizos=lista_hechizos,
+        nombres_objetos=nombres_objetos,
     )
-
+    
+    
+    
 @app.route('/fichas/crear', methods=['POST'])
 def crear_ficha():
     if 'username' not in session:

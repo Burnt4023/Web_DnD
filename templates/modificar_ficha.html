@@ -23,6 +23,21 @@
         <label for="clase">Clase:</label><br>
         <input type="text" id="clase" name="clase" value="{{ contenido['clase'] }}" required><br><br>
 
+
+        
+        <!-- Magia -->
+        <label for="magia">Magia:</label><br>
+        <input type="text" id="magia" name="magia" value="{{ contenido['magia'] }}" required><br><br>
+
+        <!-- Talento -->
+        <label for="talento">Talento:</label><br>
+        <input type="text" id="talento" name="talento" value="{{ contenido['talento'] }}" required><br><br>
+
+            <!-- Alineamiento -->
+        <label for="alineamiento">Alineamiento:</label><br>
+        <input type="text" id="alineamiento" name="alineamiento" value="{{ contenido['alineamiento'] }}" required><br><br>
+
+
         <!-- Vida -->
         <label for="vida_actual">Vida Actual:</label><br>
         <input type="number" id="vida_actual" name="vida_actual" value="{{ contenido['vida']['actual'] }}" required><br>
@@ -40,6 +55,26 @@
         <input type="number" id="resistencia_actual" name="resistencia_actual" value="{{ contenido['resistencia']['actual'] }}" required><br>
         <label for="resistencia_maxima">Resistencia Máxima:</label><br>
         <input type="number" id="resistencia_maxima" name="resistencia_maxima" value="{{ contenido['resistencia']['maxima'] }}" required><br><br>
+
+        <!-- Destrezas -->
+        <h2>Destrezas</h2>
+        <div id="destrezas">
+            {% for destreza, valor in contenido['destrezas'].items() %}
+                <label for="destreza_{{ destreza }}">{{ destreza | capitalize }}:</label>
+                <input type="number" id="destreza_{{ destreza }}" name="destrezas[{{ destreza }}]" value="{{ valor }}" min="0" required><br>
+            {% endfor %}
+        </div><br>
+
+        <h2>Estadísticas</h2>
+        <div id="estadisticas">
+            {% for estadistica, valor in contenido['estadisticas'].items() %}
+                <label for="estadistica_{{ estadistica }}">{{ estadistica | capitalize }}:</label>
+                <input type="number" id="estadistica_{{ estadistica }}" name="estadisticas[{{ estadistica }}]" value="{{ valor }}" min="0" required><br>
+            {% endfor %}
+        </div><br>
+
+        
+
 
         <!-- Sobrecarga -->
         <label for="sobrecarga">Sobrecarga:</label><br>
@@ -142,8 +177,27 @@
             {% endfor %}
         </select>
         <button type="button" onclick="agregarInventario()">Añadir</button><br><br>
-    
         
+        <!-- Dinero -->
+        <h2>Dinero</h2>
+        <div>
+            <label for="dinero_cobre">Cobre:</label>
+            <input type="number" id="dinero_cobre" name="dinero[]" value="{{ contenido['dinero'][0] }}" min="0" required><br>
+
+            <label for="dinero_plata">Plata:</label>
+            <input type="number" id="dinero_plata" name="dinero[]" value="{{ contenido['dinero'][1] }}" min="0" required><br>
+
+            <label for="dinero_oro">Oro:</label>
+            <input type="number" id="dinero_oro" name="dinero[]" value="{{ contenido['dinero'][2] }}" min="0" required><br>
+
+            <label for="dinero_platino">Platino:</label>
+            <input type="number" id="dinero_platino" name="dinero[]" value="{{ contenido['dinero'][3] }}" min="0" required><br><br>
+        </div>
+
+        <!-- Historia -->
+        <label for="historia">Historia:</label><br>
+        <textarea id="historia" name="historia" rows="4" cols="50" required>{{ contenido['historia'] }}</textarea><br><br>
+
         <!-- Botón para hacer pública o privada la ficha -->
         <label for="ficha_publica">¿Hacer la ficha pública?</label>
         <input type="checkbox" id="ficha_publica" name="ficha_publica" {% if ficha_publica %}checked{% endif %}><br><br>

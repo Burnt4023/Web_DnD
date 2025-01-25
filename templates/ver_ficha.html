@@ -22,6 +22,31 @@
         <p><strong>Velocidad:</strong> {{ contenido['velocidad'] }}</p>
         <p><strong>Tiradas:</strong> Éxitos: {{ contenido['tiradas']['exitos'] }}, Fallos: {{ contenido['tiradas']['fallos'] }}</p>
 
+        <!-- Destreza -->
+        <h2>Destrezas</h2>
+        <ul>
+            {% for destreza, valor in contenido['destrezas'].items() %}
+                <li><strong>{{ destreza.capitalize() }}:</strong> {{ valor }}</li>
+            {% endfor %}
+        </ul>
+
+        <!-- Estadísticas -->
+        <h2>Estadísticas</h2>
+        <ul>
+            {% for estadistica, valor in contenido['estadisticas'].items() %}
+                <li><strong>{{ estadistica.capitalize() }}:</strong> {{ valor }}</li>
+            {% endfor %}
+        </ul>
+
+        <!-- Dinero -->
+        <h2>Dinero</h2>
+        <p>
+            <strong>Cobre:</strong> {{ contenido['dinero'][0] }}<br>
+            <strong>Plata:</strong> {{ contenido['dinero'][1] }}<br>
+            <strong>Oro:</strong> {{ contenido['dinero'][2] }}<br>
+            <strong>Platino:</strong> {{ contenido['dinero'][3] }}
+        </p>
+
         <!-- Habilidades -->
         <h2>Habilidades</h2>
         {% if contenido['habilidades'] %}
@@ -170,6 +195,9 @@
     {% else %}
         <p>No hay objetos en el inventario.</p>
     {% endif %}
+    
+    <h2>Historia</h2>
+    <p>{{ contenido['historia'] }}</p>
 
         <br>
         <a href="{{ url_for('fichas') }}">Volver a la lista de fichas</a>

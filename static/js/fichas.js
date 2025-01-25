@@ -25,16 +25,34 @@ async function crearFicha() {
         nombre: nombreFicha,
         nivel: 1,
         clase: 'Sin clase',
+        magia: 'Ninguna',
+        talento: 'Ninguno',
+        alineamiento: 'Neutral',
         vida: { actual: 10, maximo: 10 },
         mana: { actual: 10, maximo: 10 },
         resistencia: { actual: 10, maximo: 10 },
         sobrecarga: 0,
         velocidad: 30,
+        armadura: 10,
+        iniciativa: 0,
+        historia: 'No',
         tiradas: { exito: 0, fallo: 0 },
-        habilidades: [], // Lista vacía de habilidades
+        destrezas: {
+            mineria: 0, herreria: 0, costura: 0, carpinteria: 0,
+            arcano: 0, supervivencia: 0, pesca: 0, alquimia: 0,
+            cocina: 0, medicina: 0, sigilo: 0, arco: 0,
+            espada: 0, bloqueo: 0, engaño: 0, percepcion: 0
+        },
+        estadisticas: {
+            fuerza: 0, resistencia: 0, agilidad: 0,
+            poder: 0, control: 0, capacidad: 0,
+            carisma: 0, inteligencia: 0, sabiduria: 0
+        },
+        habilidades: [],
         hechizos: [],
         objetos: [],
-        equipamiento: []
+        equipamiento: [],
+        dinero: [0, 0, 0, 0] // Formato: [cobre, plata, oro, platino]
     };
 
     // Enviar solicitud AJAX para crear la ficha con contenido inicial
