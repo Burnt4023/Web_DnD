@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bienvenido - Home</title>
+</head>
+<body>
+    <h1>Bienvenido, {{ session['username'] }}!</h1>
+    <p>Esta es la página principal de tu cuenta.</p>
+
+    <h2>Opciones:</h2>
+    <ul>
+        <li><a href="/profile">Ver tu perfil</a></li>
+        <li><a href="/edit_profile">Editar perfil</a></li>
+        <li><a href="/logout">Cerrar sesión</a></li>
+    </ul>
+
+    <h2>Gestión de Fichas</h2>
+    <button onclick="location.href='/fichas'" style="padding: 10px 20px; font-size: 16px;">Ir a Fichas</button>
+
+    <h3>Otras funciones</h3>
+    <p>En esta área puedes añadir más funcionalidades según el progreso de tu aplicación.</p>
+</body>
+</html>

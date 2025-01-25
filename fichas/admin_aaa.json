@@ -1,0 +1,39 @@
+{
+    "nombre": "Joselito",
+    "nivel": 1,
+    "clase": "Sin clase",
+    "vida": {
+        "actual": 10,
+        "maxima": 50
+    },
+    "mana": {
+        "actual": 10,
+        "maximo": 10
+    },
+    "resistencia": {
+        "actual": 10,
+        "maxima": 50
+    },
+    "sobrecarga": 0,
+    "velocidad": 30,
+    "tiradas": {
+        "exitos": 0,
+        "fallos": 0
+    },
+    "habilidades": [
+        "control mental de tablos",
+        "control mental de tablos",
+        "Pasen furras tetonas y culonas",
+        "Pasen furras tetonas y culonas"
+    ],
+    "hechizos": [
+        "Control Mental de Tablos 2"
+    ],
+    "objetos": [
+        "Espada Insana"
+    ],
+    "equipamiento": [
+        "Espada Insana"
+    ],
+    "publica": true
+}

@@ -1,78 +1,72 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="static/css/style.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <title>Fichas</title>
+    <title>Gestión de Fichas</title>
+    <!-- Enlazar el archivo CSS externo -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/fichas.css') }}">
 </head>
 <body>
-    <header class="header">
-        <img src="static/img/logo.png" alt="Logo" class="logo">
-        <div>
-            <h1>Bienvenido, {{ username }}!</h1>
-        </div>
-        <button class="btn btn-primary" id="uploadBtn">Subir</button>
-    </header>
-    <div class="container mt-5">
-        <div class="row">
-            <input type="file" id="uploadInput" accept=".pdf" style="display: none;">
-            {% for pdf in pdfs %}
-                <div class="col-md-4 mb-3">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">
-                                {% if pdf[2] == username %}
-                                    <span class="text-success">{{ pdf[1] }}</span>  
-                                {% else %}
-                                    <span>{{ pdf[1] }}</span>
-                                {% endif %}
-                            </h5>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <a class="btn btn-primary" href="/pdf/{{ pdf[1] }}">Ver PDF</a>
-                                
-                                <!-- Botón de borrar si eres el dueño o admin -->
-                                {% if pdf[2] == username or role == 'admin' %}
-                                    <form action="/delete_pdf/{{ pdf[0] }}" method="POST" style="display:inline;">
-                                        <button type="submit" class="btn btn-danger">Borrar PDF</button>
-                                    </form>
-                                {% endif %}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            {% endfor %}
-        </div>
+    <h1>Gestión de Fichas</h1>
+    <p>Bienvenido, {{ session['username'] }}. Aquí están tus fichas:</p>
+
+    <!-- Listar fichas del usuario -->
+    <h2>Tus Fichas</h2>
+    {% if fichas_usuario %}
+        <ul>
+        {% for ficha in fichas_usuario %}
+            <li>
+                <strong>{{ ficha[1] }}</strong>
+                <button onclick="location.href='{{ url_for('modificar_ficha', nombre_ficha=ficha[1]) }}'">Modificar</button>
+                <button onclick="location.href='{{ url_for('ver_ficha', nombre_ficha=ficha[1], owner_username=session['username']) }}'">Ver</button>
+                
+                <!-- Formulario para borrar ficha -->
+                <form action="{{ url_for('borrar_ficha', nombre_ficha=ficha[1]) }}" method="POST" style="display:inline;">
+                    <input type="hidden" name="_method" value="DELETE"> <!-- Método oculto para borrar -->
+                    <button type="submit">Borrar</button>
+                </form>
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No tienes fichas registradas aún.</p>
+    {% endif %}
+
+    <!-- Listar fichas públicas de otras personas -->
+    <h2>Fichas Públicas de Otros Usuarios</h2>
+    {% if fichas_publicas %}
+        <ul>
+        {% for ficha in fichas_publicas %}
+            <li>
+                <strong>{{ ficha[1] }}</strong> - De {{ ficha[2] }}
+                <button onclick="location.href='{{ url_for('ver_ficha', nombre_ficha=ficha[1], owner_username=ficha[2]) }}'">Ver</button>
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No hay fichas públicas disponibles.</p>
+    {% endif %}
+
+    <!-- Botón para abrir el popup -->
+    <br>
+    <button onclick="abrirPopup()">Crear Ficha</button>
+
+    <!-- Popup para crear fichas -->
+    <div class="popup-overlay"></div>
+    <div class="popup">
+        <h2>Crear Nueva Ficha</h2>
+        <label for="nombreFicha">Nombre de la ficha:</label>
+        <input type="text" id="nombreFicha" name="nombreFicha" required>
+        <br>
+        <button onclick="crearFicha()">Crear</button>
+        <button onclick="cerrarPopup()">Cancelar</button>
     </div>
-    <script src="static/js/modal.js"></script>
-    <script>
-    const uploadBtn = document.getElementById('uploadBtn');
-    const uploadInput = document.getElementById('uploadInput');
-    uploadBtn.addEventListener('click', () => {
-        uploadInput.click(); // Trigger the file input click
-    });
-    uploadInput.addEventListener('change', (event) => {
-        const file = event.target.files[0];
-        if (file) {
-            const formData = new FormData();
-            formData.append('pdf_file', file);
-            fetch('/upload', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => {
-                if (response.ok) {
-                    alert('PDF uploaded successfully!');
-                    // You might want to refresh the page or update the PDF list
-                } else {
-                    response.json().then(data => {
-                        alert(data.error);
-                    });
-                }
-            });
-        }
-    });
-    </script>
+
+    <br><br>
+    <a href="/">Volver al Home</a>
+
+    <!-- Enlazar el archivo JS externo -->
+    <script src="{{ url_for('static', filename='js/fichas.js') }}"></script>
 </body>
 </html>

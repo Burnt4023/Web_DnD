@@ -1,0 +1,164 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f4f9;
+    color: #333;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+}
+
+h1, h2 {
+    color: #3b4a5c;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+h1 {
+    text-align: center;
+    font-size: 2.5rem;
+    color: #1a73e8;
+}
+
+/* Estilo general para los párrafos */
+p {
+    margin: 10px 0;
+    font-size: 1rem;
+}
+
+strong {
+    font-weight: 700;
+}
+
+/* Estilo de los tooltips */
+.tooltip {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.tooltip .tooltip-content {
+    visibility: hidden;
+    opacity: 0;
+    background-color: #333;
+    color: #fff;
+    text-align: left;
+    border-radius: 5px;
+    padding: 15px;
+    position: absolute;
+    z-index: 1;
+    top: 50%;
+    left: 125%;
+    transform: translateY(-50%);
+    white-space: normal;
+    width: 300px;
+    max-width: 90vw;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+    border: 1px solid #ccc;
+    background-color: #2c3e50;
+}
+
+.tooltip:hover .tooltip-content {
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(-50%) scale(1.05); /* Escala suave al aparecer */
+}
+
+/* Triángulo de la punta del tooltip */
+.tooltip-content::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: -10px;
+    margin-top: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent transparent #2c3e50;
+}
+
+/* Icono de tooltip */
+.tooltip-icon {
+    font-size: 18px;
+    color: #1a73e8;
+    margin-right: 5px;
+    cursor: pointer;
+}
+
+.tooltip-icon:hover {
+    color: #0056b3;
+}
+
+/* Estilo de las listas */
+ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+li {
+    background-color: #fff;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+}
+
+li:hover {
+    background-color: #e9ecef;
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Estilo para los contenedores */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Estilo para los botones */
+a {
+    display: inline-block;
+    background-color: #1a73e8;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 5px;
+    text-decoration: none;
+    margin-top: 20px;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+a:hover {
+    background-color: #0056b3;
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+
+    .tooltip .tooltip-content {
+        width: 250px;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 600px) {
+    .tooltip .tooltip-content {
+        width: 230px;
+        font-size: 14px;
+    }
+
+    li {
+        padding: 12px;
+    }
+
+    a {
+        font-size: 0.9rem;
+    }
+}

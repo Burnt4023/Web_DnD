@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modificar Ficha</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/modificar_fichas.css') }}">
+</head>
+<body>
+    <h1>Modificar Ficha</h1>
+    <p>Modificando la ficha: <strong>{{ nombre_ficha }}</strong></p>
+
+    <form action="{{ url_for('modificar_ficha', nombre_ficha=nombre_ficha) }}" method="POST">
+        <!-- Nombre del personaje -->
+        <label for="nombre_personaje">Nombre del personaje:</label><br>
+        <input type="text" id="nombre_personaje" name="nombre_personaje" value="{{ contenido['nombre'] }}" required><br><br>
+
+        <!-- Nivel -->
+        <label for="nivel">Nivel:</label><br>
+        <input type="number" id="nivel" name="nivel" min="1" value="{{ contenido['nivel'] }}" required><br><br>
+
+        <!-- Clase -->
+        <label for="clase">Clase:</label><br>
+        <input type="text" id="clase" name="clase" value="{{ contenido['clase'] }}" required><br><br>
+
+        <!-- Vida -->
+        <label for="vida_actual">Vida Actual:</label><br>
+        <input type="number" id="vida_actual" name="vida_actual" value="{{ contenido['vida']['actual'] }}" required><br>
+        <label for="vida_maxima">Vida Máxima:</label><br>
+        <input type="number" id="vida_maxima" name="vida_maxima" value="{{ contenido['vida']['maxima'] }}" required><br><br>
+
+        <!-- Maná -->
+        <label for="mana_actual">Maná Actual:</label><br>
+        <input type="number" id="mana_actual" name="mana_actual" value="{{ contenido['mana']['actual'] }}" required><br>
+        <label for="mana_maximo">Maná Máximo:</label><br>
+        <input type="number" id="mana_maximo" name="mana_maximo" value="{{ contenido['mana']['maximo'] }}" required><br><br>
+
+        <!-- Resistencia -->
+        <label for="resistencia_actual">Resistencia Actual:</label><br>
+        <input type="number" id="resistencia_actual" name="resistencia_actual" value="{{ contenido['resistencia']['actual'] }}" required><br>
+        <label for="resistencia_maxima">Resistencia Máxima:</label><br>
+        <input type="number" id="resistencia_maxima" name="resistencia_maxima" value="{{ contenido['resistencia']['maxima'] }}" required><br><br>
+
+        <!-- Sobrecarga -->
+        <label for="sobrecarga">Sobrecarga:</label><br>
+        <input type="number" id="sobrecarga" name="sobrecarga" min="0" max="5" value="{{ contenido['sobrecarga'] }}" required><br><br>
+
+        <!-- Velocidad -->
+        <label for="velocidad">Velocidad:</label><br>
+        <input type="number" id="velocidad" name="velocidad" value="{{ contenido['velocidad'] }}" required><br><br>
+
+        <!-- Tiradas de salvación -->
+        <label for="tiradas_exito">Tiradas de Salvación (Éxitos):</label><br>
+        <input type="number" id="tiradas_exito" name="tiradas_exito" value="{{ contenido['tiradas']['exitos'] }}" min="0" max="3" required><br>
+        <label for="tiradas_fallo">Tiradas de Salvación (Fallos):</label><br>
+        <input type="number" id="tiradas_fallo" name="tiradas_fallo" value="{{ contenido['tiradas']['fallos'] }}" min="0" max="3" required><br><br>
+
+        <!-- Habilidades -->
+        <h2>Habilidades</h2>
+        <div id="lista-habilidades">
+            {% for habilidad in contenido['habilidades'] %}
+                <div>
+                    <input type="text" name="habilidades[]" value="{{ habilidad }}" readonly required>
+                    <button type="button" onclick="eliminarHabilidad(this)">Eliminar</button>
+                </div>
+            {% endfor %}
+        </div>
+        <br>
+
+        <!-- Lista desplegable para seleccionar habilidades -->
+        <label for="habilidades-disponibles">Añadir habilidad:</label><br>
+        <select id="habilidades-disponibles">
+            <option value="" disabled selected>Selecciona una habilidad</option>
+            {% for habilidad in lista_habilidades %}
+                <option value="{{ habilidad }}">{{ habilidad }}</option>
+            {% endfor %}
+        </select>
+        <button type="button" onclick="agregarHabilidad()">Añadir</button><br><br>
+
+        <!-- Hechizos -->
+        <h2>Hechizos</h2>
+        <div id="lista-hechizos">
+            {% for hechizo in contenido['hechizos'] %}
+                <div>
+                    <input type="text" name="hechizos[]" value="{{ hechizo }}" readonly required>
+                    <button type="button" onclick="eliminarHechizo(this)">Eliminar</button>
+                </div>
+            {% endfor %}
+        </div>
+        <br>
+
+        <!-- Lista desplegable para seleccionar hechizos -->
+        <label for="hechizos-disponibles">Añadir hechizo:</label><br>
+        <select id="hechizos-disponibles">
+            <option value="" disabled selected>Selecciona un hechizo</option>
+            {% for hechizo in lista_hechizos %}
+                <option value="{{ hechizo }}">{{ hechizo }}</option>
+            {% endfor %}
+        </select>
+        <button type="button" onclick="agregarHechizo()">Añadir</button><br><br>
+
+        <!-- Equipo -->
+        <h2>Equipo</h2>
+        <div id="lista-equipo">
+            {% for item in equipo %}
+                <div>
+                    <input type="text" name="equipo[]" value="{{ item }}" readonly required>
+                    <button type="button" onclick="eliminarEquipo(this)">Eliminar</button>
+                </div>
+            {% endfor %}
+        </div>
+        <br>
+
+        <!-- Lista desplegable para seleccionar equipo -->
+        <label for="equipo-disponible">Añadir al equipo:</label><br>
+        <select id="equipo-disponible">
+            <option value="" disabled selected>Selecciona un objeto</option>
+            {% for objeto in contenido['objetos'] %}
+                <option value="{{ objeto }}">{{ objeto }}</option>
+            {% endfor %}
+        </select>
+        <button type="button" onclick="agregarEquipo()">Añadir</button><br><br>
+    
+
+        <h2>Inventario</h2>
+        <div id="lista-inventario">
+            {% for objeto in contenido['objetos'] %}
+                <div>
+                    <input type="text" name="objetos[]" value="{{ objeto }}" readonly required>
+                    <button type="button" onclick="eliminarInventario(this)">Eliminar</button>
+                </div>
+            {% endfor %}
+        </div>
+        <br>
+        
+        <!-- Lista desplegable para seleccionar objetos del inventario -->
+        <label for="inventario-disponible">Añadir al inventario:</label><br>
+        <select id="inventario-disponible">
+            <option value="" disabled selected>Selecciona un objeto</option>
+            {% for item in nombres_objetos %}
+                <option value="{{ item }}">{{ item }}</option>
+            {% endfor %}
+        </select>
+        <button type="button" onclick="agregarInventario()">Añadir</button><br><br>
+    
+        
+        <!-- Botón para hacer pública o privada la ficha -->
+        <label for="ficha_publica">¿Hacer la ficha pública?</label>
+        <input type="checkbox" id="ficha_publica" name="ficha_publica" {% if ficha_publica %}checked{% endif %}><br><br>
+
+        <button type="submit">Guardar cambios</button>
+
+    </form>
+    <script src="{{ url_for('static', filename='js/modificar_fichas.js') }}"></script>
+</body>
+</html>

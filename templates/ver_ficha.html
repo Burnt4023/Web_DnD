@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ver Ficha</title>
+    <!-- Enlace al archivo CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/ver_fichas.css') }}">
+</head>
+<body>
+    <div class="container">
+        <p><strong>Nombre del personaje:</strong> {{ contenido['nombre'] }}</p>
+        <p><strong>Nivel:</strong> {{ contenido['nivel'] }}</p>
+        <p><strong>Clase:</strong> {{ contenido['clase'] }}</p>
+
+        <!-- Datos adicionales -->
+        <h2>Datos adicionales</h2>
+        <p><strong>Vida:</strong> {{ contenido['vida']['actual'] }} / {{ contenido['vida']['maxima'] }}</p>
+        <p><strong>Mana:</strong> {{ contenido['mana']['actual'] }} / {{ contenido['mana']['maximo'] }}</p>
+        <p><strong>Resistencia:</strong> {{ contenido['resistencia']['actual'] }} / {{ contenido['resistencia']['maxima'] }}</p>
+        <p><strong>Sobre carga:</strong> {{ contenido['sobrecarga'] }}</p>
+        <p><strong>Velocidad:</strong> {{ contenido['velocidad'] }}</p>
+        <p><strong>Tiradas:</strong> Éxitos: {{ contenido['tiradas']['exitos'] }}, Fallos: {{ contenido['tiradas']['fallos'] }}</p>
+
+        <!-- Habilidades -->
+        <h2>Habilidades</h2>
+        {% if contenido['habilidades'] %}
+            <ul>
+                {% for habilidad in contenido['habilidades'] %}
+                    {% if habilidad in habilidades_detalle %}
+                        <li>
+                            <div class="tooltip">
+                                {{ habilidad }}
+                                <div class="tooltip-content">
+                                    <strong>Duración:</strong> {{ habilidades_detalle[habilidad]['duracion'].strip('"') }}<br>
+                                    <strong>Coste de vida:</strong> {{ habilidades_detalle[habilidad]['coste'].split(',')[0].strip('"') }}<br>
+                                    <strong>Coste de mana:</strong> {{ habilidades_detalle[habilidad]['coste'].split(',')[1].strip('"') }}<br>
+                                    <strong>Coste de resistencia:</strong> {{ habilidades_detalle[habilidad]['coste'].split(',')[2].strip('"') }}<br>
+                                    <strong>Rango:</strong> {{ habilidades_detalle[habilidad]['rango'] }}ft<br>
+                                    {% if habilidades_detalle[habilidad]['clase'] %}
+                                        <strong>Clase:</strong> {{ habilidades_detalle[habilidad]['clase'] }}<br>
+                                    {% endif %}
+                                    {% if habilidades_detalle[habilidad]['raza'] %}
+                                        <strong>Raza:</strong> {{ habilidades_detalle[habilidad]['raza'] }}<br>
+                                    {% endif %}
+                                    {% if habilidades_detalle[habilidad]['otro'] %}
+                                        <strong>Otro:</strong> {{ habilidades_detalle[habilidad]['otro'] }}<br>
+                                    {% endif %}
+                                    <strong>Casteo:</strong> {{ habilidades_detalle[habilidad]['casteo'].strip('"') }}<br><br>
+                                    {{ habilidades_detalle[habilidad]['descripcion'].strip('"') }}<br>
+                                </div>
+                            </div>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No hay habilidades registradas.</p>
+        {% endif %}
+
+        <!-- Hechizos -->
+        <h2>Hechizos</h2>
+        {% if contenido['hechizos'] %}
+            <ul>
+                {% for hechizo in contenido['hechizos'] %}
+                    {% if hechizo in hechizos_detalle %}
+                        <li>
+                            <div class="tooltip">
+                                {{ hechizo }}
+                                <div class="tooltip-content">
+                                    <strong>Nivel:</strong> {{ hechizos_detalle[hechizo]['nivel'] }}<br>
+                                    <strong>Magia:</strong> {{ hechizos_detalle[hechizo]['magia'] }}<br>
+                                    <strong>Coste:</strong> {{ hechizos_detalle[hechizo]['coste'] }}<br>
+                                    <strong>Rango:</strong> {{ hechizos_detalle[hechizo]['rango'] }}ft<br>
+                                    <strong>Duración:</strong> {{ hechizos_detalle[hechizo]['duracion'] }}<br>
+                                    <strong>Casteo:</strong> {{ hechizos_detalle[hechizo]['casteo'] }}<br><br>
+                                    {{ hechizos_detalle[hechizo]['descripcion'] }}<br>
+                                </div>
+                            </div>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No hay hechizos registrados.</p>
+        {% endif %}
+
+        <!-- Equipo -->
+        <h2>Equipo</h2>
+        {% if contenido['equipamiento'] %}
+            <ul>
+                {% for item in contenido['equipamiento'] %}
+                    <li>
+                        <div class="tooltip">
+                            {{ item }}
+                            <div class="tooltip-content">
+                                {% for arma in armas_detalle %}
+                                    {% if arma['nombre'] == item %}
+                                        <strong>Daño:</strong> {{ arma['daño'] }}<br>
+                                        <strong>Calidad:</strong> {{ arma['calidad'] }}<br>
+                                        <strong>Tipo:</strong> {{ arma['tipo'] }}<br>
+                                        <strong>Descripción:</strong> {{ arma['descripcion'] }}<br>
+                                    {% endif %}
+                                {% endfor %}
+                                {% for armadura in armaduras_detalle %}
+                                    {% if armadura['nombre'] == item %}
+                                        <strong>Rating:</strong> {{ armadura['rating'] }}<br>
+                                        <strong>Calidad:</strong> {{ armadura['calidad'] }}<br>
+                                        <strong>Tipo:</strong> {{ armadura['tipo'] }}<br>
+                                        <strong>Descripción:</strong> {{ armadura['descripcion'] }}<br>
+                                    {% endif %}
+                                {% endfor %}
+                                {% for objeto in objetos_detalle %}
+                                    {% if objeto['nombre'] == item %}
+                                        <strong>Otros:</strong> {{ objeto['otros'] }}<br>
+                                        <strong>Tipo:</strong> {{ objeto['tipo'] }}<br>
+                                        <strong>Descripción:</strong> {{ objeto['descripcion'] }}<br>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No hay equipo registrado.</p>
+        {% endif %}
+
+        <!-- Inventario -->
+        <h2>Inventario</h2>
+            {% if contenido['objetos'] %}
+        <ul>
+            {% for item in contenido['objetos'] %}
+                <li>
+                    <div class="tooltip">
+                        {{ item }}
+                        <div class="tooltip-content">
+                            {% for objeto in objetos_detalle %}
+                                {% if objeto['nombre'] == item %}
+                                    <strong>{{ objeto['nombre'] }}</strong><br>
+                                    <strong>Otros:</strong> {{ objeto['otros'] }}<br>
+                                    <strong>Descripción:</strong> {{ objeto['descripcion'] }}<br>
+                                {% endif %}
+                            {% endfor %}
+                            
+                            {% for arma in armas_detalle %}
+                                {% if arma['nombre'] == item %}
+                                    <strong>{{ arma['nombre'] }}</strong><br>
+                                    <strong>Daño:</strong> {{ arma['daño'] }}<br>
+                                    <strong>Calidad:</strong> {{ arma['calidad'] }}<br>
+                                    <strong>Tipo:</strong> {{ arma['tipo'] }}<br>
+                                    <strong>Descripción:</strong> {{ arma['descripcion'] }}<br>
+                                {% endif %}
+                            {% endfor %}
+                            
+                            {% for armadura in armaduras_detalle %}
+                                {% if armadura['nombre'] == item %}
+                                    <strong>{{ armadura['nombre'] }}</strong><br>
+                                    <strong>Rating:</strong> {{ armadura['rating'] }}<br>
+                                    <strong>Calidad:</strong> {{ armadura['calidad'] }}<br>
+                                    <strong>Tipo:</strong> {{ armadura['tipo'] }}<br>
+                                    <strong>Descripción:</strong> {{ armadura['descripcion'] }}<br>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No hay objetos en el inventario.</p>
+    {% endif %}
+
+        <br>
+        <a href="{{ url_for('fichas') }}">Volver a la lista de fichas</a>
+    </div>
+
+    <!-- Enlace al archivo JavaScript -->
+    <script src="{{ url_for('static', filename='js/ver_fichas.js') }}"></script>
+</body>
+</html>
