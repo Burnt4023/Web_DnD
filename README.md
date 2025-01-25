@@ -16,7 +16,7 @@ Este proyecto tiene como objetivo crear una página web para gestionar las ficha
 1. Clona este repositorio:
     ```bash
     git clone https://github.com/Burnt4023/Web_DnD.git
-    cd proyecto-dnd
+    cd WEb_DnD
     ```
 
 2. Instala las dependencias necesarias:
