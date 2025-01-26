@@ -117,3 +117,24 @@ function agregarInventario() {
 function eliminarInventario(button) {
     button.parentElement.remove();
 }
+
+function filtrarHabilidades() {
+    const input = document.getElementById("busqueda-habilidad").value.toLowerCase();
+    const select = document.getElementById("habilidades-disponibles");
+    const options = select.getElementsByTagName("option");
+
+    for (let i = 1; i < options.length; i++) { // Saltar la primera opción (placeholder)
+        const habilidad = options[i].textContent.toLowerCase();
+        options[i].style.display = habilidad.includes(input) ? "block" : "none";
+    }
+}
+function filtrarHechizos() {
+    const input = document.getElementById("busqueda-hechizo").value.toLowerCase();
+    const select = document.getElementById("hechizos-disponibles");
+    const options = select.getElementsByTagName("option");
+
+    for (let i = 1; i < options.length; i++) { // Saltar la primera opción (placeholder)
+        const hechizo = options[i].textContent.toLowerCase();
+        options[i].style.display = hechizo.includes(input) ? "block" : "none";
+    }
+}

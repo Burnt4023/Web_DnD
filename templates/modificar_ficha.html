@@ -103,6 +103,10 @@
         <br>
 
         <!-- Lista desplegable para seleccionar habilidades -->
+        <label for="busqueda-habilidad">Buscar habilidad:</label><br>
+        <input type="text" id="busqueda-habilidad" placeholder="Escribe el nombre de la habilidad..." 
+        oninput="filtrarHabilidades()"><br><br>
+
         <label for="habilidades-disponibles">Añadir habilidad:</label><br>
         <select id="habilidades-disponibles">
             <option value="" disabled selected>Selecciona una habilidad</option>
@@ -112,7 +116,6 @@
         </select>
         <button type="button" onclick="agregarHabilidad()">Añadir</button><br><br>
 
-        <!-- Hechizos -->
         <h2>Hechizos</h2>
         <div id="lista-hechizos">
             {% for hechizo in contenido['hechizos'] %}
@@ -123,6 +126,10 @@
             {% endfor %}
         </div>
         <br>
+
+        <!-- Barra de búsqueda para filtrar hechizos -->
+        <label for="busqueda-hechizo">Buscar hechizo:</label><br>
+        <input type="text" id="busqueda-hechizo" placeholder="Escribe el nombre del hechizo..." oninput="filtrarHechizos()"><br><br>
 
         <!-- Lista desplegable para seleccionar hechizos -->
         <label for="hechizos-disponibles">Añadir hechizo:</label><br>
@@ -168,6 +175,10 @@
         </div>
         <br>
         
+        <label for="busqueda-habilidad">Buscar habilidad:</label><br>
+        <input type="text" id="busqueda-habilidad" placeholder="Escribe el nombre del objeto..." 
+        oninput="filtrarHabilidades()"><br><br>
+
         <!-- Lista desplegable para seleccionar objetos del inventario -->
         <label for="inventario-disponible">Añadir al inventario:</label><br>
         <select id="inventario-disponible">

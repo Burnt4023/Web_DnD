@@ -22,7 +22,6 @@ Este proyecto tiene como objetivo crear una página web para gestionar las ficha
 2. Instala las dependencias necesarias:
    ```
     Flask
-    SQlite3
     Bcrypt
    ```
 4. Inicia la aplicación:
@@ -39,6 +38,9 @@ Los usuarios pueden crear nuevas fichas de personajes con los siguientes campos 
 - **Nombre del personaje**
 - **Nivel**
 - **Clase**
+- **Alineamiento**
+- **Talento**
+- **Magia**
 - **Vida, Mana y Resistencia** (Homebrew)
 - **Habilidades**: Lista de habilidades del personaje.
 - **Hechizos**: Lista de hechizos disponibles para el personaje.
