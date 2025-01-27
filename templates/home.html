@@ -4,9 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bienvenido - Home</title>
+    <link rel="stylesheet" href="../static/css/home.css">
+    <link rel="icon" href="../static/images/favicon.png" type="image/png">
 </head>
 <body>
-    <h1>Bienvenido puta, {{ session['username'] }}!</h1>
+    <h1 data-text="Bruleria & Bruleria">Bruleria & Bruleria</h1>
+
+    <h2>Bienvenido, {{ session['username'] }}!</h2>
     <p>Esta es la página principal de tu cuenta.</p>
 
     <h2>Opciones:</h2>
@@ -17,7 +21,9 @@
     </ul>
 
     <h2>Gestión de Fichas</h2>
-    <button onclick="location.href='/fichas'" style="padding: 10px 20px; font-size: 16px;">Ir a Fichas</button>
+    <button onclick="location.href='/fichas'" class="button">
+        <span class="hover-text" data-text="Ir a Fichas">Ir a Fichas</span>
+    </button>
 
     <h3>Otras funciones</h3>
     <p>En esta área puedes añadir más funcionalidades según el progreso de tu aplicación.</p>
