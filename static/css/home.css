@@ -13,6 +13,33 @@ body {
     justify-content: center;
 }
 
+/* Contenedor principal */
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+    background-color: #1c1c1c;
+    color: #fff;
+    max-height: 400px;
+}
+
+/* Columnas */
+.column {
+    background-color: #2e2e2e;
+    padding: 10px;
+    border-radius: 8px;
+    flex: 1;
+    max-width: 45%; /* Ajusta el tamaño máximo para evitar que ocupen demasiado espacio */
+    min-width: 300px; /* Para que sean responsivas en pantallas pequeñas */
+    max-height: 150px;
+}
+
+.column h2, .column h3, .column p, .column ul, .column button {
+    margin-bottom: 20px;
+}
+
 /* Estilo del título con fuego */
 h1 {
     font-size: 6rem;
@@ -157,17 +184,17 @@ button.gradient-border {
     font-weight: 500;
     color: #fff;
     z-index: 2;
-   }
+}
    
-   button.gradient-border::after {
+button.gradient-border::after {
     --m-i: linear-gradient(#000, #000);
     --m-o: content-box, padding-box;
     content: "";
     position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
+    left: -0.2em;
+    top: -0.2em;
+    width: 105%;
+    height: 105%;
     padding: var(--border-width);
     border-radius: var(--border-radius);
     background-image: conic-gradient(
@@ -186,27 +213,25 @@ button.gradient-border {
     mask-composite: exclude;
     -webkit-mask-composite: destination-out;
     filter: hue-rotate(0);
-    animation: rotate-hue linear 500ms infinite;
+    animation: rotate-hue linear 4000ms infinite;
     /*animation-play-state: paused;*/
-   }
+}
    
-   button.gradient-border:hover::after {
+button.gradient-border:hover::after {
     animation-play-state: running;
-   }
+}
    
-   @keyframes rotate-hue {
+@keyframes rotate-hue {
     to {
-     filter: hue-rotate(1turn);
+        filter: hue-rotate(1turn);
     }
-   }
+}
    
-   button.gradient-border,
-   button.gradient-border::after {
+button.gradient-border,
+button.gradient-border::after {
     box-sizing: border-box;
-   }
+}
    
-   button.gradient-border:active {
+button.gradient-border:active {
     --border-width: 5px;
-   }
-   
-   
+}

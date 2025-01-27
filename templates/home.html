@@ -11,21 +11,25 @@
     <h1 data-text="Bruleria & Bruleria">Bruleria & Bruleria</h1>
 
     <h2>Bienvenido, {{ session['username'] }}!</h2>
-    <p>Esta es la página principal de tu cuenta.</p>
-
-    <h2>Opciones:</h2>
-    <ul>
-        <li><a href="/profile">Ver tu perfil</a></li>
-        <li><a href="/edit_profile">Editar perfil</a></li>
-        <li><a href="/logout">Cerrar sesión</a></li>
-    </ul>
-
-    <h2>Gestión de Fichas</h2>
-    <button onclick="location.href='/fichas'" class="gradient-border">
-        <span>Ir a Fichas</span>
-    </button>
-
-    <h3>Otras funciones</h3>
-    <p>En esta área puedes añadir más funcionalidades según el progreso de tu aplicación.</p>
+    
+    <div class="container">
+        <!-- Columna izquierda: Gestión de Fichas -->
+        <div class="column">
+            <h2>Gestión de Fichas</h2>
+            <button onclick="location.href='/fichas'" class="gradient-border">
+                <span>Ir a Fichas</span>
+            </button>
+        </div>
+        
+        <!-- Columna derecha: Opciones de perfil -->
+        <div class="column">
+            <h2>Opciones:</h2>
+            <ul>
+                <li><a href="/profile">Ver tu perfil</a></li>
+                <li><a href="/edit_profile">Editar perfil</a></li>
+                <li><a href="/logout">Cerrar sesión</a></li>
+            </ul>
+        </div>
+    </div>
 </body>
 </html>
