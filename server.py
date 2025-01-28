@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session, flash
+from flask import Flask, render_template, render_template_string, request, redirect, url_for, session, flash
 from usuarios import *
 from fichas import *
 from habilidades import *
@@ -388,8 +388,205 @@ def borrar_ficha(nombre_ficha):
 @app.route('/wiki')
 def wiki():
     if 'username' in session:
-        return render_template('wiki_home.html')
+        return render_template('wiki/wiki_home.html')
     return redirect(url_for('login'))   
+
+
+@app.route('/wiki/objetos')
+def wiki_objetos():
+    if 'username' in session:
+        # Obtener los objetos de la base de datos
+        armas = get_all_armas()  # Esta función devuelve una lista de objetos
+        armaduras = get_all_armaduras()
+        objetos = get_all_objetos()
+        
+        return render_template('wiki/objetos.html', armas=armas, armaduras=armaduras, objetos=objetos)
+    
+    return redirect(url_for('login')) 
+
+@app.route('/wiki/arma/<arma_nombre>')
+def wiki_arma(arma_nombre):
+    # Obtener el arma por su nombre
+    arma = get_arma(arma_nombre)
+
+    if not arma:
+        return f"Arma '{arma_nombre}' no encontrada."
+
+    # Generamos el HTML dinámicamente con los parámetros del arma
+    html_content = f"""
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{arma['nombre']}</title>
+    </head>
+    <body>
+        <h1>{arma['nombre']}</h1>
+        <p><strong>Descripción:</strong> {arma['descripcion']}</p>
+        <p><strong>Daño:</strong> {arma['daño']}</p>
+        <p><strong>Calidad:</strong> {arma['calidad']}</p>
+        <p><strong>Otros detalles:</strong> {arma['otros']}</p>
+        <a href="/wiki">Volver a la lista de armas</a>
+    </body>
+    </html>
+    """
+    
+    return render_template_string(html_content)
+
+
+@app.route('/wiki/armadura/<armadura_nombre>')
+def wiki_armadura(armadura_nombre):
+    # Obtener la armadura por su nombre
+    armadura = get_armadura(armadura_nombre)
+
+    if not armadura:
+        return f"Armadura '{armadura_nombre}' no encontrada."
+    
+    # Generamos el HTML dinámicamente con los parámetros de la armadura
+    html_content = f"""
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{armadura['nombre']}</title>
+    </head>
+    <body>
+        <h1>{armadura['nombre']}</h1>
+        <p><strong>Descripción:</strong> {armadura['descripcion']}</p>
+        <p><strong>Rating:</strong> {armadura['rating']}</p>
+        <p><strong>Calidad:</strong> {armadura['calidad']}</p>
+        <p><strong>Otros detalles:</strong> {armadura['otros']}</p>
+        <a href="/wiki">Volver a la lista de armaduras</a>
+    </body>
+    </html>
+    """
+    
+    return render_template_string(html_content)
+
+
+@app.route('/wiki/objeto/<objeto_nombre>')
+def wiki_objeto(objeto_nombre):
+    # Obtener el objeto por su nombre
+    objeto = get_objeto(objeto_nombre)
+
+    if not objeto:
+        return f"Objeto '{objeto_nombre}' no encontrado."
+
+    # Generamos el HTML dinámicamente con los parámetros del objeto
+    html_content = f"""
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{objeto['nombre']}</title>
+    </head>
+    <body>
+        <h1>{objeto['nombre']}</h1>
+        <p><strong>Descripción:</strong> {objeto['descripcion']}</p>
+        <p><strong>Otros detalles:</strong> {objeto['otros']}</p>
+        <a href="/wiki">Volver a la lista de objetos</a>
+    </body>
+    </html>
+    """
+    
+    return render_template_string(html_content)
+
+@app.route('/wiki/hechizos')
+def wiki_hechizos():
+    if 'username' not in session:
+        flash('No has iniciado sesión.', 'error')  # Mensaje de error
+        return redirect(url_for('login'))  # Redirigir al login
+    hechizos = get_all_hechizos_por_clase()
+    return render_template('wiki/hechizos.html', hechizos = hechizos)
+
+
+@app.route('/wiki/hechizo/<hechizo_nombre>')
+def wiki_hechizo(hechizo_nombre):
+    # Lógica para obtener el hechizo por su nombre y mostrarlo
+    hechizo = get_hechizo(hechizo_nombre)
+    if not hechizo:
+        return f"Hechizo '{hechizo_nombre}' no encontrado."
+
+    # Desglosar el coste en vida, mana y resistencia (suponiendo que coste es una cadena 'x,y,z')
+    coste_vida, coste_mana, coste_resistencia = hechizo['coste'].split(',')
+
+    # Generamos el HTML dinámicamente con los parámetros del hechizo
+    html_content = f"""
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{hechizo['nombre']}</title>
+    </head>
+    <body>
+        <h1>{hechizo['nombre']}</h1>
+        <p><strong>Descripción:</strong> {hechizo['descripcion']}</p>
+        <p><strong>Nivel:</strong> {hechizo['nivel']}</p>
+        <p><strong>Magia:</strong> {hechizo['magia']}</p>
+        <p><strong>Coste de vida:</strong> {coste_vida}</p>
+        <p><strong>Coste de mana:</strong> {coste_mana}</p>
+        <p><strong>Coste de resistencia:</strong> {coste_resistencia}</p>
+        <p><strong>Rango:</strong> {hechizo['rango']}</p>
+        <p><strong>Duración:</strong> {hechizo['duracion']}</p>
+        <p><strong>Casteo:</strong> {hechizo['casteo']}</p>
+        <p><strong>Clase:</strong> {hechizo['clase']}</p>
+        <p><strong>Raza:</strong> {hechizo['raza']}</p>
+        <p><strong>Otros:</strong> {hechizo['otro']}</p>
+        <a href="/wiki/hechizos">Volver a la lista de hechizos</a>
+    </body>
+    </html>
+    """
+    
+    return render_template_string(html_content)
+
+
+
+@app.route('/wiki/habilidades')
+def wiki_habilidades():
+    # Obtener todas las habilidades
+    habilidades = get_all_habilidades()  # Función que obtiene todas las habilidades de la base de datos
+    
+    if not habilidades:
+        return "No se encontraron habilidades."
+
+    # Renderizar la plantilla con las habilidades
+    return render_template('wiki/habilidades.html', habilidades=habilidades)
+
+@app.route('/wiki/habilidad/<habilidad_nombre>')
+def wiki_habilidad(habilidad_nombre):
+    # Lógica para obtener la habilidad por su nombre y mostrarla
+    habilidad = get_habilidad(habilidad_nombre)
+    if not habilidad:
+        return f"Habilidad '{habilidad_nombre}' no encontrada."
+
+    # Desglosar el coste en vida, mana y resistencia (suponiendo que coste es una cadena 'x,y,z')
+    coste_vida, coste_mana, coste_resistencia = habilidad['coste'].split(',')
+
+    # Generamos el HTML dinámicamente con los parámetros de la habilidad
+    html_content = f"""
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{habilidad['nombre']}</title>
+    </head>
+    <body>
+        <h1>{habilidad['nombre']}</h1>
+        <p><strong>Descripción:</strong> {habilidad['descripcion']}</p>
+        <p><strong>Coste de vida:</strong> {coste_vida}</p>
+        <p><strong>Coste de mana:</strong> {coste_mana}</p>
+        <p><strong>Coste de resistencia:</strong> {coste_resistencia}</p>
+        <p><strong>Rango:</strong> {habilidad['rango']}</p>
+        <p><strong>Duración:</strong> {habilidad['duracion']}</p>
+        <p><strong>Casteo:</strong> {habilidad['casteo']}</p>
+        <p><strong>Clase:</strong> {habilidad['clase']}</p>
+        <p><strong>Otros detalles:</strong> {habilidad['otro']}</p>
+        <a href="/wiki/habilidades">Volver a la lista de habilidades</a>
+    </body>
+    </html>
+    """
+    
+    return render_template_string(html_content)
 
 
 if __name__ == '__main__':

@@ -131,7 +131,6 @@ def get_armadura(nombre):
     fila = cursor.fetchone()
 
     conn.close()
-
     if fila:
         return {
             "id": fila[0],
@@ -141,6 +140,7 @@ def get_armadura(nombre):
             "otros": fila[4],         # Otros detalles
             "descripcion": fila[5]    # Descripción
         }
+
     return None
 
 

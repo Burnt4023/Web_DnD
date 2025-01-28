@@ -84,6 +84,46 @@ def get_all_hechizos():
     ]
     return hechizos
 
+def get_all_hechizos_por_clase():
+    conn = sqlite3.connect('database.db')
+    cursor = conn.cursor()
+
+    cursor.execute('SELECT id, nombre, nivel, magia, coste, rango, duracion, casteo, descripcion, clase, raza, otro FROM hechizos')
+    filas = cursor.fetchall()
+
+    conn.close()
+
+    # Diccionario para almacenar hechizos categorizados por clase
+    hechizos_por_clase = {
+        "Hechicero": [],
+        "Clérigo": [],
+        "Bardo": [],
+        "Monje": [],
+        "Paladín": []
+    }
+
+    # Rellenar el diccionario con hechizos por clase
+    for fila in filas:
+        hechizo = {
+            "id": fila[0],
+            "nombre": fila[1],
+            "nivel": fila[2],
+            "magia": fila[3],
+            "coste": fila[4],
+            "rango": fila[5],
+            "duracion": fila[6],
+            "casteo": fila[7],
+            "descripcion": fila[8],
+            "clase": fila[9],
+            "raza": fila[10],
+            "otro": fila[11]
+        }
+        
+        # Agregar el hechizo a la clase correspondiente
+        if fila[9] in hechizos_por_clase:
+            hechizos_por_clase[fila[9]].append(hechizo)
+
+    return hechizos_por_clase
 
 # Agregar un hechizo
 def agregar_hechizo(nombre, nivel, magia, coste, rango, duracion, casteo, descripcion, clase="", raza="", otro=""):

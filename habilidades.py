@@ -42,10 +42,12 @@ def get_habilidad(nombre):
             "nombre": fila[1],
             "coste": fila[2],
             "rango": fila[3],
-            "descripcion": fila[4],
-            "clase": fila[5],
-            "raza": fila[6],
-            "otro": fila[7]
+            "duracion": fila[4],
+            "casteo": fila[5],
+            "descripcion": fila[6],
+            "clase": fila[7],
+            "raza": fila[8],
+            "otro": fila[9]
         }
     return None
 
