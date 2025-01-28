@@ -235,3 +235,33 @@ button.gradient-border::after {
 button.gradient-border:active {
     --border-width: 5px;
 }
+
+.navbar {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    background-color: #1c1c1c;
+    padding: 10px 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
+.navbar a {
+    margin-right: 60px; /* Mueve la imagen más a la izquierda */
+    display: flex;
+    align-items: center;
+}
+
+.navbar img {
+    width: 30px;
+    height: 30px;
+    transition: transform 0.3s ease;
+}
+
+.navbar img:hover {
+    transform: scale(1.1);
+}

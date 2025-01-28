@@ -8,27 +8,22 @@
     <link rel="icon" href="../static/images/favicon.png" type="image/png">
 </head>
 <body>
+    <div class="navbar">
+        <a href="/logout">
+            <img src="../static/images/logout.png" alt="Cerrar sesión">
+        </a>
+    </div>
+
     <h1 data-text="Bruleria & Bruleria">Bruleria & Bruleria</h1>
 
     <h2>Bienvenido, {{ session['username'] }}!</h2>
     
     <div class="container">
-        
         <div class="column">
             <h2>Gestión de Fichas</h2>
             <button onclick="location.href='/fichas'" class="gradient-border">
                 <span>Ir a Fichas</span>
             </button>
-        </div>
-        
-        
-        <div class="column">
-            <h2>Opciones:</h2>
-            <ul>
-                <li><a href="/profile">Ver tu perfil</a></li>
-                <li><a href="/edit_profile">Editar perfil</a></li>
-                <li><a href="/logout">Cerrar sesión</a></li>
-            </ul>
         </div>
     </div>
 </body>
