@@ -588,6 +588,33 @@ def wiki_habilidad(habilidad_nombre):
     
     return render_template_string(html_content)
 
+@app.route('/wiki/crear_personaje')
+def wiki_crear_personaje():
+    if 'username' not in session:
+        flash('No has iniciado sesión.', 'error')  # Mensaje de error
+        return redirect(url_for('login'))  # Redirigir al login
+    
+    
+    return render_template('wiki/personaje.html')
+
+
+@app.route('/wiki/clases')
+def wiki_clases():
+    if 'username' not in session:
+        flash('No has iniciado sesión.', 'error')  # Mensaje de error
+        return redirect(url_for('login'))  # Redirigir al login
+    
+    
+    return render_template('wiki/clases.html')
+
+@app.route('/wiki/razas')
+def wiki_razas():
+    if 'username' not in session:
+        flash('No has iniciado sesión.', 'error')  # Mensaje de error
+        return redirect(url_for('login'))  # Redirigir al login
+    
+    
+    return render_template('wiki/razas.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
