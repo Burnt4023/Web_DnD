@@ -1,6 +1,28 @@
-body {
+/*body {
     background-image: url('../images/fondologin.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+}*/
+
+/* Estilo para el video de fondo */
+.video-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+}
+
+/* Estilo para oscurecer el fondo */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Oscurece el video */
+    z-index: 0;
 }
