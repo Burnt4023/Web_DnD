@@ -19,7 +19,7 @@
     <h2>Bienvenido, {{ session['username'] }}!</h2>
     
     <div class="container">
-        <div class="column">
+        <div class="columnexc">
             <h2>Gestión de Fichas</h2>
             <button onclick="location.href='/fichas'" class="gradient-border">
                 <span>Ir a Fichas</span>
@@ -27,11 +27,51 @@
         </div>
         <div class="column">
             <h2>Wiki</h2>
-            <button onclick="location.href='/wiki'" class="gradient-border">
-                <span>Ir a Wiki</span>
-            </button>
+            <div style="display: flex;">
+                <div class="maincard">
+                    <div class="upcard">
+                    <button class="card1">
+                        <span style="font-size: 33px;">🌍</span>
+                    </button>
+                    <button class="card2">
+                        <span style="font-size: 33px;">🔧</span>
+                    </button>
+                    </div>
+                    <div class="downcard">
+                    <button class="card3">
+                        <span style="font-size: 33px;">💫</span>
+                    </button>
+                    <button class="card4">
+                        <span style="font-size: 33px;">💰</span>
+                    </button>
+                    </div>
+                </div>
+
+                <div class="maincard2">
+                    <div class="upcard2">
+                    <button class="card12">
+                        <span style="font-size: 33px;">⚔️</span>
+                    </button>
+                    <button class="card22">
+                        <span style="font-size: 33px;">⚡</span>
+                    </button>
+                    </div>
+                    <div class="downcard2">
+                    <button class="card32">
+                        <span style="font-size: 33px;">🪖</span>
+                    </button>
+                    <button class="card42">
+                        <span style="font-size: 33px;">🗣️</span>
+                    </button>
+                    </div>
+                </div>
+            </div>
         </div>
 
     </div>
+
+    
+   
 </body>
 </html>
+
