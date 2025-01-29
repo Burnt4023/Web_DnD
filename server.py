@@ -239,11 +239,12 @@ def modificar_ficha(nombre_ficha):
         ]
 
         # Captura de destrezas
-        destrezas = {clave: request.form.get(clave, 0) for clave in destrezas_claves}
+        destrezas = {clave.strip("destrezas[").strip("]"): int(valor) for clave, valor in request.form.items() if clave.startswith("destrezas[")}
 
         # Captura de estadísticas
-        estadisticas = {clave: request.form.get(clave, 0) for clave in estadisticas_claves}
-
+        estadisticas = {clave.strip("estadisticas[").strip("]"): int(valor) for clave, valor in request.form.items() if clave.startswith("estadisticas[")}
+        
+        print(request.form)
         # Construir el nuevo contenido
         # Captura de los valores de dinero enviados por el formulario
         dinero = request.form.getlist('dinero[]')
