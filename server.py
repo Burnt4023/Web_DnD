@@ -606,7 +606,21 @@ def wiki_clases():
         return redirect(url_for('login'))  # Redirigir al login
     
     
-    return render_template('wiki/clases.html')
+    return render_template('wiki/clases/clases.html')
+
+@app.route('/wiki/hechicero')
+def wiki_hechicero():
+    if 'username' not in session:
+        flash('No has iniciado sesión.', 'error')  # Mensaje de error
+        return redirect(url_for('login'))  # Redirigir al login
+    return render_template('wiki/clases/hechicero.html')
+
+@app.route('/wiki/clerigo')
+def wiki_clerigo():
+    if 'username' not in session:
+        flash('No has iniciado sesión.', 'error')  # Mensaje de error
+        return redirect(url_for('login'))  # Redirigir al login
+    return render_template('wiki/clases/clerigo.html')
 
 @app.route('/wiki/razas')
 def wiki_razas():
@@ -614,7 +628,7 @@ def wiki_razas():
         flash('No has iniciado sesión.', 'error')  # Mensaje de error
         return redirect(url_for('login'))  # Redirigir al login
     
-    
+
     return render_template('wiki/razas.html')
 
 if __name__ == '__main__':
