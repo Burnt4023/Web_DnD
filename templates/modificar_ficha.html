@@ -64,44 +64,29 @@
         </div>
       </div>
       <!-- Fin del encabezado -->
-      
-      <!-- Contenedor principal en 3 columnas (el resto de la ficha) -->
+
+      <!-- Contenedor principal en 3 columnas -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <!-- Columna 1: Estadísticas de Vida y Maná/Resistencia -->
+        <!-- Columna 1: Equipo -->
         <div>
-          <h2 class="text-2xl font-semibold mb-4 border-b border-gray-600 pb-2">Estadísticas de Vida</h2>
-          <!-- Vida -->
-          <div class="mb-4">
-            <label for="vida_actual" class="block text-sm font-medium">Vida Actual:</label>
-            <input type="number" id="vida_actual" name="vida_actual" value="{{ contenido['vida']['actual'] }}" required class="w-full p-2 mt-1 bg-gray-700 rounded-lg">
+          <h2 class="text-2xl font-semibold mb-4 border-b border-gray-600 pb-2">Equipo</h2>
+          <div id="lista-equipo" class="mb-4 space-y-2">
+            {% for item in equipo %}
+              <div class="flex items-center space-x-2">
+                <input type="text" name="equipo[]" value="{{ item }}" readonly required class="w-full p-2 bg-gray-700 rounded-lg">
+                <button type="button" onclick="eliminarEquipo(this)" class="bg-red-500 hover:bg-red-600 px-2 py-1 rounded-lg">Eliminar</button>
+              </div>
+            {% endfor %}
           </div>
           <div class="mb-4">
-            <label for="vida_maxima" class="block text-sm font-medium">Vida Máxima:</label>
-            <input type="number" id="vida_maxima" name="vida_maxima" value="{{ contenido['vida']['maxima'] }}" required class="w-full p-2 mt-1 bg-gray-700 rounded-lg">
-          </div>
-          
-          <h2 class="text-2xl font-semibold mt-8 mb-4 border-b border-gray-600 pb-2">Maná y Resistencia</h2>
-          <!-- Maná -->
-          <div class="mb-4 grid grid-cols-2 gap-4">
-            <div>
-              <label for="mana_actual" class="block text-sm font-medium">Maná Actual:</label>
-              <input type="number" id="mana_actual" name="mana_actual" value="{{ contenido['mana']['actual'] }}" required class="w-full p-2 mt-1 bg-gray-700 rounded-lg">
-            </div>
-            <div>
-              <label for="mana_maximo" class="block text-sm font-medium">Maná Máximo:</label>
-              <input type="number" id="mana_maximo" name="mana_maximo" value="{{ contenido['mana']['maximo'] }}" required class="w-full p-2 mt-1 bg-gray-700 rounded-lg">
-            </div>
-          </div>
-          <!-- Resistencia -->
-          <div class="mb-4 grid grid-cols-2 gap-4">
-            <div>
-              <label for="resistencia_actual" class="block text-sm font-medium">Resistencia Actual:</label>
-              <input type="number" id="resistencia_actual" name="resistencia_actual" value="{{ contenido['resistencia']['actual'] }}" required class="w-full p-2 mt-1 bg-gray-700 rounded-lg">
-            </div>
-            <div>
-              <label for="resistencia_maxima" class="block text-sm font-medium">Resistencia Máxima:</label>
-              <input type="number" id="resistencia_maxima" name="resistencia_maxima" value="{{ contenido['resistencia']['maxima'] }}" required class="w-full p-2 mt-1 bg-gray-700 rounded-lg">
-            </div>
+            <label for="equipo-disponible" class="block text-sm font-medium">Añadir al equipo:</label>
+            <select id="equipo-disponible" class="w-full p-2 mt-1 bg-gray-700 rounded-lg">
+              <option value="" disabled selected>Selecciona un objeto</option>
+              {% for objeto in contenido['objetos'] %}
+                <option value="{{ objeto }}">{{ objeto }}</option>
+              {% endfor %}
+            </select>
+            <button type="button" onclick="agregarEquipo()" class="mt-2 bg-green-500 hover:bg-green-600 px-2 py-1 rounded-lg">Añadir</button>
           </div>
         </div>
         
@@ -179,29 +164,9 @@
           </div>
         </div>
         
-        <!-- Columna 3: Equipo, Inventario, Dinero, Historia y ficha pública -->
+        <!-- Columna 3: Inventario, Dinero y Ficha Pública -->
         <div>
-          <h2 class="text-2xl font-semibold mb-4 border-b border-gray-600 pb-2">Equipo</h2>
-          <div id="lista-equipo" class="mb-4 space-y-2">
-            {% for item in equipo %}
-              <div class="flex items-center space-x-2">
-                <input type="text" name="equipo[]" value="{{ item }}" readonly required class="w-full p-2 bg-gray-700 rounded-lg">
-                <button type="button" onclick="eliminarEquipo(this)" class="bg-red-500 hover:bg-red-600 px-2 py-1 rounded-lg">Eliminar</button>
-              </div>
-            {% endfor %}
-          </div>
-          <div class="mb-4">
-            <label for="equipo-disponible" class="block text-sm font-medium">Añadir al equipo:</label>
-            <select id="equipo-disponible" class="w-full p-2 mt-1 bg-gray-700 rounded-lg">
-              <option value="" disabled selected>Selecciona un objeto</option>
-              {% for objeto in contenido['objetos'] %}
-                <option value="{{ objeto }}">{{ objeto }}</option>
-              {% endfor %}
-            </select>
-            <button type="button" onclick="agregarEquipo()" class="mt-2 bg-green-500 hover:bg-green-600 px-2 py-1 rounded-lg">Añadir</button>
-          </div>
-          
-          <h2 class="text-2xl font-semibold mt-8 mb-4 border-b border-gray-600 pb-2">Inventario</h2>
+          <h2 class="text-2xl font-semibold mb-4 border-b border-gray-600 pb-2">Inventario</h2>
           <div id="lista-inventario" class="mb-4 space-y-2">
             {% for objeto in contenido['objetos'] %}
               <div class="flex items-center space-x-2">
@@ -212,7 +177,7 @@
           </div>
           <!-- Búsqueda para objetos -->
           <div class="mb-4">
-            <label for="busqueda-habilidad" class="block text-sm font-medium">Buscar habilidad:</label>
+            <label for="busqueda-habilidad" class="block text-sm font-medium">Buscar objeto:</label>
             <input type="text" id="busqueda-habilidad" placeholder="Escribe el nombre del objeto..." oninput="filtrarHabilidades()" class="w-full p-2 mt-1 bg-gray-700 rounded-lg">
           </div>
           <div class="mb-4">
@@ -244,11 +209,6 @@
               <input type="number" id="dinero_platino" name="dinero[]" value="{{ contenido['dinero'][3] }}" min="0" required class="w-full p-2 mt-1 bg-gray-700 rounded-lg">
             </div>
           </div>
-          <h2 class="text-2xl font-semibold mt-8 mb-4 border-b border-gray-600 pb-2">Historia</h2>
-          <div class="mb-4">
-            <label for="historia" class="block text-sm font-medium">Historia:</label>
-            <textarea id="historia" name="historia" rows="4" cols="50" required class="w-full p-2 mt-1 bg-gray-700 rounded-lg">{{ contenido['historia'] }}</textarea>
-          </div>
           <!-- Ficha pública -->
           <div class="mb-4 flex items-center">
             <label for="ficha_publica" class="block text-sm font-medium mr-2">¿Hacer la ficha pública?</label>
@@ -257,27 +217,51 @@
         </div>
       </div>
       
-      <!-- Nuevo contenedor para Estadísticas (dividido en 3 columnas) -->
+      <!-- Contenedor independiente para Destrezas -->
       <div class="mt-8">
-        <h2 class="text-2xl font-semibold mb-4 border-b border-gray-600 pb-2">Estadísticas</h2>
-        <div id="estadisticas" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {% for estadistica, valor in contenido['estadisticas'].items() %}
-            <div>
-              <label for="estadistica_{{ estadistica }}" class="block text-sm font-medium">{{ estadistica | capitalize }}:</label>
-              <input type="number" id="estadistica_{{ estadistica }}" name="estadisticas[{{ estadistica }}]" value="{{ valor }}" min="0" required class="w-full p-2 mt-1 bg-gray-700 rounded-lg">
-            </div>
-          {% endfor %}
-        </div>
-      </div>
-      
-      <!-- Contenedor independiente para Destrezas, distribuidas en 3 columnas -->
-      <div class="mt-8">
-        <h2 class="text-2xl font-semibold mb-4 border-b border-gray-600 pb-2">Destrezas</h2>
+        <h2 class="text-2xl font-semibold mb-4">Destrezas</h2>
         <div id="destrezas-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
           {% for destreza, valor in contenido['destrezas'].items() %}
             <div>
               <label for="destreza_{{ destreza }}" class="block text-sm font-medium">{{ destreza | capitalize }}:</label>
               <input type="number" id="destreza_{{ destreza }}" name="destrezas[{{ destreza }}]" value="{{ valor }}" min="0" required class="w-full p-2 mt-1 bg-gray-700 rounded-lg">
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+      
+      <!-- Nueva sección: Imagen e Historia en paralelo -->
+      <div class="mt-8 flex flex-col md:flex-row gap-4">
+        <!-- Contenedor para la imagen (placeholder) -->
+        <div class="md:w-1/2 flex items-center justify-center border border-dashed border-gray-500 p-4">
+          <!--
+          #########################################################
+          #                                                       #
+          #                 PON TU IMAGEN AQUÍ                    #
+          #                                                       #
+          #########################################################
+          -->
+          <span class="text-gray-400">Imagen de la ficha</span>
+        </div>
+        <!-- Contenedor para Historia -->
+        <div class="md:w-1/2">
+          <h2 class="text-2xl font-semibold mb-4 border-b border-gray-600 pb-2">Historia</h2>
+          <div class="mb-4">
+            <label for="historia" class="block text-sm font-medium">Historia:</label>
+            <textarea id="historia" name="historia" rows="4" required class="w-full p-2 mt-1 bg-gray-700 rounded-lg">{{ contenido['historia'] }}</textarea>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Contenedor independiente para Estadísticas (inputs cuadrados pequeños) -->
+      <div class="mt-8">
+        <h2 class="text-2xl font-semibold mb-4 border-b border-gray-600 pb-2">Estadísticas</h2>
+        <div id="estadisticas" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {% for estadistica, valor in contenido['estadisticas'].items() %}
+            <div>
+              <label for="estadistica_{{ estadistica }}" class="block text-sm font-medium text-center">{{ estadistica | capitalize }}:</label>
+              <!-- Input cuadrado con tamaño fijo (por ejemplo, 4rem x 4rem) y centrado -->
+              <input type="number" id="estadistica_{{ estadistica }}" name="estadisticas[{{ estadistica }}]" value="{{ valor }}" min="0" required class="w-16 h-16 mx-auto bg-gray-700 rounded-none text-center">
             </div>
           {% endfor %}
         </div>
