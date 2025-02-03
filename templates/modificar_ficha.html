@@ -11,52 +11,65 @@
   <link rel="icon" href="{{ url_for('static', filename='images/favicon.png') }}" type="image/png">
 </head>
 <body class="bg-gray-900 text-white">
-  <div class="container mx-auto py-10 px-4">
+  <!-- Contenedor principal con ancho del 95% -->
+  <div class="mx-auto py-10 px-4 w-[95%]">
     <h1 class="text-4xl font-bold text-center mb-6">Modificar Ficha</h1>
     <p class="text-lg text-center mb-8">
       Modificando la ficha: <strong class="text-yellow-400">{{ nombre_ficha }}</strong>
     </p>
     
     <form action="{{ url_for('modificar_ficha', nombre_ficha=nombre_ficha) }}" method="POST" class="bg-gray-800 p-8 rounded-lg shadow-2xl">
-      <!-- Contenedor principal en 3 columnas -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <!-- Columna 1: Información básica, vida, maná y resistencia -->
-        <div>
-          <h2 class="text-2xl font-semibold mb-4 border-b border-gray-600 pb-2">Información Básica</h2>
-          <!-- Nombre del personaje -->
-          <div class="mb-4">
+      
+      <!-- Encabezado superior con dos contenedores en paralelo -->
+      <div class="flex flex-col md:flex-row gap-4 mb-8">
+        <!-- Contenedor izquierdo: sin fondo, menos padding -->
+        <div class="md:w-1/4 p-2">
+          <h2 class="text-xl font-bold">BRULERIA &amp; BRULERIA</h2>
+          <!-- Campo de Nombre ubicado debajo del título -->
+          <div class="mt-2">
             <label for="nombre_personaje" class="block text-sm font-medium">Nombre del personaje:</label>
-            <input type="text" id="nombre_personaje" name="nombre_personaje" value="{{ contenido['nombre'] }}" required class="w-full p-2 mt-1 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <input type="text" id="nombre_personaje" name="nombre_personaje" value="{{ contenido['nombre'] }}" required class="w-full p-1 mt-1 bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
           </div>
+        </div>
+        <!-- Contenedor derecho: sin fondo, menos padding, contiene el resto de Información Básica -->
+        <div class="md:w-3/4 p-2">
+          <h2 class="text-2xl font-semibold mb-4 border-b border-gray-600 pb-2">Información Básica</h2>
           <!-- Nivel y Clase -->
           <div class="mb-4 grid grid-cols-2 gap-4">
             <div>
               <label for="nivel" class="block text-sm font-medium">Nivel:</label>
-              <input type="number" id="nivel" name="nivel" min="1" value="{{ contenido['nivel'] }}" required class="w-full p-2 mt-1 bg-gray-700 rounded-lg">
+              <input type="number" id="nivel" name="nivel" min="1" value="{{ contenido['nivel'] }}" required class="w-full p-1 mt-1 bg-gray-800 rounded-lg">
             </div>
             <div>
               <label for="clase" class="block text-sm font-medium">Clase:</label>
-              <input type="text" id="clase" name="clase" value="{{ contenido['clase'] }}" required class="w-full p-2 mt-1 bg-gray-700 rounded-lg">
+              <input type="text" id="clase" name="clase" value="{{ contenido['clase'] }}" required class="w-full p-1 mt-1 bg-gray-800 rounded-lg">
             </div>
           </div>
           <!-- Magia y Talento -->
           <div class="mb-4 grid grid-cols-2 gap-4">
             <div>
               <label for="magia" class="block text-sm font-medium">Magia:</label>
-              <input type="text" id="magia" name="magia" value="{{ contenido['magia'] }}" required class="w-full p-2 mt-1 bg-gray-700 rounded-lg">
+              <input type="text" id="magia" name="magia" value="{{ contenido['magia'] }}" required class="w-full p-1 mt-1 bg-gray-800 rounded-lg">
             </div>
             <div>
               <label for="talento" class="block text-sm font-medium">Talento:</label>
-              <input type="text" id="talento" name="talento" value="{{ contenido['talento'] }}" required class="w-full p-2 mt-1 bg-gray-700 rounded-lg">
+              <input type="text" id="talento" name="talento" value="{{ contenido['talento'] }}" required class="w-full p-1 mt-1 bg-gray-800 rounded-lg">
             </div>
           </div>
           <!-- Alineamiento -->
           <div class="mb-4">
             <label for="alineamiento" class="block text-sm font-medium">Alineamiento:</label>
-            <input type="text" id="alineamiento" name="alineamiento" value="{{ contenido['alineamiento'] }}" required class="w-full p-2 mt-1 bg-gray-700 rounded-lg">
+            <input type="text" id="alineamiento" name="alineamiento" value="{{ contenido['alineamiento'] }}" required class="w-full p-1 mt-1 bg-gray-800 rounded-lg">
           </div>
-          
-          <h2 class="text-2xl font-semibold mt-8 mb-4 border-b border-gray-600 pb-2">Estadísticas de Vida</h2>
+        </div>
+      </div>
+      <!-- Fin del encabezado -->
+      
+      <!-- Contenedor principal en 3 columnas (el resto de la ficha) -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Columna 1: Estadísticas de Vida y Maná/Resistencia -->
+        <div>
+          <h2 class="text-2xl font-semibold mb-4 border-b border-gray-600 pb-2">Estadísticas de Vida</h2>
           <!-- Vida -->
           <div class="mb-4">
             <label for="vida_actual" class="block text-sm font-medium">Vida Actual:</label>
@@ -90,10 +103,9 @@
               <input type="number" id="resistencia_maxima" name="resistencia_maxima" value="{{ contenido['resistencia']['maxima'] }}" required class="w-full p-2 mt-1 bg-gray-700 rounded-lg">
             </div>
           </div>
-          <!-- (Se elimina la sección de Destrezas de esta columna) -->
         </div>
         
-        <!-- Columna 2: Combate, estadísticas, habilidades y hechizos -->
+        <!-- Columna 2: Combate y Habilidades -->
         <div>
           <h2 class="text-2xl font-semibold mb-4 border-b border-gray-600 pb-2">Combate y Habilidades</h2>
           <!-- Sobrecarga -->
@@ -116,16 +128,6 @@
               <label for="tiradas_fallo" class="block text-sm font-medium">Tiradas de Salvación (Fallos):</label>
               <input type="number" id="tiradas_fallo" name="tiradas_fallo" value="{{ contenido['tiradas']['fallos'] }}" min="0" max="3" required class="w-full p-2 mt-1 bg-gray-700 rounded-lg">
             </div>
-          </div>
-          <!-- Estadísticas (se mantienen en esta columna) -->
-          <h2 class="text-2xl font-semibold mt-8 mb-4 border-b border-gray-600 pb-2">Estadísticas</h2>
-          <div id="estadisticas" class="mb-4 space-y-2">
-            {% for estadistica, valor in contenido['estadisticas'].items() %}
-              <div>
-                <label for="estadistica_{{ estadistica }}" class="block text-sm font-medium">{{ estadistica | capitalize }}:</label>
-                <input type="number" id="estadistica_{{ estadistica }}" name="estadisticas[{{ estadistica }}]" value="{{ valor }}" min="0" required class="w-full p-2 mt-1 bg-gray-700 rounded-lg">
-              </div>
-            {% endfor %}
           </div>
           <!-- Habilidades -->
           <h2 class="text-2xl font-semibold mt-8 mb-4 border-b border-gray-600 pb-2">Habilidades</h2>
@@ -208,7 +210,7 @@
               </div>
             {% endfor %}
           </div>
-          <!-- Se mantiene la búsqueda para objetos -->
+          <!-- Búsqueda para objetos -->
           <div class="mb-4">
             <label for="busqueda-habilidad" class="block text-sm font-medium">Buscar habilidad:</label>
             <input type="text" id="busqueda-habilidad" placeholder="Escribe el nombre del objeto..." oninput="filtrarHabilidades()" class="w-full p-2 mt-1 bg-gray-700 rounded-lg">
@@ -255,9 +257,22 @@
         </div>
       </div>
       
+      <!-- Nuevo contenedor para Estadísticas (dividido en 3 columnas) -->
+      <div class="mt-8">
+        <h2 class="text-2xl font-semibold mb-4 border-b border-gray-600 pb-2">Estadísticas</h2>
+        <div id="estadisticas" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {% for estadistica, valor in contenido['estadisticas'].items() %}
+            <div>
+              <label for="estadistica_{{ estadistica }}" class="block text-sm font-medium">{{ estadistica | capitalize }}:</label>
+              <input type="number" id="estadistica_{{ estadistica }}" name="estadisticas[{{ estadistica }}]" value="{{ valor }}" min="0" required class="w-full p-2 mt-1 bg-gray-700 rounded-lg">
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+      
       <!-- Contenedor independiente para Destrezas, distribuidas en 3 columnas -->
       <div class="mt-8">
-        <h2 class="text-2xl font-semibold mb-4">Destrezas</h2>
+        <h2 class="text-2xl font-semibold mb-4 border-b border-gray-600 pb-2">Destrezas</h2>
         <div id="destrezas-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
           {% for destreza, valor in contenido['destrezas'].items() %}
             <div>
