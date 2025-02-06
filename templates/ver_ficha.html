@@ -5,49 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Ver Ficha</title>
   <link rel="icon" href="{{ url_for('static', filename='images/favicon.png') }}" type="image/png">
-  <!-- Tailwind CSS CDN -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/ver_fichas.css') }}">
   <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    /* From Uiverse.io by Yaya12085 */
-    .radio-inputs {
-      position: relative;
-      display: flex;
-      flex-wrap: wrap;
-      border-radius: 0.5rem;
-      background-color: #EEE;
-      box-sizing: border-box;
-      box-shadow: 0 0 0px 1px rgba(0, 0, 0, 0.06);
-      padding: 0.25rem;
-      width: 300px;
-      font-size: 14px;
-    }
-
-    .radio-inputs .radio {
-      flex: 1 1 auto;
-      text-align: center;
-    }
-
-    .radio-inputs .radio input {
-      display: none;
-    }
-
-    .radio-inputs .radio .name {
-      display: flex;
-      cursor: pointer;
-      align-items: center;
-      justify-content: center;
-      border-radius: 0.5rem;
-      border: none;
-      padding: .5rem 0;
-      color: rgba(51, 65, 85, 1);
-      transition: all .15s ease-in-out;
-    }
-
-    .radio-inputs .radio input:checked + .name {
-      background-color: #fff;
-      font-weight: 600;
-    }
-  </style>
 </head>
 <body class="bg-gray-100 text-gray-900">
   <div class="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg my-8">
@@ -97,6 +56,10 @@
         <label class="radio">
           <input type="radio" name="secciones" onclick="mostrarSeccion('seccionHabilidadesHechizos')">
           <span class="name">Habilidades y Hechizos</span>
+        </label>
+        <label class="radio">
+          <input type="radio" name="secciones" onclick="mostrarSeccion('seccionDistraccion')">
+          <span class="name">TDAH</span>
         </label>
       </div>
     </div>
@@ -287,6 +250,10 @@
       {% else %}
         <p>No hay hechizos registrados.</p>
       {% endif %}
+    </div>
+
+    <div id="seccionDistraccion" class="seccion hidden">
+
     </div>
 
     <!-- Historia y Foto (siempre visibles) -->
