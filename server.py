@@ -301,7 +301,8 @@ def modificar_ficha(nombre_ficha):
         actualizar_ficha_en_bd(username, nombre_ficha, nuevo_contenido, ficha_publica)
 
         flash('Ficha modificada exitosamente.', 'success')
-        return redirect(url_for('fichas'))
+        return redirect(url_for('ver_ficha', nombre_ficha=nombre_ficha, owner_username=session['username']))
+
 
     # Obtener los datos actuales de la ficha
     contenido = obtener_contenido_de_archivo(username, nombre_ficha)
