@@ -1,4 +1,4 @@
-from flask import Flask, render_template, render_template_string, request, redirect, url_for, session, flash
+from flask import Flask, render_template, render_template_string, request, redirect, url_for, session, flash, send_from_directory
 from usuarios import *
 from fichas import *
 from habilidades import *
@@ -8,6 +8,7 @@ import os
 
 app = Flask(__name__)
 app.secret_key = 'Keyzapzapzap'
+UPLOAD_FOLDER = os.path.join(os.getcwd(), 'fichas', 'fotos')
 
 # Aseguramos que las tablas necesarias existan al iniciar el servidor
 crear_tabla_usuarios()
@@ -19,10 +20,9 @@ crear_tabla_armas()
 crear_tabla_objetos()
 
 
-# Aseguramos que las fichas se almacenen en un directorio específico
-def crear_directorio_fichas():
-    if not os.path.exists('fichas'):
-        os.makedirs('fichas')
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in {'png', 'jpg', 'jpeg', 'gif'}
+
 
 # Lleva a login si no hay sesión, muestra home si hay
 @app.route('/')
@@ -30,6 +30,11 @@ def home():
     if 'username' in session:
         return render_template('home.html')
     return redirect(url_for('login'))
+
+@app.route('/fichas/fotos/<path:filename>')
+def serve_photo(filename):
+    return send_from_directory(UPLOAD_FOLDER, filename)
+
 
 
 # POST lleva a home, GET permite iniciar sesión
@@ -200,17 +205,22 @@ def modificar_ficha(nombre_ficha):
     username = session['username']
 
     if request.method == 'POST':
-
         # Definir todos los campos de la ficha
         campos = [
-            'nombre_personaje', 'nivel', 'clase', 'magia', 'talento', 'alineamiento', 'historia',
+            'nombre_personaje', 'nivel', 'clase', 'magia', 'talento', 'alineamiento', 'historia', 'foto',
             'vida_actual', 'vida_maxima', 'mana_actual', 'mana_maximo', 'resistencia_actual', 'resistencia_maxima',
             'sobrecarga', 'velocidad', 'armadura', 'iniciativa', 'tiradas_exito', 'tiradas_fallo'
         ]
 
         # Capturar los datos del formulario con valores por defecto
         datos_ficha = {campo: request.form.get(campo, None) for campo in campos}
-
+        
+        
+        
+        
+        
+        
+        
         # Capturar el estado del checkbox de "ficha pública"
         ficha_publica = 'ficha_publica' in request.form  # True si el checkbox está marcado
 
@@ -219,6 +229,21 @@ def modificar_ficha(nombre_ficha):
         hechizos = request.form.getlist('hechizos[]')
         objetos = request.form.getlist('objetos[]')
         equipo = request.form.getlist('equipo[]')
+
+        # Inicializar fotoname
+        fotoname = ""
+
+        # Verificar si se subió una nueva foto
+        foto = request.files.get('foto')  # Accede al archivo real
+
+        # Si se sube una nueva foto
+        if foto:
+            # Crear el nombre de archivo con un formato único (usando el username y nombre del personaje)
+            fotoname = f"{username}_{datos_ficha['nombre_personaje']}.{foto.filename.split('.')[-1].lower()}"
+            foto.save(os.path.join(UPLOAD_FOLDER, fotoname))  # Guardar la foto en la carpeta de subida
+        else:
+            # Si no se sube una nueva foto, mantener la foto anterior
+            fotoname = get_photo(username, nombre_ficha)
 
         # Captura de destrezas
         destrezas = [int(request.form.get(f"destrezas[{i}]", 15)) for i in range(16)]
@@ -242,6 +267,7 @@ def modificar_ficha(nombre_ficha):
             "talento": datos_ficha['talento'] or 'Ninguno',
             "alineamiento": datos_ficha['alineamiento'] or 'Neutral',
             "historia": datos_ficha['historia'] or 'No',
+            "foto": fotoname,  # Usar la URL de la foto
             "vida": {
                 "actual": int(datos_ficha['vida_actual']) if datos_ficha['vida_actual'] else 10,
                 "maxima": int(datos_ficha['vida_maxima']) if datos_ficha['vida_maxima'] else 10
@@ -273,7 +299,7 @@ def modificar_ficha(nombre_ficha):
         }
 
         # Actualizar la ficha en la base de datos
-        actualizar_ficha_en_bd(username, nombre_ficha, nuevo_contenido, ficha_publica)
+        actualizar_ficha_en_bd(username, nombre_ficha, nuevo_contenido, ficha_publica, fotoname)
 
         flash('Ficha modificada exitosamente.', 'success')
         return redirect(url_for('ver_ficha', nombre_ficha=nombre_ficha, owner_username=session['username']))
@@ -303,7 +329,6 @@ def modificar_ficha(nombre_ficha):
         nombres_objetos=nombres_objetos,
     )
 
-    
     
     
 @app.route('/fichas/crear', methods=['POST'])

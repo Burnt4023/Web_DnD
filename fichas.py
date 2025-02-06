@@ -14,15 +14,24 @@ def crear_tabla_fichas():
             username TEXT NOT NULL,
             nombre TEXT NOT NULL,
             public BOOLEAN NOT NULL,
-            UNIQUE(username, nombre)  -- Índice único para evitar duplicados
+            foto TEXT
         )
     ''')
+
+    # Crear índice único para evitar duplicados en 'username' y 'nombre'
+    cursor.execute('''
+        CREATE UNIQUE INDEX IF NOT EXISTS idx_fichas_username_nombre ON fichas(username, nombre)
+    ''')
+
     conn.commit()
     conn.close()
 
-    # Asegúrate de que la carpeta para las fichas existe
+    # Asegúrate de que la carpeta para las fichas exista
     if not os.path.exists('fichas'):
         os.makedirs('fichas')
+        
+    if not os.path.exists('fichas/fotos'):
+        os.makedirs('fichas/fotos')
         
         
 # Función para obtener las fichas por usuario
@@ -49,15 +58,15 @@ def obtener_otras_fichas_publicas(username):
         return []
 
 # Insertar una nueva ficha
-def agregar_ficha(username, nombre, public):
+def agregar_ficha(username, nombre, public, photo = ""):
     try:
         conn = sqlite3.connect('database.db')
         cursor = conn.cursor()
 
         cursor.execute(''' 
-            INSERT INTO fichas (username, nombre, public) 
-            VALUES (?, ?, ?)
-        ''', (username, nombre, public))
+            INSERT INTO fichas (username, nombre, public, foto) 
+            VALUES (?, ?, ?, ?)
+        ''', (username, nombre, public, photo))
 
         conn.commit()
     except sqlite3.Error as e:
@@ -94,6 +103,47 @@ def actualizar_ficha(username, nombre_ficha, public):
     finally:
         conn.close()
 
+def set_photo(username, nombre_ficha, photo):
+    try:
+        conn = sqlite3.connect('database.db')
+        cursor = conn.cursor()
+
+        cursor.execute('''UPDATE fichas SET foto = ? WHERE username = ? AND nombre = ?''', 
+                       (photo, username, nombre_ficha))
+        conn.commit()
+
+        # Verificar que la actualización se haya realizado
+        if cursor.rowcount == 0:
+            print(f"No se encontró la ficha {nombre_ficha} para el usuario {username}.")
+    except sqlite3.Error as e:
+        print(f"Error al actualizar la ficha: {e}")
+    finally:
+        conn.close()
+
+def get_photo(username, nombreficha):
+    try:
+        conn = sqlite3.connect('database.db')
+        cursor = conn.cursor()
+
+        # Consulta SQL para obtener la foto de la ficha
+        cursor.execute('''SELECT foto FROM fichas WHERE username = ? AND nombre = ?''', 
+                       (username, nombreficha))
+
+        # Recuperar el resultado de la consulta
+        result = cursor.fetchone()
+
+        # Verificar si se encontró la ficha
+        if result:
+            return result[0]  # La foto está en el primer elemento de la tupla
+        else:
+            print(f"No se encontró la foto para la ficha {nombreficha} del usuario {username}.")
+            return None
+    except sqlite3.Error as e:
+        print(f"Error al obtener la foto: {e}")
+        return None
+    finally:
+        conn.close()
+    
 # Obtener el contenido de la ficha desde su archivo JSON
 def obtener_contenido_de_archivo(username, nombre_ficha):
     """Obtiene el contenido de una ficha desde un archivo JSON y lo convierte en un diccionario."""
@@ -115,10 +165,12 @@ def guardar_contenido_en_archivo(username, nombre_ficha, contenido):
         json.dump(contenido, archivo, ensure_ascii=False, indent=4)
 
 # Modificar el contenido de la ficha
-def actualizar_ficha_en_bd(username, nombre_ficha, nuevo_contenido, public=False):
+def actualizar_ficha_en_bd(username, nombre_ficha, nuevo_contenido, public=False, photo=""):
     # Actualizar la ficha en la base de datos
     actualizar_ficha(username, nombre_ficha, public)
 
+    set_photo(username, nombre_ficha, photo)
+    
     # Guardar el nuevo contenido en el archivo correspondiente
     guardar_contenido_en_archivo(username, nombre_ficha, nuevo_contenido)
 

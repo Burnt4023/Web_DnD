@@ -5,9 +5,11 @@
     "magia": "Ninguna",
     "talento": "Ninguno",
     "alineamiento": "Neutral",
+    "historia": "No",
+    "foto": "admin_ae.png",
     "vida": {
         "actual": 10,
-        "maximo": 10
+        "maxima": 10
     },
     "mana": {
         "actual": 10,
@@ -15,18 +17,25 @@
     },
     "resistencia": {
         "actual": 10,
-        "maximo": 10
+        "maxima": 10
     },
     "sobrecarga": 0,
     "velocidad": 30,
     "armadura": 10,
     "iniciativa": 0,
-    "historia": "No",
     "tiradas": {
-        "exito": 0,
-        "fallo": 0
+        "exitos": 0,
+        "fallos": 0
     },
+    "habilidades": [],
+    "hechizos": [],
+    "objetos": [],
+    "equipamiento": [],
     "destrezas": [
+        15,
+        15,
+        15,
+        15,
         15,
         15,
         15,
@@ -51,14 +60,11 @@
         0,
         0
     ],
-    "habilidades": [],
-    "hechizos": [],
-    "objetos": [],
-    "equipamiento": [],
     "dinero": [
         0,
         0,
         0,
         0
-    ]
+    ],
+    "publica": false
 }

@@ -36,6 +36,7 @@ async function crearFicha() {
         armadura: 10,
         iniciativa: 0,
         historia: 'No',
+        foto : "",
         tiradas: { exito: 0, fallo: 0 },
         destrezas: [
             15,15,15,15,

@@ -229,11 +229,27 @@
       {% endif %}
     </div>
 
-    <!-- Historia -->
-    <div class="mb-6">
-      <h2 class="text-2xl font-semibold border-b pb-2 mb-4">Historia</h2>
-      <p>{{ contenido['historia'] }}</p>
-    </div>
+    <!-- Historia y Foto -->
+    <div class="mb-6 flex items-start space-x-6">
+      <!-- Historia -->
+      <div class="flex-1">
+        <h2 class="text-2xl font-semibold border-b pb-2 mb-4">Historia</h2>
+        <p>{{ contenido['historia'] }}</p>
+      </div>
+
+      <!-- Foto -->
+      <div class="w-1/4">
+        {% if contenido['foto'] %}
+          <h2 class="text-2xl font-semibold border-b pb-2 mb-4">Foto</h2>
+          <!-- Imprimir el nombre de la foto -->
+          
+          <img src="{{ url_for('serve_photo', filename=contenido['foto']) }}" alt="Foto del personaje" class="w-full h-auto rounded-md" />
+        {% else %}
+          <p>No hay foto disponible.</p>
+        {% endif %}
+      </div>
+
+
 
     <!-- Enlace para volver -->
     <div class="text-center">
@@ -246,7 +262,7 @@
     </div>
   </div>
 
-  <!-- JavaScript (si lo requieres) -->
+  <!-- JavaScript -->
   <script src="{{ url_for('static', filename='js/ver_fichas.js') }}"></script>
 </body>
 </html>

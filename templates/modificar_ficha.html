@@ -18,7 +18,7 @@
       Modificando la ficha: <strong class="text-yellow-400">{{ nombre_ficha }}</strong>
     </p>
     
-    <form action="{{ url_for('modificar_ficha', nombre_ficha=nombre_ficha) }}" method="POST" class="bg-gray-800 p-8 rounded-lg shadow-2xl">
+    <form action="{{ url_for('modificar_ficha', nombre_ficha=nombre_ficha) }}" method="POST" class="bg-gray-800 p-8 rounded-lg shadow-2xl" enctype="multipart/form-data">
       
       <!-- Encabezado superior con dos contenedores en paralelo -->
       <div class="flex flex-col md:flex-row gap-4 mb-8">
@@ -266,25 +266,33 @@
       <!-- Nueva sección: Imagen e Historia en paralelo -->
       <div class="mt-8 flex flex-col md:flex-row gap-4">
         <!-- Contenedor para la imagen (placeholder) -->
-        <div class="md:w-1/2 flex items-center justify-center border border-dashed border-gray-500 p-4">
-          <!--
-          #########################################################
-          #                                                       #
-          #                 PON TU IMAGEN AQUÍ                    #
-          #                                                       #
-          #########################################################
-          -->
-          <span class="text-gray-400">Imagen de la ficha</span>
-        </div>
-        <!-- Contenedor para Historia -->
-        <div class="md:w-1/2">
+        <div class="md:w-1/2 flex flex-col items-center justify-center border border-dashed border-gray-500 p-4">
+          <span class="text-gray-400 mb-2">Imagen de la ficha</span>
+          
+          <!-- Mostrar la imagen si 'contenido['foto']' no está vacío -->
+          {% if contenido['foto'] %}
+              <div class="mt-2 mb-4">
+                  <img src="{{ url_for('serve_photo', filename=contenido['foto']) }}" alt="Imagen de la ficha" class="max-w-full h-auto rounded-md" />
+              </div>
+          {% endif %}
+      
+          <!-- Contenedor para el campo de subida -->
+          <div class="mt-4">
+              <input type="file" name="foto" id="foto" accept="image/*" class="mt-2" />
+          </div>
+      </div>
+      
+
+      <!-- Contenedor para Historia -->
+      <div class="md:w-1/2">
           <h2 class="text-2xl font-semibold mb-4 border-b border-gray-600 pb-2">Historia</h2>
           <div class="mb-4">
-            <label for="historia" class="block text-sm font-medium">Historia:</label>
-            <textarea id="historia" name="historia" rows="4" required class="w-full p-2 mt-1 bg-gray-700 rounded-lg">{{ contenido['historia'] }}</textarea>
+              <label for="historia" class="block text-sm font-medium">Historia:</label>
+              <textarea id="historia" name="historia" rows="4" required class="w-full p-2 mt-1 bg-gray-700 rounded-lg">{{ contenido['historia'] }}</textarea>
           </div>
-        </div>
       </div>
+    </div>
+
 
       <!-- Nuevo contenedor para Estadísticas (dividido en 3 columnas) -->
       <div class="mt-8">
