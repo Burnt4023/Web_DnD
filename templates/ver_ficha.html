@@ -7,22 +7,59 @@
   <link rel="icon" href="{{ url_for('static', filename='images/favicon.png') }}" type="image/png">
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Si deseas conservar estilos personalizados, puedes mantener o agregar tu CSS aquí -->
-  <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/ver_fichas.css') }}"> -->
   <style>
-    /* Opcional: Puedes agregar reglas CSS personalizadas si lo requieres */
+    /* From Uiverse.io by Yaya12085 */
+    .radio-inputs {
+      position: relative;
+      display: flex;
+      flex-wrap: wrap;
+      border-radius: 0.5rem;
+      background-color: #EEE;
+      box-sizing: border-box;
+      box-shadow: 0 0 0px 1px rgba(0, 0, 0, 0.06);
+      padding: 0.25rem;
+      width: 300px;
+      font-size: 14px;
+    }
+
+    .radio-inputs .radio {
+      flex: 1 1 auto;
+      text-align: center;
+    }
+
+    .radio-inputs .radio input {
+      display: none;
+    }
+
+    .radio-inputs .radio .name {
+      display: flex;
+      cursor: pointer;
+      align-items: center;
+      justify-content: center;
+      border-radius: 0.5rem;
+      border: none;
+      padding: .5rem 0;
+      color: rgba(51, 65, 85, 1);
+      transition: all .15s ease-in-out;
+    }
+
+    .radio-inputs .radio input:checked + .name {
+      background-color: #fff;
+      font-weight: 600;
+    }
   </style>
 </head>
 <body class="bg-gray-100 text-gray-900">
   <div class="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg my-8">
-    <!-- Información básica del personaje -->
+    
+    <!-- Información básica del personaje (siempre visible) -->
     <div class="mb-6">
       <p class="mb-2"><span class="font-bold">Nombre del personaje:</span> {{ contenido['nombre'] }}</p>
       <p class="mb-2"><span class="font-bold">Nivel:</span> {{ contenido['nivel'] }}</p>
       <p class="mb-2"><span class="font-bold">Clase:</span> {{ contenido['clase'] }}</p>
     </div>
 
-    <!-- Datos adicionales -->
+    <!-- Datos adicionales (siempre visibles) -->
     <div class="mb-6">
       <h2 class="text-2xl font-semibold border-b pb-2 mb-4">Datos adicionales</h2>
       <p class="mb-2"><span class="font-bold">Vida:</span> {{ contenido['vida']['actual'] }} / {{ contenido['vida']['maxima'] }}</p>
@@ -33,8 +70,39 @@
       <p class="mb-2"><span class="font-bold">Tiradas:</span> Éxitos: {{ contenido['tiradas']['exitos'] }}, Fallos: {{ contenido['tiradas']['fallos'] }}</p>
     </div>
 
-    <!-- Destreza -->
+    <!-- Dinero (siempre visible) -->
     <div class="mb-6">
+      <h2 class="text-2xl font-semibold border-b pb-2 mb-4">Dinero</h2>
+      <p class="mb-2"><span class="font-bold">Cobre:</span> {{ contenido['dinero'][0] }}</p>
+      <p class="mb-2"><span class="font-bold">Plata:</span> {{ contenido['dinero'][1] }}</p>
+      <p class="mb-2"><span class="font-bold">Oro:</span> {{ contenido['dinero'][2] }}</p>
+      <p class="mb-2"><span class="font-bold">Platino:</span> {{ contenido['dinero'][3] }}</p>
+    </div>
+
+    <!-- Barra de navegación de secciones usando radio-inputs -->
+    <div class="flex justify-center mb-6">
+      <div class="radio-inputs">
+        <label class="radio">
+          <input type="radio" name="secciones" onclick="mostrarSeccion('seccionDestrezas')" checked>
+          <span class="name">Destrezas</span>
+        </label>
+        <label class="radio">
+          <input type="radio" name="secciones" onclick="mostrarSeccion('seccionEstadisticas')">
+          <span class="name">Estadísticas</span>
+        </label>
+        <label class="radio">
+          <input type="radio" name="secciones" onclick="mostrarSeccion('seccionInventarioEquipo')">
+          <span class="name">Inventario y Equipo</span>
+        </label>
+        <label class="radio">
+          <input type="radio" name="secciones" onclick="mostrarSeccion('seccionHabilidadesHechizos')">
+          <span class="name">Habilidades y Hechizos</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Sección: Destrezas -->
+    <div id="seccionDestrezas" class="seccion">
       <h2 class="text-2xl font-semibold border-b pb-2 mb-4">Destrezas</h2>
       <ul class="list-disc pl-5">
         {% set destrezas_nombres = ['Minería', 'Herrería', 'Costura', 'Carpintería', 
@@ -49,8 +117,8 @@
       </ul>
     </div>
 
-    <!-- Estadísticas -->
-    <div class="mb-6">
+    <!-- Sección: Estadísticas -->
+    <div id="seccionEstadisticas" class="seccion hidden">
       <h2 class="text-2xl font-semibold border-b pb-2 mb-4">Estadísticas</h2>
       <ul class="list-disc pl-5">
         {% set estadisticas_nombres = ['Fuerza', 'Resistencia', 'Agilidad', 
@@ -64,90 +132,16 @@
       </ul>
     </div>
 
-    <!-- Dinero -->
-    <div class="mb-6">
-      <h2 class="text-2xl font-semibold border-b pb-2 mb-4">Dinero</h2>
-      <p class="mb-2"><span class="font-bold">Cobre:</span> {{ contenido['dinero'][0] }}</p>
-      <p class="mb-2"><span class="font-bold">Plata:</span> {{ contenido['dinero'][1] }}</p>
-      <p class="mb-2"><span class="font-bold">Oro:</span> {{ contenido['dinero'][2] }}</p>
-      <p class="mb-2"><span class="font-bold">Platino:</span> {{ contenido['dinero'][3] }}</p>
-    </div>
-
-    <!-- Habilidades -->
-    <div class="mb-6">
-      <h2 class="text-2xl font-semibold border-b pb-2 mb-4">Habilidades</h2>
-      {% if contenido['habilidades'] %}
-        <ul class="list-disc pl-5 space-y-2">
-          {% for habilidad in contenido['habilidades'] %}
-            {% if habilidad in habilidades_detalle %}
-              <li>
-                <!-- Tooltip con Tailwind -->
-                <div class="relative group inline-block">
-                  <span class="cursor-pointer text-blue-600 hover:underline">{{ habilidad }}</span>
-                  <div class="absolute left-1/2 bottom-full transform -translate-x-1/2 mb-2 hidden group-hover:block w-64 bg-gray-800 text-white text-xs rounded py-2 px-3 z-10">
-                    <p><strong>Duración:</strong> {{ habilidades_detalle[habilidad]['duracion'].strip('"') }}</p>
-                    <p><strong>Coste de vida:</strong> {{ habilidades_detalle[habilidad]['coste'].split(',')[0].strip('"') }}</p>
-                    <p><strong>Coste de mana:</strong> {{ habilidades_detalle[habilidad]['coste'].split(',')[1].strip('"') }}</p>
-                    <p><strong>Coste de resistencia:</strong> {{ habilidades_detalle[habilidad]['coste'].split(',')[2].strip('"') }}</p>
-                    <p><strong>Rango:</strong> {{ habilidades_detalle[habilidad]['rango'] }}ft</p>
-                    {% if habilidades_detalle[habilidad]['clase'] %}
-                      <p><strong>Clase:</strong> {{ habilidades_detalle[habilidad]['clase'] }}</p>
-                    {% endif %}
-                    {% if habilidades_detalle[habilidad]['raza'] %}
-                      <p><strong>Raza:</strong> {{ habilidades_detalle[habilidad]['raza'] }}</p>
-                    {% endif %}
-                    {% if habilidades_detalle[habilidad]['otro'] %}
-                      <p><strong>Otro:</strong> {{ habilidades_detalle[habilidad]['otro'] }}</p>
-                    {% endif %}
-                    <p><strong>Casteo:</strong> {{ habilidades_detalle[habilidad]['casteo'].strip('"') }}</p>
-                    <p class="mt-2">{{ habilidades_detalle[habilidad]['descripcion'].strip('"') }}</p>
-                  </div>
-                </div>
-              </li>
-            {% endif %}
-          {% endfor %}
-        </ul>
-      {% else %}
-        <p>No hay habilidades registradas.</p>
-      {% endif %}
-    </div>
-
-    <!-- Hechizos -->
-    <div class="mb-6">
-      <h2 class="text-2xl font-semibold border-b pb-2 mb-4">Hechizos</h2>
-      {% if contenido['hechizos'] %}
-        <ul class="list-disc pl-5 space-y-2">
-          {% for hechizo in contenido['hechizos'] %}
-            {% if hechizo in hechizos_detalle %}
-              <li>
-                <div class="relative group inline-block">
-                  <span class="cursor-pointer text-blue-600 hover:underline">{{ hechizo }}</span>
-                  <div class="absolute left-1/2 bottom-full transform -translate-x-1/2 mb-2 hidden group-hover:block w-64 bg-gray-800 text-white text-xs rounded py-2 px-3 z-10">
-                    <p><strong>Nivel:</strong> {{ hechizos_detalle[hechizo]['nivel'] }}</p>
-                    <p><strong>Magia:</strong> {{ hechizos_detalle[hechizo]['magia'] }}</p>
-                    <p><strong>Coste:</strong> {{ hechizos_detalle[hechizo]['coste'] }}</p>
-                    <p><strong>Rango:</strong> {{ hechizos_detalle[hechizo]['rango'] }}ft</p>
-                    <p><strong>Duración:</strong> {{ hechizos_detalle[hechizo]['duracion'] }}</p>
-                    <p><strong>Casteo:</strong> {{ hechizos_detalle[hechizo]['casteo'] }}</p>
-                    <p class="mt-2">{{ hechizos_detalle[hechizo]['descripcion'] }}</p>
-                  </div>
-                </div>
-              </li>
-            {% endif %}
-          {% endfor %}
-        </ul>
-      {% else %}
-        <p>No hay hechizos registrados.</p>
-      {% endif %}
-    </div>
-
-    <!-- Equipo -->
-    <div class="mb-6">
-      <h2 class="text-2xl font-semibold border-b pb-2 mb-4">Equipo</h2>
+    <!-- Sección: Inventario y Equipo (se agrupan Equipo e Inventario) -->
+    <div id="seccionInventarioEquipo" class="seccion hidden">
+      <h2 class="text-2xl font-semibold border-b pb-2 mb-4">Inventario y Equipo</h2>
+      
+      <!-- Equipo -->
+      <h3 class="text-xl font-semibold mt-4">Equipo</h3>
       {% if contenido['equipamiento'] %}
         <ul class="list-disc pl-5 space-y-2">
           {% for item in contenido['equipamiento'] %}
-            <li>
+            <li class="mb-1">
               <div class="relative group inline-block">
                 <span class="cursor-pointer text-blue-600 hover:underline">{{ item }}</span>
                 <div class="absolute left-1/2 bottom-full transform -translate-x-1/2 mb-2 hidden group-hover:block w-72 bg-gray-800 text-white text-xs rounded py-2 px-3 z-10">
@@ -182,15 +176,13 @@
       {% else %}
         <p>No hay equipo registrado.</p>
       {% endif %}
-    </div>
 
-    <!-- Inventario -->
-    <div class="mb-6">
-      <h2 class="text-2xl font-semibold border-b pb-2 mb-4">Inventario</h2>
+      <!-- Inventario -->
+      <h3 class="text-xl font-semibold mt-4">Inventario</h3>
       {% if contenido['objetos'] %}
         <ul class="list-disc pl-5 space-y-2">
           {% for item in contenido['objetos'] %}
-            <li>
+            <li class="mb-1">
               <div class="relative group inline-block">
                 <span class="cursor-pointer text-blue-600 hover:underline">{{ item }}</span>
                 <div class="absolute left-1/2 bottom-full transform -translate-x-1/2 mb-2 hidden group-hover:block w-72 bg-gray-800 text-white text-xs rounded py-2 px-3 z-10">
@@ -229,40 +221,114 @@
       {% endif %}
     </div>
 
-    <!-- Historia y Foto -->
+    <!-- Sección: Habilidades y Hechizos (se agrupan ambos bloques) -->
+    <div id="seccionHabilidadesHechizos" class="seccion hidden">
+      <h2 class="text-2xl font-semibold border-b pb-2 mb-4">Habilidades y Hechizos</h2>
+      
+      <!-- Habilidades -->
+      <h3 class="text-xl font-semibold mt-4">Habilidades</h3>
+      {% if contenido['habilidades'] %}
+        <ul class="list-disc pl-5 space-y-2">
+          {% for habilidad in contenido['habilidades'] %}
+            {% if habilidad in habilidades_detalle %}
+              <li>
+                <div class="relative group inline-block">
+                  <span class="cursor-pointer text-blue-600 hover:underline">{{ habilidad }}</span>
+                  <div class="absolute left-1/2 bottom-full transform -translate-x-1/2 mb-2 hidden group-hover:block w-64 bg-gray-800 text-white text-xs rounded py-2 px-3 z-10">
+                    <p><strong>Duración:</strong> {{ habilidades_detalle[habilidad]['duracion'].strip('"') }}</p>
+                    <p><strong>Coste de vida:</strong> {{ habilidades_detalle[habilidad]['coste'].split(',')[0].strip('"') }}</p>
+                    <p><strong>Coste de mana:</strong> {{ habilidades_detalle[habilidad]['coste'].split(',')[1].strip('"') }}</p>
+                    <p><strong>Coste de resistencia:</strong> {{ habilidades_detalle[habilidad]['coste'].split(',')[2].strip('"') }}</p>
+                    <p><strong>Rango:</strong> {{ habilidades_detalle[habilidad]['rango'] }}ft</p>
+                    {% if habilidades_detalle[habilidad]['clase'] %}
+                      <p><strong>Clase:</strong> {{ habilidades_detalle[habilidad]['clase'] }}</p>
+                    {% endif %}
+                    {% if habilidades_detalle[habilidad]['raza'] %}
+                      <p><strong>Raza:</strong> {{ habilidades_detalle[habilidad]['raza'] }}</p>
+                    {% endif %}
+                    {% if habilidades_detalle[habilidad]['otro'] %}
+                      <p><strong>Otro:</strong> {{ habilidades_detalle[habilidad]['otro'] }}</p>
+                    {% endif %}
+                    <p><strong>Casteo:</strong> {{ habilidades_detalle[habilidad]['casteo'].strip('"') }}</p>
+                    <p class="mt-2">{{ habilidades_detalle[habilidad]['descripcion'].strip('"') }}</p>
+                  </div>
+                </div>
+              </li>
+            {% endif %}
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p>No hay habilidades registradas.</p>
+      {% endif %}
+      
+      <!-- Hechizos -->
+      <h3 class="text-xl font-semibold mt-4">Hechizos</h3>
+      {% if contenido['hechizos'] %}
+        <ul class="list-disc pl-5 space-y-2">
+          {% for hechizo in contenido['hechizos'] %}
+            {% if hechizo in hechizos_detalle %}
+              <li>
+                <div class="relative group inline-block">
+                  <span class="cursor-pointer text-blue-600 hover:underline">{{ hechizo }}</span>
+                  <div class="absolute left-1/2 bottom-full transform -translate-x-1/2 mb-2 hidden group-hover:block w-64 bg-gray-800 text-white text-xs rounded py-2 px-3 z-10">
+                    <p><strong>Nivel:</strong> {{ hechizos_detalle[hechizo]['nivel'] }}</p>
+                    <p><strong>Magia:</strong> {{ hechizos_detalle[hechizo]['magia'] }}</p>
+                    <p><strong>Coste:</strong> {{ hechizos_detalle[hechizo]['coste'] }}</p>
+                    <p><strong>Rango:</strong> {{ hechizos_detalle[hechizo]['rango'] }}ft</p>
+                    <p><strong>Duración:</strong> {{ hechizos_detalle[hechizo]['duracion'] }}</p>
+                    <p><strong>Casteo:</strong> {{ hechizos_detalle[hechizo]['casteo'] }}</p>
+                    <p class="mt-2">{{ hechizos_detalle[hechizo]['descripcion'] }}</p>
+                  </div>
+                </div>
+              </li>
+            {% endif %}
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p>No hay hechizos registrados.</p>
+      {% endif %}
+    </div>
+
+    <!-- Historia y Foto (siempre visibles) -->
     <div class="mb-6 flex items-start space-x-6">
       <!-- Historia -->
       <div class="flex-1">
         <h2 class="text-2xl font-semibold border-b pb-2 mb-4">Historia</h2>
         <p>{{ contenido['historia'] }}</p>
       </div>
-
       <!-- Foto -->
       <div class="w-1/4">
         {% if contenido['foto'] %}
           <h2 class="text-2xl font-semibold border-b pb-2 mb-4">Foto</h2>
-          <!-- Imprimir el nombre de la foto -->
-          
           <img src="{{ url_for('serve_photo', filename=contenido['foto']) }}" alt="Foto del personaje" class="w-full h-auto rounded-md" />
         {% else %}
           <p>No hay foto disponible.</p>
         {% endif %}
       </div>
+    </div>
 
-
-
-    <!-- Enlace para volver -->
+    <!-- Enlaces para volver o editar -->
     <div class="text-center">
       <a href="{{ url_for('fichas') }}" class="text-blue-500 hover:underline">
         Volver a la lista de fichas
       </a>
-      <a href="{{ url_for('modificar_ficha', nombre_ficha=nombre_ficha) }}" class="text-blue-500 hover:underline">
+      <a href="{{ url_for('modificar_ficha', nombre_ficha=nombre_ficha) }}" class="text-blue-500 hover:underline ml-4">
         Editar ficha
       </a>
     </div>
   </div>
 
-  <!-- JavaScript -->
+  <!-- JavaScript para cambiar de sección -->
+  <script>
+    function mostrarSeccion(id) {
+      document.querySelectorAll('.seccion').forEach(function(seccion) {
+        seccion.classList.add('hidden');
+      });
+      document.getElementById(id).classList.remove('hidden');
+    }
+  </script>
+  
+  <!-- Si tienes un archivo JS externo, puedes enlazarlo aquí -->
   <script src="{{ url_for('static', filename='js/ver_fichas.js') }}"></script>
 </body>
 </html>

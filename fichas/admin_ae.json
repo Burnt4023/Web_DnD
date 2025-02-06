@@ -1,5 +1,5 @@
 {
-    "nombre": "ae",
+    "nombre": "aaa",
     "nivel": 1,
     "clase": "Sin clase",
     "magia": "Ninguna",
@@ -66,5 +66,5 @@
         0,
         0
     ],
-    "publica": false
+    "publica": true
 }

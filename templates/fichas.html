@@ -1,80 +1,133 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestión de Fichas</title>
-    <link rel="icon" href="../static/images/favicon.png" type="image/png">
-    <link rel="stylesheet" href="../static/css/fichas.css">
-    <script src="https://cdn.tailwindcss.com"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestión de Fichas</title>
+  <link rel="icon" href="../static/images/favicon.png" type="image/png">
+  <link rel="stylesheet" href="../static/css/fichas.css">
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-50 min-h-screen flex flex-col items-center justify-center py-10">
-    <div class="container mx-auto p-6 bg-white bg-opacity-80 shadow-md rounded-xl">
-        <h1 class="text-4xl font-bold text-indigo-600 mb-4 text-center">Gestión de Fichas</h1>
-        <p class="text-center text-lg text-gray-700 mb-6">Bienvenido, <span class="font-semibold">{{ session['username'] }}</span>. Aquí están tus fichas:</p>
+    <div class="container mx-auto p-6 bg-gray-800/85 text-white shadow-md rounded-xl">
+    <h1 class="text-4xl font-bold text-indigo-400 mb-4 text-center">Gestión de Fichas</h1>
+    <p class="text-center text-lg text-gray-300 mb-6">
+      Bienvenido, <span class="font-semibold">{{ session['username'] }}</span>. Aquí tienes la gestión de tus fichas.
+    </p>
 
-        <!-- Listar fichas del usuario -->
-        <h2 class="text-2xl text-indigo-500 font-semibold mb-4">Tus Fichas</h2>
-        {% if fichas_usuario %}
-            <ul class="space-y-4">
-            {% for ficha in fichas_usuario %}
-                <li class="bg-white bg-opacity-90 p-4 rounded-lg shadow flex justify-between items-center">
-                    <strong class="text-lg">{{ ficha[1] }}</strong>
-                    <div class="space-x-2">
-                        <button class="bg-blue-500 bg-opacity-90 text-white px-4 py-2 rounded hover:bg-blue-600" onclick="location.href='{{ url_for('modificar_ficha', nombre_ficha=ficha[1]) }}'">Modificar</button>
-                        <button class="bg-green-500 bg-opacity-90 text-white px-4 py-2 rounded hover:bg-green-600" onclick="location.href='{{ url_for('ver_ficha', nombre_ficha=ficha[1], owner_username=session['username']) }}'">Ver</button>
-                        <form action="{{ url_for('borrar_ficha', nombre_ficha=ficha[1]) }}" method="POST" style="display:inline;" onsubmit="return confirm('¿Estás seguro de que deseas borrar esta ficha?');">
-                            <input type="hidden" name="_method" value="DELETE">
-                            <button type="submit" class="bg-red-500 bg-opacity-90 text-white px-4 py-2 rounded hover:bg-red-600">Borrar</button>
-                        </form>
-                        
-                    </div>
-                </li>
-            {% endfor %}
-            </ul>
-        {% else %}
-            <p class="text-gray-500">No tienes fichas registradas aún.</p>
-        {% endif %}
-
-        <!-- Listar fichas públicas de otras personas -->
-        <h2 class="text-2xl text-indigo-500 font-semibold mt-8 mb-4">Fichas Públicas de Otros Usuarios</h2>
-        {% if fichas_publicas %}
-            <ul class="space-y-4">
-            {% for ficha in fichas_publicas %}
-                <li class="bg-white bg-opacity-90 p-4 rounded-lg shadow flex justify-between items-center">
-                    <strong class="text-lg">{{ ficha[1] }}</strong>
-                    <span class="text-sm text-gray-600">De {{ ficha[2] }}</span>
-                    <button class="bg-purple-500 bg-opacity-90 text-white px-4 py-2 rounded hover:bg-purple-600" onclick="location.href='{{ url_for('ver_ficha', nombre_ficha=ficha[1], owner_username=ficha[2]) }}'">Ver</button>
-                </li>
-            {% endfor %}
-            </ul>
-        {% else %}
-            <p class="text-gray-500">No hay fichas públicas disponibles.</p>
-        {% endif %}
-
-        <!-- Botón para abrir el popup -->
-        <div class="text-center mt-6">
-            <button class="bg-indigo-600 bg-opacity-90 text-white px-6 py-3 rounded-xl hover:bg-indigo-700" onclick="abrirPopup()">Crear Ficha</button>
-        </div>
-
-        <!-- Popup para crear fichas -->
-        <div class="popup-overlay"></div>
-        <div class="popup bg-opacity-90">
-            <h2 class="text-2xl font-semibold text-center text-indigo-600 mb-4">Crear Nueva Ficha</h2>
-            <label for="nombreFicha" class="block text-gray-700 mb-2">Nombre de la ficha:</label>
-            <input type="text" id="nombreFicha" name="nombreFicha" required class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-indigo-500">
-            <div class="flex justify-around mt-4">
-                <button class="bg-green-500 bg-opacity-90 text-white px-4 py-2 rounded hover:bg-green-600" onclick="crearFicha()">Crear</button>
-                <button class="bg-red-500 bg-opacity-90 text-white px-4 py-2 rounded hover:bg-red-600" onclick="cerrarPopup()">Cancelar</button>
-            </div>
-        </div>
-
-        <div class="text-center mt-4">
-            <a href="/" class="text-indigo-500 hover:underline">Volver al Home</a>
+    <div class="grid place-items-center mb-6">
+        <div class="radio-inputs flex">
+            <label class="radio">
+                <input type="radio" name="secciones" onclick="mostrarSeccion('seccionTusFichas')" checked>
+                <span class="name">Tus Fichas</span>
+            </label>
+            <label class="radio">
+                <input type="radio" name="secciones" onclick="mostrarSeccion('seccionFichasPublicas')">
+                <span class="name">Fichas Públicas</span>
+            </label>
         </div>
     </div>
+      
 
-    <!-- Enlazar el archivo JS externo -->
-    <script src="{{ url_for('static', filename='js/fichas.js') }}"></script>
+    <!-- Sección: Tus Fichas y opción de crear ficha -->
+    <div id="seccionTusFichas" class="seccion">
+      <h2 class="text-2xl text-indigo-400 font-semibold mb-4">Tus Fichas</h2>
+      {% if fichas_usuario %}
+        <ul class="space-y-4">
+          {% for ficha in fichas_usuario %}
+            <li class="bg-gray-700/83 p-4 rounded-lg shadow flex justify-between items-center">
+              <strong class="text-lg text-black">{{ ficha[1] }}</strong>
+              <div class="space-x-2">
+                <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                        onclick="location.href='{{ url_for('modificar_ficha', nombre_ficha=ficha[1]) }}'">
+                  Modificar
+                </button>
+                <button class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+                        onclick="location.href='{{ url_for('ver_ficha', nombre_ficha=ficha[1], owner_username=session['username']) }}'">
+                  Ver
+                </button>
+                <form action="{{ url_for('borrar_ficha', nombre_ficha=ficha[1]) }}" method="POST"
+                      style="display:inline;"
+                      onsubmit="return confirm('¿Estás seguro de que deseas borrar esta ficha?');">
+                  <input type="hidden" name="_method" value="DELETE">
+                  <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
+                    Borrar
+                  </button>
+                </form>
+              </div>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p class="text-gray-400">No tienes fichas registradas aún.</p>
+      {% endif %}
+
+      <!-- Botón para abrir el popup y crear una nueva ficha -->
+      <div class="text-center mt-6">
+        <button class="bg-indigo-600 text-white px-6 py-3 rounded-xl hover:bg-indigo-700"
+                onclick="abrirPopup()">
+          Crear Ficha
+        </button>
+      </div>
+    </div>
+
+    <!-- Sección: Fichas Públicas de otros usuarios -->
+    <div id="seccionFichasPublicas" class="seccion hidden">
+      <h2 class="text-2xl text-indigo-400 font-semibold mb-4">Fichas Públicas de Otros Usuarios</h2>
+      {% if fichas_publicas %}
+        <ul class="space-y-4">
+          {% for ficha in fichas_publicas %}
+            <li class="bg-gray-700/83 p-4 rounded-lg shadow flex justify-between items-center">
+              <strong class="text-lg text-black">{{ ficha[1] }}</strong>
+              <span class="text-sm text-gray-300">De {{ ficha[2] }}</span>
+              <button class="bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-600"
+                      onclick="location.href='{{ url_for('ver_ficha', nombre_ficha=ficha[1], owner_username=ficha[2]) }}'">
+                Ver
+              </button>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p class="text-gray-400">No hay fichas públicas disponibles.</p>
+      {% endif %}
+    </div>
+
+    <!-- Enlace para volver al Home -->
+    <div class="text-center mt-4">
+      <a href="/" class="text-indigo-400 hover:underline">Volver al Home</a>
+    </div>
+
+    <!-- Popup para crear una nueva ficha -->
+    <div class="popup-overlay"></div>
+    <div class="popup bg-gray-800 text-white">
+      <h2 class="text-2xl font-semibold text-center text-indigo-400 mb-4">Crear Nueva Ficha</h2>
+      <label for="nombreFicha" class="block text-gray-300 mb-2">Nombre de la ficha:</label>
+      <input type="text" id="nombreFicha" name="nombreFicha" required
+             class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-gray-700 text-white">
+      <div class="flex justify-around mt-4">
+        <button class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+                onclick="crearFicha()">
+          Crear
+        </button>
+        <button class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+                onclick="cerrarPopup()">
+          Cancelar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Enlazar el archivo JS externo -->
+  <script src="{{ url_for('static', filename='js/fichas.js') }}"></script>
+  <script>
+    function mostrarSeccion(id) {
+      // Oculta todas las secciones
+      document.querySelectorAll('.seccion').forEach(seccion => {
+        seccion.classList.add('hidden');
+      });
+      // Muestra la sección seleccionada
+      document.getElementById(id).classList.remove('hidden');
+    }
+  </script>
 </body>
 </html>
