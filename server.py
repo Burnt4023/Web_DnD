@@ -201,20 +201,15 @@ def modificar_ficha(nombre_ficha):
 
     if request.method == 'POST':
 
-        # Captura los datos del formulario
-        campos_obligatorios = [
-            'nombre_personaje', 'nivel', 'clase',
-            'vida_actual', 'vida_maxima',
-            'mana_actual', 'mana_maximo',
-            'resistencia_actual', 'resistencia_maxima',
-            'sobrecarga', 'velocidad', 'tiradas_exito', 'tiradas_fallo',
+        # Definir todos los campos de la ficha
+        campos = [
+            'nombre_personaje', 'nivel', 'clase', 'magia', 'talento', 'alineamiento', 'historia',
+            'vida_actual', 'vida_maxima', 'mana_actual', 'mana_maximo', 'resistencia_actual', 'resistencia_maxima',
+            'sobrecarga', 'velocidad', 'armadura', 'iniciativa', 'tiradas_exito', 'tiradas_fallo'
         ]
 
-        # Validar que todos los campos obligatorios estén presentes
-        datos_ficha = {campo: request.form.get(campo) for campo in campos_obligatorios}
-        if not all(datos_ficha.values()):
-            flash('Todos los campos son obligatorios.', 'error')
-            return redirect(url_for('modificar_ficha', nombre_ficha=nombre_ficha))
+        # Capturar los datos del formulario con valores por defecto
+        datos_ficha = {campo: request.form.get(campo, None) for campo in campos}
 
         # Capturar el estado del checkbox de "ficha pública"
         ficha_publica = 'ficha_publica' in request.form  # True si el checkbox está marcado
@@ -222,79 +217,59 @@ def modificar_ficha(nombre_ficha):
         # Capturar habilidades, hechizos y objetos
         habilidades = request.form.getlist('habilidades[]')
         hechizos = request.form.getlist('hechizos[]')
-        objetos = request.form.getlist('objetos[]')  # Nueva lista de objetos
+        objetos = request.form.getlist('objetos[]')
         equipo = request.form.getlist('equipo[]')
-        
-        # Definir las claves para las destrezas y estadísticas
-        destrezas_claves = [
-            'mineria', 'herreria', 'costura', 'carpinteria',
-            'arcano', 'supervivencia', 'pesca', 'alquimia',
-            'cocina', 'medicina', 'sigilo', 'arco',
-            'espada', 'bloqueo', 'engano', 'percepcion'
-        ]
-
-        estadisticas_claves = [
-            'fuerza', 'resistencia', 'agilidad', 'poder',
-            'control', 'capacidad', 'carisma', 'inteligencia', 'sabiduria'
-        ]
 
         # Captura de destrezas
-        destrezas = {clave.strip("destrezas[").strip("]"): int(valor) for clave, valor in request.form.items() if clave.startswith("destrezas[")}
+        destrezas = [int(request.form.get(f"destrezas[{i}]", 15)) for i in range(16)]
 
         # Captura de estadísticas
-        estadisticas = {clave.strip("estadisticas[").strip("]"): int(valor) for clave, valor in request.form.items() if clave.startswith("estadisticas[")}
-        
-        print(request.form)
-        # Construir el nuevo contenido
+        estadisticas = [int(request.form.get(f"estadisticas[{i}]", 0)) for i in range(9)]
+
         # Captura de los valores de dinero enviados por el formulario
         dinero = request.form.getlist('dinero[]')
-
-        magia = request.form.get('magia')
-        talento = request.form.get('talento')
-        alineamiento = request.form.get('alineamiento')
-        historia = request.form.get('historia')
-        
-        # Asegúrate de que los valores estén en el orden correcto: cobre, plata, oro, platino
         cobre = int(dinero[0]) if len(dinero) > 0 else 0
         plata = int(dinero[1]) if len(dinero) > 1 else 0
         oro = int(dinero[2]) if len(dinero) > 2 else 0
         platino = int(dinero[3]) if len(dinero) > 3 else 0
 
-        # Agrega el dinero al diccionario final
+        # Construcción del nuevo contenido de la ficha
         nuevo_contenido = {
             "nombre": datos_ficha['nombre_personaje'],
-            "nivel": int(datos_ficha['nivel']),
-            "clase": datos_ficha['clase'],
-            "magia": magia,
-            "talento": talento,
-            "alineamiento": alineamiento,
-            "historia": historia,  # Agregar historia
+            "nivel": int(datos_ficha['nivel']) if datos_ficha['nivel'] else 1,
+            "clase": datos_ficha['clase'] or 'Sin clase',
+            "magia": datos_ficha['magia'] or 'Ninguna',
+            "talento": datos_ficha['talento'] or 'Ninguno',
+            "alineamiento": datos_ficha['alineamiento'] or 'Neutral',
+            "historia": datos_ficha['historia'] or 'No',
             "vida": {
-                "actual": int(datos_ficha['vida_actual']),
-                "maxima": int(datos_ficha['vida_maxima'])
+                "actual": int(datos_ficha['vida_actual']) if datos_ficha['vida_actual'] else 10,
+                "maxima": int(datos_ficha['vida_maxima']) if datos_ficha['vida_maxima'] else 10
             },
             "mana": {
-                "actual": int(datos_ficha['mana_actual']),
-                "maximo": int(datos_ficha['mana_maximo'])
+                "actual": int(datos_ficha['mana_actual']) if datos_ficha['mana_actual'] else 10,
+                "maximo": int(datos_ficha['mana_maximo']) if datos_ficha['mana_maximo'] else 10
             },
             "resistencia": {
-                "actual": int(datos_ficha['resistencia_actual']),
-                "maxima": int(datos_ficha['resistencia_maxima'])
+                "actual": int(datos_ficha['resistencia_actual']) if datos_ficha['resistencia_actual'] else 10,
+                "maxima": int(datos_ficha['resistencia_maxima']) if datos_ficha['resistencia_maxima'] else 10
             },
-            "sobrecarga": int(datos_ficha['sobrecarga']),
-            "velocidad": int(datos_ficha['velocidad']),
+            "sobrecarga": int(datos_ficha['sobrecarga']) if datos_ficha['sobrecarga'] else 0,
+            "velocidad": int(datos_ficha['velocidad']) if datos_ficha['velocidad'] else 30,
+            "armadura": int(datos_ficha['armadura']) if datos_ficha['armadura'] else 10,
+            "iniciativa": int(datos_ficha['iniciativa']) if datos_ficha['iniciativa'] else 0,
             "tiradas": {
-                "exitos": int(datos_ficha['tiradas_exito']),
-                "fallos": int(datos_ficha['tiradas_fallo'])
+                "exitos": int(datos_ficha['tiradas_exito']) if datos_ficha['tiradas_exito'] else 0,
+                "fallos": int(datos_ficha['tiradas_fallo']) if datos_ficha['tiradas_fallo'] else 0
             },
-            "habilidades": habilidades,  # Agregar habilidades
-            "hechizos": hechizos,  # Agregar hechizos
-            "objetos": objetos,  # Agregar objetos (armas, armaduras y objetos)
+            "habilidades": habilidades,
+            "hechizos": hechizos,
+            "objetos": objetos,
             "equipamiento": equipo,
-            "destrezas": destrezas,  # Agregar destrezas si es necesario
-            "estadisticas": estadisticas,  # Agregar estadísticas si es necesario
-            "dinero": [cobre, plata, oro, platino],  # Usar el array de dinero
-            "publica": ficha_publica  # Agregar el valor de "publica" al contenido
+            "destrezas": destrezas,
+            "estadisticas": estadisticas,
+            "dinero": [cobre, plata, oro, platino],
+            "publica": ficha_publica
         }
 
         # Actualizar la ficha en la base de datos
@@ -302,7 +277,6 @@ def modificar_ficha(nombre_ficha):
 
         flash('Ficha modificada exitosamente.', 'success')
         return redirect(url_for('ver_ficha', nombre_ficha=nombre_ficha, owner_username=session['username']))
-
 
     # Obtener los datos actuales de la ficha
     contenido = obtener_contenido_de_archivo(username, nombre_ficha)
@@ -312,24 +286,23 @@ def modificar_ficha(nombre_ficha):
 
     # Obtener todas las habilidades, hechizos, armas, armaduras y objetos posibles
     lista_habilidades = [habilidad['nombre'] for habilidad in get_all_habilidades()]
-    lista_hechizos = [hechizo['nombre'] for hechizo in get_all_hechizos()]  # Lista de hechizos
-    lista_armas = [arma['nombre'] for arma in get_all_armas()]  # Lista de armas
-    lista_armaduras = [armadura['nombre'] for armadura in get_all_armaduras()]  # Lista de armaduras
-    
-    # Unificar armas, armaduras y otros objetos en una sola lista
-    nombres_objetos = lista_armas + lista_armaduras + [objeto['nombre'] for objeto in get_all_objetos()]  # Lista de nombres de todos los objetos
+    lista_hechizos = [hechizo['nombre'] for hechizo in get_all_hechizos()]
+    lista_armas = [arma['nombre'] for arma in get_all_armas()]
+    lista_armaduras = [armadura['nombre'] for armadura in get_all_armaduras()]
+    nombres_objetos = lista_armas + lista_armaduras + [objeto['nombre'] for objeto in get_all_objetos()]
 
     return render_template(
         'modificar_ficha.html',
         nombre_ficha=nombre_ficha,
         contenido=contenido,
         ficha_publica=contenido.get('publica', False),
-        equipo=contenido.get('equipamiento', []),  # Pasar solo el equipo actual
+        equipo=contenido.get('equipamiento', []),
         objetos=contenido.get('objetos', []),
         lista_habilidades=lista_habilidades,
         lista_hechizos=lista_hechizos,
         nombres_objetos=nombres_objetos,
     )
+
     
     
     

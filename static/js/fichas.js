@@ -37,17 +37,16 @@ async function crearFicha() {
         iniciativa: 0,
         historia: 'No',
         tiradas: { exito: 0, fallo: 0 },
-        destrezas: {
-            mineria: 15, herreria: 15, costura: 15, carpinteria: 15,
-            arcano: 15, supervivencia: 15, pesca: 15, alquimia: 15,
-            cocina: 15, medicina: 15, sigilo: 15, arco: 15,
-            espada: 15, bloqueo: 15, engaño: 15, percepcion: 15
-        },
-        estadisticas: {
-            fuerza: 0, resistencia: 0, agilidad: 0,
-            poder: 0, control: 0, capacidad: 0,
-            carisma: 0, inteligencia: 0, sabiduria: 0
-        },
+        destrezas: [
+            15,15,15,15,
+            15,15,15,15,
+            15,15,15,15
+        ],
+        estadisticas: [
+            0,0,0,
+            0,0,0,
+            0,0,0
+        ],
         habilidades: [],
         hechizos: [],
         objetos: [],

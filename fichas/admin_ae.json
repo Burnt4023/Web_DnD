@@ -1,0 +1,64 @@
+{
+    "nombre": "ae",
+    "nivel": 1,
+    "clase": "Sin clase",
+    "magia": "Ninguna",
+    "talento": "Ninguno",
+    "alineamiento": "Neutral",
+    "vida": {
+        "actual": 10,
+        "maximo": 10
+    },
+    "mana": {
+        "actual": 10,
+        "maximo": 10
+    },
+    "resistencia": {
+        "actual": 10,
+        "maximo": 10
+    },
+    "sobrecarga": 0,
+    "velocidad": 30,
+    "armadura": 10,
+    "iniciativa": 0,
+    "historia": "No",
+    "tiradas": {
+        "exito": 0,
+        "fallo": 0
+    },
+    "destrezas": [
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15
+    ],
+    "estadisticas": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+    ],
+    "habilidades": [],
+    "hechizos": [],
+    "objetos": [],
+    "equipamiento": [],
+    "dinero": [
+        0,
+        0,
+        0,
+        0
+    ]
+}
