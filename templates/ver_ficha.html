@@ -1,210 +1,242 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ver Ficha</title>
-    <!-- Enlace al archivo CSS -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/ver_fichas.css') }}">
-    <link rel="icon" href="{{ url_for('static', filename='images/favicon.png') }}" type="image/png">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ver Ficha</title>
+  <link rel="icon" href="{{ url_for('static', filename='images/favicon.png') }}" type="image/png">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Si deseas conservar estilos personalizados, puedes mantener o agregar tu CSS aquí -->
+  <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/ver_fichas.css') }}"> -->
+  <style>
+    /* Opcional: Puedes agregar reglas CSS personalizadas si lo requieres */
+  </style>
 </head>
-<body>
-    <div class="container">
-        <p><strong>Nombre del personaje:</strong> {{ contenido['nombre'] }}</p>
-        <p><strong>Nivel:</strong> {{ contenido['nivel'] }}</p>
-        <p><strong>Clase:</strong> {{ contenido['clase'] }}</p>
-
-        <!-- Datos adicionales -->
-        <h2>Datos adicionales</h2>
-        <p><strong>Vida:</strong> {{ contenido['vida']['actual'] }} / {{ contenido['vida']['maxima'] }}</p>
-        <p><strong>Mana:</strong> {{ contenido['mana']['actual'] }} / {{ contenido['mana']['maximo'] }}</p>
-        <p><strong>Resistencia:</strong> {{ contenido['resistencia']['actual'] }} / {{ contenido['resistencia']['maxima'] }}</p>
-        <p><strong>Sobre carga:</strong> {{ contenido['sobrecarga'] }}</p>
-        <p><strong>Velocidad:</strong> {{ contenido['velocidad'] }}</p>
-        <p><strong>Tiradas:</strong> Éxitos: {{ contenido['tiradas']['exitos'] }}, Fallos: {{ contenido['tiradas']['fallos'] }}</p>
-
-        <!-- Destreza -->
-        <h2>Destrezas</h2>
-        <ul>
-            {% for destreza, valor in contenido['destrezas'].items() %}
-                <li><strong>{{ destreza.capitalize() }}:</strong> {{ valor }}</li>
-            {% endfor %}
-        </ul>
-
-        <!-- Estadísticas -->
-        <h2>Estadísticas</h2>
-        <ul>
-            {% for estadistica, valor in contenido['estadisticas'].items() %}
-                <li><strong>{{ estadistica.capitalize() }}:</strong> {{ valor }}</li>
-            {% endfor %}
-        </ul>
-
-        <!-- Dinero -->
-        <h2>Dinero</h2>
-        <p>
-            <strong>Cobre:</strong> {{ contenido['dinero'][0] }}<br>
-            <strong>Plata:</strong> {{ contenido['dinero'][1] }}<br>
-            <strong>Oro:</strong> {{ contenido['dinero'][2] }}<br>
-            <strong>Platino:</strong> {{ contenido['dinero'][3] }}
-        </p>
-
-        <!-- Habilidades -->
-        <h2>Habilidades</h2>
-        {% if contenido['habilidades'] %}
-            <ul>
-                {% for habilidad in contenido['habilidades'] %}
-                    {% if habilidad in habilidades_detalle %}
-                        <li>
-                            <div class="tooltip">
-                                {{ habilidad }}
-                                <div class="tooltip-content">
-                                    <strong>Duración:</strong> {{ habilidades_detalle[habilidad]['duracion'].strip('"') }}<br>
-                                    <strong>Coste de vida:</strong> {{ habilidades_detalle[habilidad]['coste'].split(',')[0].strip('"') }}<br>
-                                    <strong>Coste de mana:</strong> {{ habilidades_detalle[habilidad]['coste'].split(',')[1].strip('"') }}<br>
-                                    <strong>Coste de resistencia:</strong> {{ habilidades_detalle[habilidad]['coste'].split(',')[2].strip('"') }}<br>
-                                    <strong>Rango:</strong> {{ habilidades_detalle[habilidad]['rango'] }}ft<br>
-                                    {% if habilidades_detalle[habilidad]['clase'] %}
-                                        <strong>Clase:</strong> {{ habilidades_detalle[habilidad]['clase'] }}<br>
-                                    {% endif %}
-                                    {% if habilidades_detalle[habilidad]['raza'] %}
-                                        <strong>Raza:</strong> {{ habilidades_detalle[habilidad]['raza'] }}<br>
-                                    {% endif %}
-                                    {% if habilidades_detalle[habilidad]['otro'] %}
-                                        <strong>Otro:</strong> {{ habilidades_detalle[habilidad]['otro'] }}<br>
-                                    {% endif %}
-                                    <strong>Casteo:</strong> {{ habilidades_detalle[habilidad]['casteo'].strip('"') }}<br><br>
-                                    {{ habilidades_detalle[habilidad]['descripcion'].strip('"') }}<br>
-                                </div>
-                            </div>
-                        </li>
-                    {% endif %}
-                {% endfor %}
-            </ul>
-        {% else %}
-            <p>No hay habilidades registradas.</p>
-        {% endif %}
-
-        <!-- Hechizos -->
-        <h2>Hechizos</h2>
-        {% if contenido['hechizos'] %}
-            <ul>
-                {% for hechizo in contenido['hechizos'] %}
-                    {% if hechizo in hechizos_detalle %}
-                        <li>
-                            <div class="tooltip">
-                                {{ hechizo }}
-                                <div class="tooltip-content">
-                                    <strong>Nivel:</strong> {{ hechizos_detalle[hechizo]['nivel'] }}<br>
-                                    <strong>Magia:</strong> {{ hechizos_detalle[hechizo]['magia'] }}<br>
-                                    <strong>Coste:</strong> {{ hechizos_detalle[hechizo]['coste'] }}<br>
-                                    <strong>Rango:</strong> {{ hechizos_detalle[hechizo]['rango'] }}ft<br>
-                                    <strong>Duración:</strong> {{ hechizos_detalle[hechizo]['duracion'] }}<br>
-                                    <strong>Casteo:</strong> {{ hechizos_detalle[hechizo]['casteo'] }}<br><br>
-                                    {{ hechizos_detalle[hechizo]['descripcion'] }}<br>
-                                </div>
-                            </div>
-                        </li>
-                    {% endif %}
-                {% endfor %}
-            </ul>
-        {% else %}
-            <p>No hay hechizos registrados.</p>
-        {% endif %}
-
-        <!-- Equipo -->
-        <h2>Equipo</h2>
-        {% if contenido['equipamiento'] %}
-            <ul>
-                {% for item in contenido['equipamiento'] %}
-                    <li>
-                        <div class="tooltip">
-                            {{ item }}
-                            <div class="tooltip-content">
-                                {% for arma in armas_detalle %}
-                                    {% if arma['nombre'] == item %}
-                                        <strong>Daño:</strong> {{ arma['daño'] }}<br>
-                                        <strong>Calidad:</strong> {{ arma['calidad'] }}<br>
-                                        <strong>Tipo:</strong> {{ arma['tipo'] }}<br>
-                                        <strong>Descripción:</strong> {{ arma['descripcion'] }}<br>
-                                    {% endif %}
-                                {% endfor %}
-                                {% for armadura in armaduras_detalle %}
-                                    {% if armadura['nombre'] == item %}
-                                        <strong>Rating:</strong> {{ armadura['rating'] }}<br>
-                                        <strong>Calidad:</strong> {{ armadura['calidad'] }}<br>
-                                        <strong>Tipo:</strong> {{ armadura['tipo'] }}<br>
-                                        <strong>Descripción:</strong> {{ armadura['descripcion'] }}<br>
-                                    {% endif %}
-                                {% endfor %}
-                                {% for objeto in objetos_detalle %}
-                                    {% if objeto['nombre'] == item %}
-                                        <strong>Otros:</strong> {{ objeto['otros'] }}<br>
-                                        <strong>Tipo:</strong> {{ objeto['tipo'] }}<br>
-                                        <strong>Descripción:</strong> {{ objeto['descripcion'] }}<br>
-                                    {% endif %}
-                                {% endfor %}
-                            </div>
-                        </div>
-                    </li>
-                {% endfor %}
-            </ul>
-        {% else %}
-            <p>No hay equipo registrado.</p>
-        {% endif %}
-
-        <!-- Inventario -->
-        <h2>Inventario</h2>
-            {% if contenido['objetos'] %}
-        <ul>
-            {% for item in contenido['objetos'] %}
-                <li>
-                    <div class="tooltip">
-                        {{ item }}
-                        <div class="tooltip-content">
-                            {% for objeto in objetos_detalle %}
-                                {% if objeto['nombre'] == item %}
-                                    <strong>{{ objeto['nombre'] }}</strong><br>
-                                    <strong>Otros:</strong> {{ objeto['otros'] }}<br>
-                                    <strong>Descripción:</strong> {{ objeto['descripcion'] }}<br>
-                                {% endif %}
-                            {% endfor %}
-                            
-                            {% for arma in armas_detalle %}
-                                {% if arma['nombre'] == item %}
-                                    <strong>{{ arma['nombre'] }}</strong><br>
-                                    <strong>Daño:</strong> {{ arma['daño'] }}<br>
-                                    <strong>Calidad:</strong> {{ arma['calidad'] }}<br>
-                                    <strong>Tipo:</strong> {{ arma['tipo'] }}<br>
-                                    <strong>Descripción:</strong> {{ arma['descripcion'] }}<br>
-                                {% endif %}
-                            {% endfor %}
-                            
-                            {% for armadura in armaduras_detalle %}
-                                {% if armadura['nombre'] == item %}
-                                    <strong>{{ armadura['nombre'] }}</strong><br>
-                                    <strong>Rating:</strong> {{ armadura['rating'] }}<br>
-                                    <strong>Calidad:</strong> {{ armadura['calidad'] }}<br>
-                                    <strong>Tipo:</strong> {{ armadura['tipo'] }}<br>
-                                    <strong>Descripción:</strong> {{ armadura['descripcion'] }}<br>
-                                {% endif %}
-                            {% endfor %}
-                        </div>
-                    </div>
-                </li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>No hay objetos en el inventario.</p>
-    {% endif %}
-    
-    <h2>Historia</h2>
-    <p>{{ contenido['historia'] }}</p>
-
-        <br>
-        <a href="{{ url_for('fichas') }}">Volver a la lista de fichas</a>
+<body class="bg-gray-100 text-gray-900">
+  <div class="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg my-8">
+    <!-- Información básica del personaje -->
+    <div class="mb-6">
+      <p class="mb-2"><span class="font-bold">Nombre del personaje:</span> {{ contenido['nombre'] }}</p>
+      <p class="mb-2"><span class="font-bold">Nivel:</span> {{ contenido['nivel'] }}</p>
+      <p class="mb-2"><span class="font-bold">Clase:</span> {{ contenido['clase'] }}</p>
     </div>
 
-    <!-- Enlace al archivo JavaScript -->
-    <script src="{{ url_for('static', filename='js/ver_fichas.js') }}"></script>
+    <!-- Datos adicionales -->
+    <div class="mb-6">
+      <h2 class="text-2xl font-semibold border-b pb-2 mb-4">Datos adicionales</h2>
+      <p class="mb-2"><span class="font-bold">Vida:</span> {{ contenido['vida']['actual'] }} / {{ contenido['vida']['maxima'] }}</p>
+      <p class="mb-2"><span class="font-bold">Mana:</span> {{ contenido['mana']['actual'] }} / {{ contenido['mana']['maximo'] }}</p>
+      <p class="mb-2"><span class="font-bold">Resistencia:</span> {{ contenido['resistencia']['actual'] }} / {{ contenido['resistencia']['maxima'] }}</p>
+      <p class="mb-2"><span class="font-bold">Sobre carga:</span> {{ contenido['sobrecarga'] }}</p>
+      <p class="mb-2"><span class="font-bold">Velocidad:</span> {{ contenido['velocidad'] }}</p>
+      <p class="mb-2"><span class="font-bold">Tiradas:</span> Éxitos: {{ contenido['tiradas']['exitos'] }}, Fallos: {{ contenido['tiradas']['fallos'] }}</p>
+    </div>
+
+    <!-- Destreza -->
+    <div class="mb-6">
+      <h2 class="text-2xl font-semibold border-b pb-2 mb-4">Destrezas</h2>
+      <ul class="list-disc pl-5">
+        {% for destreza, valor in contenido['destrezas'].items() %}
+          <li class="mb-1">
+            <span class="font-bold">{{ destreza.capitalize() }}:</span> {{ valor }}
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <!-- Estadísticas -->
+    <div class="mb-6">
+      <h2 class="text-2xl font-semibold border-b pb-2 mb-4">Estadísticas</h2>
+      <ul class="list-disc pl-5">
+        {% for estadistica, valor in contenido['estadisticas'].items() %}
+          <li class="mb-1">
+            <span class="font-bold">{{ estadistica.capitalize() }}:</span> {{ valor }}
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <!-- Dinero -->
+    <div class="mb-6">
+      <h2 class="text-2xl font-semibold border-b pb-2 mb-4">Dinero</h2>
+      <p class="mb-2"><span class="font-bold">Cobre:</span> {{ contenido['dinero'][0] }}</p>
+      <p class="mb-2"><span class="font-bold">Plata:</span> {{ contenido['dinero'][1] }}</p>
+      <p class="mb-2"><span class="font-bold">Oro:</span> {{ contenido['dinero'][2] }}</p>
+      <p class="mb-2"><span class="font-bold">Platino:</span> {{ contenido['dinero'][3] }}</p>
+    </div>
+
+    <!-- Habilidades -->
+    <div class="mb-6">
+      <h2 class="text-2xl font-semibold border-b pb-2 mb-4">Habilidades</h2>
+      {% if contenido['habilidades'] %}
+        <ul class="list-disc pl-5 space-y-2">
+          {% for habilidad in contenido['habilidades'] %}
+            {% if habilidad in habilidades_detalle %}
+              <li>
+                <!-- Tooltip con Tailwind -->
+                <div class="relative group inline-block">
+                  <span class="cursor-pointer text-blue-600 hover:underline">{{ habilidad }}</span>
+                  <div class="absolute left-1/2 bottom-full transform -translate-x-1/2 mb-2 hidden group-hover:block w-64 bg-gray-800 text-white text-xs rounded py-2 px-3 z-10">
+                    <p><strong>Duración:</strong> {{ habilidades_detalle[habilidad]['duracion'].strip('"') }}</p>
+                    <p><strong>Coste de vida:</strong> {{ habilidades_detalle[habilidad]['coste'].split(',')[0].strip('"') }}</p>
+                    <p><strong>Coste de mana:</strong> {{ habilidades_detalle[habilidad]['coste'].split(',')[1].strip('"') }}</p>
+                    <p><strong>Coste de resistencia:</strong> {{ habilidades_detalle[habilidad]['coste'].split(',')[2].strip('"') }}</p>
+                    <p><strong>Rango:</strong> {{ habilidades_detalle[habilidad]['rango'] }}ft</p>
+                    {% if habilidades_detalle[habilidad]['clase'] %}
+                      <p><strong>Clase:</strong> {{ habilidades_detalle[habilidad]['clase'] }}</p>
+                    {% endif %}
+                    {% if habilidades_detalle[habilidad]['raza'] %}
+                      <p><strong>Raza:</strong> {{ habilidades_detalle[habilidad]['raza'] }}</p>
+                    {% endif %}
+                    {% if habilidades_detalle[habilidad]['otro'] %}
+                      <p><strong>Otro:</strong> {{ habilidades_detalle[habilidad]['otro'] }}</p>
+                    {% endif %}
+                    <p><strong>Casteo:</strong> {{ habilidades_detalle[habilidad]['casteo'].strip('"') }}</p>
+                    <p class="mt-2">{{ habilidades_detalle[habilidad]['descripcion'].strip('"') }}</p>
+                  </div>
+                </div>
+              </li>
+            {% endif %}
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p>No hay habilidades registradas.</p>
+      {% endif %}
+    </div>
+
+    <!-- Hechizos -->
+    <div class="mb-6">
+      <h2 class="text-2xl font-semibold border-b pb-2 mb-4">Hechizos</h2>
+      {% if contenido['hechizos'] %}
+        <ul class="list-disc pl-5 space-y-2">
+          {% for hechizo in contenido['hechizos'] %}
+            {% if hechizo in hechizos_detalle %}
+              <li>
+                <div class="relative group inline-block">
+                  <span class="cursor-pointer text-blue-600 hover:underline">{{ hechizo }}</span>
+                  <div class="absolute left-1/2 bottom-full transform -translate-x-1/2 mb-2 hidden group-hover:block w-64 bg-gray-800 text-white text-xs rounded py-2 px-3 z-10">
+                    <p><strong>Nivel:</strong> {{ hechizos_detalle[hechizo]['nivel'] }}</p>
+                    <p><strong>Magia:</strong> {{ hechizos_detalle[hechizo]['magia'] }}</p>
+                    <p><strong>Coste:</strong> {{ hechizos_detalle[hechizo]['coste'] }}</p>
+                    <p><strong>Rango:</strong> {{ hechizos_detalle[hechizo]['rango'] }}ft</p>
+                    <p><strong>Duración:</strong> {{ hechizos_detalle[hechizo]['duracion'] }}</p>
+                    <p><strong>Casteo:</strong> {{ hechizos_detalle[hechizo]['casteo'] }}</p>
+                    <p class="mt-2">{{ hechizos_detalle[hechizo]['descripcion'] }}</p>
+                  </div>
+                </div>
+              </li>
+            {% endif %}
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p>No hay hechizos registrados.</p>
+      {% endif %}
+    </div>
+
+    <!-- Equipo -->
+    <div class="mb-6">
+      <h2 class="text-2xl font-semibold border-b pb-2 mb-4">Equipo</h2>
+      {% if contenido['equipamiento'] %}
+        <ul class="list-disc pl-5 space-y-2">
+          {% for item in contenido['equipamiento'] %}
+            <li>
+              <div class="relative group inline-block">
+                <span class="cursor-pointer text-blue-600 hover:underline">{{ item }}</span>
+                <div class="absolute left-1/2 bottom-full transform -translate-x-1/2 mb-2 hidden group-hover:block w-72 bg-gray-800 text-white text-xs rounded py-2 px-3 z-10">
+                  {% for arma in armas_detalle %}
+                    {% if arma['nombre'] == item %}
+                      <p><strong>Daño:</strong> {{ arma['daño'] }}</p>
+                      <p><strong>Calidad:</strong> {{ arma['calidad'] }}</p>
+                      <p><strong>Tipo:</strong> {{ arma['tipo'] }}</p>
+                      <p><strong>Descripción:</strong> {{ arma['descripcion'] }}</p>
+                    {% endif %}
+                  {% endfor %}
+                  {% for armadura in armaduras_detalle %}
+                    {% if armadura['nombre'] == item %}
+                      <p><strong>Rating:</strong> {{ armadura['rating'] }}</p>
+                      <p><strong>Calidad:</strong> {{ armadura['calidad'] }}</p>
+                      <p><strong>Tipo:</strong> {{ armadura['tipo'] }}</p>
+                      <p><strong>Descripción:</strong> {{ armadura['descripcion'] }}</p>
+                    {% endif %}
+                  {% endfor %}
+                  {% for objeto in objetos_detalle %}
+                    {% if objeto['nombre'] == item %}
+                      <p><strong>Otros:</strong> {{ objeto['otros'] }}</p>
+                      <p><strong>Tipo:</strong> {{ objeto['tipo'] }}</p>
+                      <p><strong>Descripción:</strong> {{ objeto['descripcion'] }}</p>
+                    {% endif %}
+                  {% endfor %}
+                </div>
+              </div>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p>No hay equipo registrado.</p>
+      {% endif %}
+    </div>
+
+    <!-- Inventario -->
+    <div class="mb-6">
+      <h2 class="text-2xl font-semibold border-b pb-2 mb-4">Inventario</h2>
+      {% if contenido['objetos'] %}
+        <ul class="list-disc pl-5 space-y-2">
+          {% for item in contenido['objetos'] %}
+            <li>
+              <div class="relative group inline-block">
+                <span class="cursor-pointer text-blue-600 hover:underline">{{ item }}</span>
+                <div class="absolute left-1/2 bottom-full transform -translate-x-1/2 mb-2 hidden group-hover:block w-72 bg-gray-800 text-white text-xs rounded py-2 px-3 z-10">
+                  {% for objeto in objetos_detalle %}
+                    {% if objeto['nombre'] == item %}
+                      <p><strong>{{ objeto['nombre'] }}</strong></p>
+                      <p><strong>Otros:</strong> {{ objeto['otros'] }}</p>
+                      <p><strong>Descripción:</strong> {{ objeto['descripcion'] }}</p>
+                    {% endif %}
+                  {% endfor %}
+                  {% for arma in armas_detalle %}
+                    {% if arma['nombre'] == item %}
+                      <p><strong>{{ arma['nombre'] }}</strong></p>
+                      <p><strong>Daño:</strong> {{ arma['daño'] }}</p>
+                      <p><strong>Calidad:</strong> {{ arma['calidad'] }}</p>
+                      <p><strong>Tipo:</strong> {{ arma['tipo'] }}</p>
+                      <p><strong>Descripción:</strong> {{ arma['descripcion'] }}</p>
+                    {% endif %}
+                  {% endfor %}
+                  {% for armadura in armaduras_detalle %}
+                    {% if armadura['nombre'] == item %}
+                      <p><strong>{{ armadura['nombre'] }}</strong></p>
+                      <p><strong>Rating:</strong> {{ armadura['rating'] }}</p>
+                      <p><strong>Calidad:</strong> {{ armadura['calidad'] }}</p>
+                      <p><strong>Tipo:</strong> {{ armadura['tipo'] }}</p>
+                      <p><strong>Descripción:</strong> {{ armadura['descripcion'] }}</p>
+                    {% endif %}
+                  {% endfor %}
+                </div>
+              </div>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p>No hay objetos en el inventario.</p>
+      {% endif %}
+    </div>
+
+    <!-- Historia -->
+    <div class="mb-6">
+      <h2 class="text-2xl font-semibold border-b pb-2 mb-4">Historia</h2>
+      <p>{{ contenido['historia'] }}</p>
+    </div>
+
+    <!-- Enlace para volver -->
+    <div class="text-center">
+      <a href="{{ url_for('fichas') }}" class="text-blue-500 hover:underline">
+        Volver a la lista de fichas
+      </a>
+    </div>
+  </div>
+
+  <!-- JavaScript (si lo requieres) -->
+  <script src="{{ url_for('static', filename='js/ver_fichas.js') }}"></script>
 </body>
 </html>

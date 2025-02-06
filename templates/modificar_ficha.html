@@ -226,25 +226,24 @@
             <button type="button" onclick="agregarInventario()" class="mt-2 bg-green-500 hover:bg-green-600 px-2 py-1 rounded-lg">Añadir</button>
           </div>
           <h2 class="text-2xl font-semibold mt-8 mb-4 border-b border-gray-600 pb-2">Dinero</h2>
-          <div class="mb-4 space-y-4">
-            <div>
-              <label for="dinero_cobre" class="block text-sm font-medium">Cobre:</label>
-              <input type="number" id="dinero_cobre" name="dinero[]" value="{{ contenido['dinero'][0] }}" min="0" required class="w-full p-2 mt-1 bg-gray-700 rounded-lg">
+            <div class="grid grid-cols-2 gap-4" style="padding-right: 20%; padding-left: 20%;">
+              <div class="flex flex-col items-center">
+                <label for="dinero_cobre" class="block text-sm font-medium">Cobre:</label>
+                <input type="number" id="dinero_cobre" name="dinero[]" value="{{ contenido['dinero'][0] }}" min="0" required class="w-16 h-16 p-2 mt-1 bg-gray-700 rounded-lg text-center">
+              </div>
+              <div class="flex flex-col items-center">
+                <label for="dinero_plata" class="block text-sm font-medium">Plata:</label>
+                <input type="number" id="dinero_plata" name="dinero[]" value="{{ contenido['dinero'][1] }}" min="0" required class="w-16 h-16 p-2 mt-1 bg-gray-700 rounded-lg text-center">
+              </div>
+              <div class="flex flex-col items-center">
+                <label for="dinero_oro" class="block text-sm font-medium">Oro:</label>
+                <input type="number" id="dinero_oro" name="dinero[]" value="{{ contenido['dinero'][2] }}" min="0" required class="w-16 h-16 p-2 mt-1 bg-gray-700 rounded-lg text-center">
+              </div>
+              <div class="flex flex-col items-center">
+                <label for="dinero_platino" class="block text-sm font-medium">Platino:</label>
+                <input type="number" id="dinero_platino" name="dinero[]" value="{{ contenido['dinero'][3] }}" min="0" required class="w-16 h-16 p-2 mt-1 bg-gray-700 rounded-lg text-center">
+              </div>
             </div>
-            <div>
-              <label for="dinero_plata" class="block text-sm font-medium">Plata:</label>
-              <input type="number" id="dinero_plata" name="dinero[]" value="{{ contenido['dinero'][1] }}" min="0" required class="w-full p-2 mt-1 bg-gray-700 rounded-lg">
-            </div>
-            <div>
-              <label for="dinero_oro" class="block text-sm font-medium">Oro:</label>
-              <input type="number" id="dinero_oro" name="dinero[]" value="{{ contenido['dinero'][2] }}" min="0" required class="w-full p-2 mt-1 bg-gray-700 rounded-lg">
-            </div>
-            <div>
-              <label for="dinero_platino" class="block text-sm font-medium">Platino:</label>
-              <input type="number" id="dinero_platino" name="dinero[]" value="{{ contenido['dinero'][3] }}" min="0" required class="w-full p-2 mt-1 bg-gray-700 rounded-lg">
-            </div>
-          </div>
-          
         </div>
       </div>
            
