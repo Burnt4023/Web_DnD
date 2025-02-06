@@ -49,3 +49,11 @@ h2 {
 div {
     margin-bottom: 10px;
 }
+
+.fondo-container {
+    background-image: url('../images/papel.png'); /* Asegúrate de que la ruta sea correcta */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+  
