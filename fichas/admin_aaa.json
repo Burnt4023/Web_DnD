@@ -1,11 +1,11 @@
 {
-    "nombre": "Caca",
+    "nombre": "Caca3",
     "nivel": 1,
     "clase": "Sin clase",
     "magia": "a",
     "talento": "a",
     "alineamiento": "a",
-    "historia": "None",
+    "historia": "pepe  y etesech",
     "vida": {
         "actual": 10,
         "maxima": 10
@@ -55,7 +55,7 @@
         "pacidad": 0,
         "risma": 0,
         "nteligencia": 0,
-        "biduria": 0
+        "biduria": 33
     },
     "dinero": [
         10,
