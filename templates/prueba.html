@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Formulario con Secciones</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white p-6">
+
+  <!-- Formulario -->
+  <form action="#" method="POST" class="max-w-3xl mx-auto bg-gray-800 p-6 rounded-lg shadow-lg">
+    
+    <!-- Barra de navegación con botones -->
+    <div class="flex justify-center space-x-4 mb-6">
+      <button type="button" onclick="mostrarSeccion('seccion1')" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 rounded-lg">Sección 1</button>
+      <button type="button" onclick="mostrarSeccion('seccion2')" class="px-4 py-2 bg-green-500 hover:bg-green-600 rounded-lg">Sección 2</button>
+      <button type="button" onclick="mostrarSeccion('seccion3')" class="px-4 py-2 bg-yellow-500 hover:bg-yellow-600 rounded-lg">Sección 3</button>
+      <button type="button" onclick="mostrarSeccion('seccion4')" class="px-4 py-2 bg-red-500 hover:bg-red-600 rounded-lg">Sección 4</button>
+    </div>
+
+    <!-- Secciones del formulario -->
+    <div id="seccion1" class="seccion p-6 bg-gray-700 rounded-lg shadow-md">
+      <h2 class="text-xl font-semibold mb-4">Información Personal</h2>
+      <label class="block mb-2">Nombre:</label>
+      <input type="text" name="nombre" class="w-full p-2 bg-gray-600 rounded-lg">
+      <label class="block mt-4 mb-2">Correo:</label>
+      <input type="email" name="correo" class="w-full p-2 bg-gray-600 rounded-lg">
+    </div>
+
+    <div id="seccion2" class="seccion hidden p-6 bg-gray-700 rounded-lg shadow-md">
+      <h2 class="text-xl font-semibold mb-4">Dirección</h2>
+      <label class="block mb-2">Dirección:</label>
+      <input type="text" name="direccion" class="w-full p-2 bg-gray-600 rounded-lg">
+      <label class="block mt-4 mb-2">Ciudad:</label>
+      <input type="text" name="ciudad" class="w-full p-2 bg-gray-600 rounded-lg">
+    </div>
+
+    <div id="seccion3" class="seccion hidden p-6 bg-gray-700 rounded-lg shadow-md">
+      <h2 class="text-xl font-semibold mb-4">Datos Adicionales</h2>
+      <label class="block mb-2">Edad:</label>
+      <input type="number" name="edad" class="w-full p-2 bg-gray-600 rounded-lg">
+      <label class="block mt-4 mb-2">Teléfono:</label>
+      <input type="tel" name="telefono" class="w-full p-2 bg-gray-600 rounded-lg">
+    </div>
+
+    <div id="seccion4" class="seccion hidden p-6 bg-gray-700 rounded-lg shadow-md">
+      <h2 class="text-xl font-semibold mb-4">Comentarios</h2>
+      <label class="block mb-2">Mensaje:</label>
+      <textarea name="mensaje" rows="4" class="w-full p-2 bg-gray-600 rounded-lg"></textarea>
+    </div>
+
+    <!-- Botón de envío del formulario -->
+    <div class="mt-6 flex justify-center">
+      <button type="submit" class="px-6 py-3 bg-indigo-500 hover:bg-indigo-600 rounded-xl text-white font-bold shadow-lg transition-transform transform hover:scale-105">
+        Enviar Formulario
+      </button>
+    </div>
+
+  </form>
+
+  <script>
+    function mostrarSeccion(id) {
+      // Oculta todas las secciones
+      document.querySelectorAll('.seccion').forEach(seccion => {
+        seccion.classList.add('hidden');
+      });
+
+      // Muestra la sección seleccionada
+      document.getElementById(id).classList.remove('hidden');
+    }
+  </script>
+
+</body>
+</html>
