@@ -20,8 +20,6 @@ crear_tabla_armas()
 crear_tabla_objetos()
 
 
-def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in {'png', 'jpg', 'jpeg', 'gif'}
 
 
 # Lleva a login si no hay sesión, muestra home si hay
