@@ -10,32 +10,47 @@
 </head>
 <body class="bg-gray-100 text-gray-900">
   <div class="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg my-8">
+
+    <!-- Información básica y foto en paralelo -->
+    <div class="mb-6 flex items-center">
+      <div class="flex-1">
+        <img src="{{ url_for('static', filename='images/bb.png') }}" alt="Logo del rol" class="w-40 h-auto mb-4">
+        <p class="mb-2"><span class="font-bold">Nombre del personaje:</span> {{ contenido['nombre'] }}</p>
+        <p class="mb-2"><span class="font-bold">Nivel:</span> {{ contenido['nivel'] }}</p>
+        <p class="mb-2"><span class="font-bold">Clase:</span> {{ contenido['clase'] }}</p>
+      </div>
+      <div class="ml-4">
+        {% if contenido['foto'] %}
+          <img src="{{ url_for('serve_photo', filename=contenido['foto']) }}" alt="Foto del personaje" class="w-60 h-auto rounded-md">
+        {% else %}
+          <p>No hay foto disponible.</p>
+        {% endif %}
+      </div>
+    </div>
+
     
-    <!-- Información básica del personaje (siempre visible) -->
-    <div class="mb-6">
-      <p class="mb-2"><span class="font-bold">Nombre del personaje:</span> {{ contenido['nombre'] }}</p>
-      <p class="mb-2"><span class="font-bold">Nivel:</span> {{ contenido['nivel'] }}</p>
-      <p class="mb-2"><span class="font-bold">Clase:</span> {{ contenido['clase'] }}</p>
-    </div>
-
-    <!-- Datos adicionales (siempre visibles) -->
-    <div class="mb-6">
-      <h2 class="text-2xl font-semibold border-b pb-2 mb-4">Datos adicionales</h2>
-      <p class="mb-2"><span class="font-bold">Vida:</span> {{ contenido['vida']['actual'] }} / {{ contenido['vida']['maxima'] }}</p>
-      <p class="mb-2"><span class="font-bold">Mana:</span> {{ contenido['mana']['actual'] }} / {{ contenido['mana']['maximo'] }}</p>
-      <p class="mb-2"><span class="font-bold">Resistencia:</span> {{ contenido['resistencia']['actual'] }} / {{ contenido['resistencia']['maxima'] }}</p>
-      <p class="mb-2"><span class="font-bold">Sobre carga:</span> {{ contenido['sobrecarga'] }}</p>
-      <p class="mb-2"><span class="font-bold">Velocidad:</span> {{ contenido['velocidad'] }}</p>
-      <p class="mb-2"><span class="font-bold">Tiradas:</span> Éxitos: {{ contenido['tiradas']['exitos'] }}, Fallos: {{ contenido['tiradas']['fallos'] }}</p>
-    </div>
-
-    <!-- Dinero (siempre visible) -->
-    <div class="mb-6">
-      <h2 class="text-2xl font-semibold border-b pb-2 mb-4">Dinero</h2>
-      <p class="mb-2"><span class="font-bold">Cobre:</span> {{ contenido['dinero'][0] }}</p>
-      <p class="mb-2"><span class="font-bold">Plata:</span> {{ contenido['dinero'][1] }}</p>
-      <p class="mb-2"><span class="font-bold">Oro:</span> {{ contenido['dinero'][2] }}</p>
-      <p class="mb-2"><span class="font-bold">Platino:</span> {{ contenido['dinero'][3] }}</p>
+    <!-- Datos adicionales y Dinero en paralelo -->
+    <div class="mb-6 flex flex-wrap gap-4">
+      <div class="flex-1">
+        <h2 class="text-2xl font-semibold border-b pb-2 mb-4">Datos adicionales</h2>
+        <div class="grid grid-cols-3 gap-4">
+          <p><span class="font-bold">Vida:</span><br> {{ contenido['vida']['actual'] }} / {{ contenido['vida']['maxima'] }}</p>
+          <p><span class="font-bold">Mana:</span><br> {{ contenido['mana']['actual'] }} / {{ contenido['mana']['maximo'] }}</p>
+          <p><span class="font-bold">Resistencia:</span> <br>{{ contenido['resistencia']['actual'] }} / {{ contenido['resistencia']['maxima'] }}</p>
+          <p><span class="font-bold">Sobrecarga:</span> <br>{{ contenido['sobrecarga'] }}</p>
+          <p><span class="font-bold">Velocidad:</span> <br>{{ contenido['velocidad'] }}</p>
+          <p><span class="font-bold">Tiradas:</span> <br>Éxitos: {{ contenido['tiradas']['exitos'] }}, Fallos: {{ contenido['tiradas']['fallos'] }}</p>
+        </div>
+      </div>
+      <div class="w-64">
+        <h2 class="text-2xl font-semibold border-b pb-2 mb-4">Dinero</h2>
+        <div class="grid grid-cols-2">
+          <p class="mb-2"><span class="font-bold">Cobre:</span> {{ contenido['dinero'][0] }}</p>
+          <p class="mb-2"><span class="font-bold">Plata:</span> {{ contenido['dinero'][1] }}</p>
+          <p class="mb-2"><span class="font-bold">Oro:</span> {{ contenido['dinero'][2] }}</p>
+          <p class="mb-2"><span class="font-bold">Platino:</span> {{ contenido['dinero'][3] }}</p>
+        </div>
+      </div>
     </div>
 
     <!-- Barra de navegación de secciones usando radio-inputs -->
@@ -64,39 +79,37 @@
       </div>
     </div>
 
-    <!-- Sección: Destrezas -->
-    <div id="seccionDestrezas" class="seccion">
+    <!-- Sección: Destrezas en 3 columnas -->
+    <div id="seccionDestrezas" class="seccion mb-7">
       <h2 class="text-2xl font-semibold border-b pb-2 mb-4">Destrezas</h2>
-      <ul class="list-disc pl-5">
+      <div class="grid grid-cols-3 gap-4">
         {% set destrezas_nombres = ['Minería', 'Herrería', 'Costura', 'Carpintería', 
                                   'Arcano', 'Supervivencia', 'Pesca', 'Alquimia', 
                                   'Cocina', 'Medicina', 'Sigilo', 'Arco', 
                                   'Espada', 'Bloqueo', 'Engaño', 'Percepción'] %}
         {% for valor in contenido['destrezas'] %}
-          <li class="mb-1">
+          <div>
             <span class="font-bold">{{ destrezas_nombres[loop.index0] }}:</span> {{ valor }}
-          </li>
+          </div>
         {% endfor %}
-      </ul>
+      </div>
     </div>
 
-    <!-- Sección: Estadísticas -->
-    <div id="seccionEstadisticas" class="seccion hidden">
+    <!-- Sección: Estadísticas en 3 columnas -->
+    <div id="seccionEstadisticas" class="seccion hidden mb-7">
       <h2 class="text-2xl font-semibold border-b pb-2 mb-4">Estadísticas</h2>
-      <ul class="list-disc pl-5">
-        {% set estadisticas_nombres = ['Fuerza', 'Resistencia', 'Agilidad', 
-                                      'Poder', 'Control', 'Capacidad', 
-                                      'Carisma', 'Inteligencia', 'Sabiduría'] %}
+      <div class="grid grid-cols-3 gap-4">
+        {% set estadisticas_nombres = ['Fuerza', 'Resistencia', 'Agilidad', 'Poder', 'Control', 'Capacidad', 'Carisma', 'Inteligencia', 'Sabiduría'] %}
         {% for valor in contenido['estadisticas'] %}
-          <li class="mb-1">
+          <div>
             <span class="font-bold">{{ estadisticas_nombres[loop.index0] }}:</span> {{ valor }}
-          </li>
+          </div>
         {% endfor %}
-      </ul>
+      </div>
     </div>
 
-    <!-- Sección: Inventario y Equipo (se agrupan Equipo e Inventario) -->
-    <div id="seccionInventarioEquipo" class="seccion hidden">
+    <!-- Sección: Inventario y Equipo (agrupa Equipo e Inventario) -->
+    <div id="seccionInventarioEquipo" class="seccion hidden mb-7">
       <h2 class="text-2xl font-semibold border-b pb-2 mb-4">Inventario y Equipo</h2>
       
       <!-- Equipo -->
@@ -184,8 +197,8 @@
       {% endif %}
     </div>
 
-    <!-- Sección: Habilidades y Hechizos (se agrupan ambos bloques) -->
-    <div id="seccionHabilidadesHechizos" class="seccion hidden">
+    <!-- Sección: Habilidades y Hechizos -->
+    <div id="seccionHabilidadesHechizos" class="seccion hidden mb-7">
       <h2 class="text-2xl font-semibold border-b pb-2 mb-4">Habilidades y Hechizos</h2>
       
       <!-- Habilidades -->
@@ -252,26 +265,43 @@
       {% endif %}
     </div>
 
-    <div id="seccionDistraccion" class="seccion hidden">
-
+    <div id="seccionDistraccion" class="seccion hidden mb-7">
+      <h2 class="text-2xl font-semibold border-b pb-2 mb-4">Distracción</h2>
+      <div class="grid grid-cols-4 gap-4 items-center justify-center">
+        <button class="custom-button">
+          <span class="back"></span>
+          <span class="front"></span>
+        </button>
+        <label class="switch">
+          <div class="round"><input name="onoff" id="onoff" type="checkbox">
+              <div class="back">
+                <label for="onoff" class="but">
+                  <span class="on">0</span>
+                  <span class="off">I</span>
+                </label>
+              </div>
+          </div>
+        </label>
+        <label class="switch mt-3">
+          <input type="checkbox" />
+          <span class="slider"> </span>
+          <div class="hitbox"></div>
+        </label>
+        <div> 
+          <div class="brick one"></div>
+          <div id="miBoton" class="tooltip-mario-container">
+            <div class="box"></div>
+            <div class="mush"></div>
+          </div>
+          <div class="brick two"></div>
+        </div>
+      </div>
     </div>
 
-    <!-- Historia y Foto (siempre visibles) -->
-    <div class="mb-6 flex items-start space-x-6">
-      <!-- Historia -->
-      <div class="flex-1">
-        <h2 class="text-2xl font-semibold border-b pb-2 mb-4">Historia</h2>
-        <p>{{ contenido['historia'] }}</p>
-      </div>
-      <!-- Foto -->
-      <div class="w-1/4">
-        {% if contenido['foto'] %}
-          <h2 class="text-2xl font-semibold border-b pb-2 mb-4">Foto</h2>
-          <img src="{{ url_for('serve_photo', filename=contenido['foto']) }}" alt="Foto del personaje" class="w-full h-auto rounded-md" />
-        {% else %}
-          <p>No hay foto disponible.</p>
-        {% endif %}
-      </div>
+    <!-- Historia (siempre visible) -->
+    <div class="mb-6">
+      <h2 class="text-2xl font-semibold border-b pb-2 mb-4">Historia</h2>
+      <p>{{ contenido['historia'] }}</p>
     </div>
 
     <!-- Enlaces para volver o editar -->
@@ -285,7 +315,6 @@
     </div>
   </div>
 
-  <!-- JavaScript para cambiar de sección -->
   <script>
     function mostrarSeccion(id) {
       document.querySelectorAll('.seccion').forEach(function(seccion) {
@@ -294,8 +323,16 @@
       document.getElementById(id).classList.remove('hidden');
     }
   </script>
+    
+  <audio id="miSonido" src="{{ url_for('static', filename='images/bomboclat.mp3') }}"></audio>
+  <script>
+    document.getElementById("miBoton").addEventListener("click", function() {
+      document.getElementById("miSonido").play();
+    });
+  </script>
   
-  <!-- Si tienes un archivo JS externo, puedes enlazarlo aquí -->
+  
+
   <script src="{{ url_for('static', filename='js/ver_fichas.js') }}"></script>
 </body>
 </html>
