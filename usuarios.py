@@ -9,31 +9,14 @@ def crear_tabla_usuarios():
     cursor.execute(''' 
         CREATE TABLE IF NOT EXISTS usuarios (
             username TEXT PRIMARY KEY,
-            contraseña TEXT NOT NULL
+            contraseña TEXT NOT NULL,
+            admin Boolean NOT NULL
         )
     ''')
     conn.commit()
     conn.close()
 
-# Insertar un nuevo usuario
-def insertar_usuario(username, contraseña):
-    try:
-        conn = sqlite3.connect('database.db')
-        cursor = conn.cursor()
 
-        # Generar el hash de la contraseña antes de insertarlo
-        hashed_password = bcrypt.hashpw(contraseña.encode('utf-8'), bcrypt.gensalt())
-
-        cursor.execute(''' 
-            INSERT INTO usuarios (username, contraseña)
-            VALUES (?, ?)
-        ''', (username, hashed_password))
-
-        conn.commit()
-    except sqlite3.IntegrityError:
-        print(f"El usuario '{username}' ya existe.")
-    finally:
-        conn.close()
 
 # Obtener un usuario por nombre
 def obtener_usuario_por_nombre(username):
@@ -78,8 +61,8 @@ def registrar_usuario(username, contraseña):
 
         # Insertar el nuevo usuario con la contraseña encriptada
         cursor.execute(''' 
-            INSERT INTO usuarios (username, contraseña)
-            VALUES (?, ?)
+            INSERT INTO usuarios (username, contraseña, admin)
+            VALUES (?, ?, 0)
         ''', (username, hashed_password))
 
         conn.commit()
