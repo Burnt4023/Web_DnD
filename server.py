@@ -193,9 +193,6 @@ def ver_ficha(nombre_ficha, owner_username):
                 'nombre': estado['nombre'],
                 'efecto': estado['efecto'],
             })
-
-    print(estados_detalle)
-    print(habilidades_detalle)
     return render_template(
         'ver_ficha.html',
         nombre_ficha=nombre_ficha,
