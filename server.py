@@ -266,6 +266,7 @@ def modificar_ficha(nombre_ficha):
             "alineamiento": datos_ficha['alineamiento'] or 'Neutral',
             "historia": datos_ficha['historia'] or 'No',
             "foto": fotoname,  # Usar la URL de la foto
+            "iniciativa": datos_ficha['iniciativa'],
             "vida": {
                 "actual": int(datos_ficha['vida_actual']) if datos_ficha['vida_actual'] else 10,
                 "maxima": int(datos_ficha['vida_maxima']) if datos_ficha['vida_maxima'] else 10
@@ -605,6 +606,9 @@ def wiki_clases():
     
     return render_template('wiki/clases/clases.html')
 
+
+
+# ENTRADAS PARA MAGO
 @app.route('/wiki/mago/hechicero')
 def wiki_hechicero():
     if 'username' not in session:
@@ -618,6 +622,67 @@ def wiki_clerigo():
         flash('No has iniciado sesión.', 'error')  # Mensaje de error
         return redirect(url_for('login'))  # Redirigir al login
     return render_template('wiki/clases/mago/clerigo/clerigo.html')
+
+
+
+
+# ENTRADAS PARA GUERRERO
+@app.route('/wiki/guerrero/ronin')
+def wiki_ronin():
+    if 'username' not in session:
+        flash('No has iniciado sesión.', 'error')  # Mensaje de error
+        return redirect(url_for('login'))  # Redirigir al login
+    return render_template('wiki/clases/guerrero/ronin/ronin.html')
+
+@app.route('/wiki/guerrero/paladin')
+def wiki_paladin():
+    if 'username' not in session:
+        flash('No has iniciado sesión.', 'error')  # Mensaje de error
+        return redirect(url_for('login'))  # Redirigir al login
+    return render_template('wiki/clases/guerrero/paladin/paladin.html')
+
+@app.route('/wiki/guerrero/barbaro')
+def wiki_barbaro():
+    if 'username' not in session:
+        flash('No has iniciado sesión.', 'error')  # Mensaje de error
+        return redirect(url_for('login'))  # Redirigir al login
+    return render_template('wiki/clases/guerrero/barbaro/barbaro.html')
+
+
+
+
+#ENTRADAS PARA PICARO
+@app.route('/wiki/picaro/asesino')
+def wiki_asesino():
+    if 'username' not in session:
+        flash('No has iniciado sesión.', 'error')  # Mensaje de error
+        return redirect(url_for('login'))  # Redirigir al login
+    return render_template('wiki/clases/picaro/asesino/asesino.html')
+
+@app.route('/wiki/picaro/monje')
+def wiki_monje():
+    if 'username' not in session:
+        flash('No has iniciado sesión.', 'error')  # Mensaje de error
+        return redirect(url_for('login'))  # Redirigir al login
+    return render_template('wiki/clases/picaro/monje/monje.html')
+
+@app.route('/wiki/picaro/bardo')
+def wiki_bardo():
+    if 'username' not in session:
+        flash('No has iniciado sesión.', 'error')  # Mensaje de error
+        return redirect(url_for('login'))  # Redirigir al login
+    return render_template('wiki/clases/picaro/bardo/bardo.html')
+
+@app.route('/wiki/picaro/explorador')
+def wiki_explorador():
+    if 'username' not in session:
+        flash('No has iniciado sesión.', 'error')  # Mensaje de error
+        return redirect(url_for('login'))  # Redirigir al login
+    return render_template('wiki/clases/picaro/explorador/explorador.html')
+
+
+
+
 
 @app.route('/wiki/razas')
 def wiki_razas():

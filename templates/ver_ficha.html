@@ -39,6 +39,7 @@
           <p><span class="font-bold">Resistencia:</span> <br>{{ contenido['resistencia']['actual'] }} / {{ contenido['resistencia']['maxima'] }}</p>
           <p><span class="font-bold">Sobrecarga:</span> <br>{{ contenido['sobrecarga'] }}</p>
           <p><span class="font-bold">Velocidad:</span> <br>{{ contenido['velocidad'] }}</p>
+          <p><span class="font-bold">Iniciativa:</span> <br>{{ contenido['iniciativa'] }}</p>
           <p><span class="font-bold">Tiradas:</span> <br>Éxitos: {{ contenido['tiradas']['exitos'] }}, Fallos: {{ contenido['tiradas']['fallos'] }}</p>
         </div>
       </div>
@@ -86,7 +87,7 @@
         {% set destrezas_nombres = ['Minería', 'Herrería', 'Costura', 'Carpintería', 
                                   'Arcano', 'Supervivencia', 'Pesca', 'Alquimia', 
                                   'Cocina', 'Medicina', 'Sigilo', 'Arco', 
-                                  'Espada', 'Bloqueo', 'Engaño', 'Percepción'] %}
+                                  'Espada', 'Desarmado', 'Engaño', 'Percepción'] %}
         {% for valor in contenido['destrezas'] %}
           <div>
             <span class="font-bold">{{ destrezas_nombres[loop.index0] }}:</span> {{ valor }}

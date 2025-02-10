@@ -7,6 +7,7 @@
     "alineamiento": "Neutral",
     "historia": "No",
     "foto": "admin_ae.png",
+    "iniciativa": 3,
     "vida": {
         "actual": 10,
         "maxima": 10
@@ -22,7 +23,6 @@
     "sobrecarga": 0,
     "velocidad": 30,
     "armadura": 10,
-    "iniciativa": 0,
     "tiradas": {
         "exitos": 0,
         "fallos": 0
