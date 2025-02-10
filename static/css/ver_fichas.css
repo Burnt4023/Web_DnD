@@ -1,6 +1,8 @@
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #f4f4f9;
+    background-image: url('../images/fondopredeterminadofichas.jpg');
+    background-size: cover;
     color: #333;
     line-height: 1.6;
     margin: 0;
