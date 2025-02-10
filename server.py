@@ -4,6 +4,7 @@ from fichas import *
 from habilidades import *
 from hechizos import *
 from Objetos import *
+from estados import *
 import os
 
 app = Flask(__name__)
@@ -18,7 +19,7 @@ crear_tabla_hechizos()
 crear_tabla_armaduras()
 crear_tabla_armas()
 crear_tabla_objetos()
-
+crear_tabla_estados()
 
 
 
@@ -120,69 +121,81 @@ def ver_ficha(nombre_ficha, owner_username):
     # Obtener todas las habilidades de la base de datos
     habilidades_detalle = {}
     for habilidad in get_all_habilidades():
-        habilidades_detalle[habilidad['nombre']] = {
-            'coste': habilidad['coste'],
-            'rango': habilidad['rango'],
-            'descripcion': habilidad['descripcion'],
-            'clase': habilidad['clase'],
-            'raza': habilidad['raza'],
-            'otro': habilidad['otro'],
-            'duracion': str(habilidad.get('duracion', 'N/A')),
-            'casteo': str(habilidad.get('casteo', 'N/A'))
-        }
+        if habilidad['nombre'] in contenido['habilidades']:
+            habilidades_detalle[habilidad['nombre']] = {
+                'coste': habilidad['coste'],
+                'rango': habilidad['rango'],
+                'descripcion': habilidad['descripcion'],
+                'clase': habilidad['clase'],
+                'raza': habilidad['raza'],
+                'otro': habilidad['otro'],
+                'duracion': str(habilidad.get('duracion', 'N/A')),
+                'casteo': str(habilidad.get('casteo', 'N/A'))
+            }
 
     # Obtener todos los hechizos de la base de datos
     hechizos_detalle = {}
     for hechizo in get_all_hechizos():
-        hechizos_detalle[hechizo['nombre']] = {
-            'nivel': hechizo['nivel'],
-            'magia': hechizo['magia'],
-            'coste': hechizo['coste'],
-            'rango': hechizo['rango'],
-            'duracion': str(hechizo.get('duracion', 'N/A')),
-            'casteo': str(hechizo.get('casteo', 'N/A')),
-            'clase': hechizo['clase'],
-            'raza': hechizo['raza'],
-            'otro': hechizo['otro'],
-            'descripcion': hechizo['descripcion']
-        }
+        if hechizo['nombre'] in contenido['hechizos']:
+            hechizos_detalle[hechizo['nombre']] = {
+                'nivel': hechizo['nivel'],
+                'magia': hechizo['magia'],
+                'coste': hechizo['coste'],
+                'rango': hechizo['rango'],
+                'duracion': str(hechizo.get('duracion', 'N/A')),
+                'casteo': str(hechizo.get('casteo', 'N/A')),
+                'clase': hechizo['clase'],
+                'raza': hechizo['raza'],
+                'otro': hechizo['otro'],
+                'descripcion': hechizo['descripcion']
+            }
 
 
 
     # Obtener todos los objetos de la base de datos (armas, armaduras, objetos)
     armas_detalle = []
     for arma in get_all_armas():
-        armas_detalle.append({
-            
-            'nombre': arma['nombre'],
-            'descripcion': arma['descripcion'],
-            'daño': arma['daño'],  # Se usa 'daño' en lugar de 'coste'
-            'calidad': arma['calidad'],  # Se usa 'calidad' en lugar de 'rango'
-            'tipo': 'Arma'
-        })
+        if arma['nombre'] in contenido['objetos']:
+            armas_detalle.append({
+                'nombre': arma['nombre'],
+                'descripcion': arma['descripcion'],
+                'daño': arma['daño'],  # Se usa 'daño' en lugar de 'coste'
+                'calidad': arma['calidad'],  # Se usa 'calidad' en lugar de 'rango'
+                'tipo': 'Arma'
+            })
 
     # Detalles de armaduras
     armaduras_detalle = []
     for armadura in get_all_armaduras():
-        armaduras_detalle.append({
-            'nombre': armadura['nombre'],
-            'descripcion': armadura['descripcion'],
-            'rating': armadura['rating'],  # Se usa 'rating' en lugar de 'coste'
-            'calidad': armadura['calidad'],  # Se usa 'calidad' en lugar de 'rango'
-            'tipo': 'Armadura'
-        })
+        if armadura['nombre'] in contenido['objetos']:
+            armaduras_detalle.append({
+                'nombre': armadura['nombre'],
+                'descripcion': armadura['descripcion'],
+                'rating': armadura['rating'],  # Se usa 'rating' en lugar de 'coste'
+                'calidad': armadura['calidad'],  # Se usa 'calidad' en lugar de 'rango'
+                'tipo': 'Armadura'
+            })
 
     # Detalles de objetos
     objetos_detalle = []
     for objeto in get_all_objetos():
-        objetos_detalle.append({
-            'nombre': objeto['nombre'],
-            'descripcion': objeto['descripcion'],
-            'otros': objeto['otros'],  
-        })
+        if objeto['nombre'] in contenido['objetos']:
+            objetos_detalle.append({
+                'nombre': objeto['nombre'],
+                'descripcion': objeto['descripcion'],
+                'otros': objeto['otros'],  
+            })
 
+    estados_detalle = []
+    for estado in get_all_estados():
+        if estado['nombre'] in contenido['estados']:
+            estados_detalle.append({
+                'nombre': estado['nombre'],
+                'efecto': estado['efecto'],
+            })
 
-    
+    print(estados_detalle)
+    print(habilidades_detalle)
     return render_template(
         'ver_ficha.html',
         nombre_ficha=nombre_ficha,
@@ -191,7 +204,8 @@ def ver_ficha(nombre_ficha, owner_username):
         hechizos_detalle=hechizos_detalle,
         armas_detalle=armas_detalle,
         armaduras_detalle=armaduras_detalle,
-        objetos_detalle=objetos_detalle
+        objetos_detalle=objetos_detalle,
+        estados_detalle=estados_detalle
     )
 
 @app.route('/fichas/modificar/<nombre_ficha>', methods=['GET', 'POST'])
@@ -227,12 +241,12 @@ def modificar_ficha(nombre_ficha):
         hechizos = request.form.getlist('hechizos[]')
         objetos = request.form.getlist('objetos[]')
         equipo = request.form.getlist('equipo[]')
+        estados = request.form.getlist('estados[]')
+        
 
-        # Inicializar fotoname
         fotoname = ""
-
         # Verificar si se subió una nueva foto
-        foto = request.files.get('foto')  # Accede al archivo real
+        foto = request.files.get('foto')
 
         # Si se sube una nueva foto
         if foto:
@@ -293,6 +307,7 @@ def modificar_ficha(nombre_ficha):
             "equipamiento": equipo,
             "destrezas": destrezas,
             "estadisticas": estadisticas,
+            "estados": estados,
             "dinero": [cobre, plata, oro, platino],
             "publica": ficha_publica
         }
@@ -314,6 +329,7 @@ def modificar_ficha(nombre_ficha):
     lista_hechizos = [hechizo['nombre'] for hechizo in get_all_hechizos()]
     lista_armas = [arma['nombre'] for arma in get_all_armas()]
     lista_armaduras = [armadura['nombre'] for armadura in get_all_armaduras()]
+    lista_estados = [estado['nombre'] for estado in get_all_estados()]
     nombres_objetos = lista_armas + lista_armaduras + [objeto['nombre'] for objeto in get_all_objetos()]
 
     return render_template(
@@ -325,6 +341,7 @@ def modificar_ficha(nombre_ficha):
         objetos=contenido.get('objetos', []),
         lista_habilidades=lista_habilidades,
         lista_hechizos=lista_hechizos,
+        lista_estados=lista_estados,
         nombres_objetos=nombres_objetos,
     )
 

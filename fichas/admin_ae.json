@@ -27,10 +27,18 @@
         "exitos": 0,
         "fallos": 0
     },
-    "habilidades": [],
-    "hechizos": [],
-    "objetos": [],
-    "equipamiento": [],
+    "habilidades": [
+        "Pasen furras tetonas y culonas"
+    ],
+    "hechizos": [
+        "Control Mental de Tablos 2"
+    ],
+    "objetos": [
+        "Espada Insana"
+    ],
+    "equipamiento": [
+        "Espada Insana"
+    ],
     "destrezas": [
         15,
         15,
@@ -59,6 +67,9 @@
         0,
         0,
         0
+    ],
+    "estados": [
+        "elpepe"
     ],
     "dinero": [
         0,

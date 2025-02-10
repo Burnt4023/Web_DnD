@@ -102,6 +102,31 @@
               <label for="resistencia_maxima" class="block text-sm font-medium">Resistencia Máxima:</label>
               <input type="number" id="resistencia_maxima" name="resistencia_maxima" value="{{ contenido['resistencia']['maxima'] }}" required class="w-full p-2 mt-1 bg-gray-700 rounded-lg">
             </div>
+            <!-- Estados -->
+            <h2 class="text-2xl font-semibold mt-8 mb-4 border-b border-gray-600 pb-2">Estados</h2>
+            <div id="lista-estados" class="mb-4 space-y-2">
+              {% for estado in contenido['estados'] %}
+                <div class="flex items-center space-x-2">
+                  <input type="text" name="estados[]" value="{{ estado }}" readonly required class="w-full p-2 bg-gray-700 rounded-lg">
+                  <button type="button" onclick="eliminarEstado(this)" class="bg-red-500 hover:bg-red-600 px-2 py-1 rounded-lg">Eliminar</button>
+                </div>
+              {% endfor %}
+            </div>
+            <div class="mb-4">
+              <label for="busqueda-estado" class="block text-sm font-medium">Buscar estado:</label>
+              <input type="text" id="busqueda-estado" placeholder="Escribe el nombre del estado..." oninput="filtrarEstados()" class="w-full p-2 mt-1 bg-gray-700 rounded-lg">
+            </div>
+            <div class="mb-4">
+              <label for="estados-disponibles" class="block text-sm font-medium">Añadir estado:</label>
+              <select id="estados-disponibles" class="w-full p-2 mt-1 bg-gray-700 rounded-lg">
+                <option value="" disabled selected>Selecciona un estado</option>
+                {% for estado in lista_estados %}
+                  <option value="{{ estado }}">{{ estado }}</option>
+                {% endfor %}
+              </select>
+              <button type="button" onclick="agregarEstado()" class="mt-2 bg-green-500 hover:bg-green-600 px-2 py-1 rounded-lg">Añadir</button>
+            </div>
+
           </div>
         </div>
         
@@ -135,6 +160,7 @@
               <input type="number" id="tiradas_fallo" name="tiradas_fallo" value="{{ contenido['tiradas']['fallos'] }}" min="0" max="3" required class="w-full p-2 mt-1 bg-gray-700 rounded-lg">
             </div>
           </div>
+          
           <!-- Habilidades -->
           <h2 class="text-2xl font-semibold mt-8 mb-4 border-b border-gray-600 pb-2">Habilidades</h2>
           <div id="lista-habilidades" class="mb-4 space-y-2">

@@ -138,3 +138,42 @@ function filtrarHechizos() {
         options[i].style.display = hechizo.includes(input) ? "block" : "none";
     }
 }
+
+function agregarEstado() {
+    const lista = document.getElementById('lista-estados');
+    const select = document.getElementById('estados-disponibles');
+    const estadoSeleccionado = select.value;
+
+    if (estadoSeleccionado) {
+        const div = document.createElement('div');
+        div.innerHTML = `
+            <input type="text" name="estados[]" value="${estadoSeleccionado}" readonly required>
+            <button type="button" onclick="eliminarEstado(this)">Eliminar</button>
+        `;
+        lista.appendChild(div);
+
+        // Resetear la selección
+        select.value = "";
+    } else {
+        alert("Selecciona un estado válido.");
+    }
+}
+
+function eliminarEstado(button) {
+    button.parentElement.remove();
+}
+
+function filtrarEstados() {
+    const filtro = document.getElementById('busqueda-estado').value.toLowerCase();
+    const opciones = document.getElementById('estados-disponibles').getElementsByTagName('option');
+
+    for (let i = 0; i < opciones.length; i++) {
+        const option = opciones[i];
+        const texto = option.textContent.toLowerCase();
+        if (texto.includes(filtro)) {
+            option.style.display = "";
+        } else {
+            option.style.display = "none";
+        }
+    }
+}

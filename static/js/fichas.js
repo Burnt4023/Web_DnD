@@ -49,6 +49,7 @@ async function crearFicha() {
             0,0,0
         ],
         habilidades: [],
+        estados: [],
         hechizos: [],
         objetos: [],
         equipamiento: [],
