@@ -622,7 +622,8 @@ def wiki_clases():
 
 
 
-# ENTRADAS PARA MAGO
+# ENTRADAS PARA HECHICEROS
+########################################################################################
 @app.route('/wiki/mago/hechicero')
 def wiki_hechicero():
     if 'username' not in session:
@@ -630,6 +631,62 @@ def wiki_hechicero():
         return redirect(url_for('login'))  # Redirigir al login
     return render_template('wiki/clases/mago/hechicero/hechicero.html')
 
+@app.route('/wiki/mago/hechicero/herencia_draconica')
+def wiki_hechicero_draconido():
+    if 'username' not in session:
+        flash('No has iniciado sesión.', 'error')  # Mensaje de error
+        return redirect(url_for('login'))  # Redirigir al login
+    
+    
+    return render_template('wiki/clases/mago/hechicero/herencia_draconica.html')
+
+@app.route('/wiki/mago/hechicero/superviviente_cataclismo')
+def wiki_hechicero_cataclismo():
+    if 'username' not in session:
+        flash('No has iniciado sesión.', 'error')  # Mensaje de error
+        return redirect(url_for('login'))  # Redirigir al login
+    
+    
+    return render_template('wiki/clases/mago/hechicero/superviviente_cataclismo.html')
+
+@app.route('/wiki/mago/hechicero/engendro_caos')
+def wiki_hechicero_engendro():
+    if 'username' not in session:
+        flash('No has iniciado sesión.', 'error')  # Mensaje de error
+        return redirect(url_for('login'))  # Redirigir al login
+    
+    
+    return render_template('wiki/clases/mago/hechicero/herencia_necroplaga.html')
+
+@app.route('/wiki/mago/hechicero/herencia_necroplaga')
+def wiki_hechicero_necroplaga():
+    if 'username' not in session:
+        flash('No has iniciado sesión.', 'error')  # Mensaje de error
+        return redirect(url_for('login'))  # Redirigir al login
+    
+    
+    return render_template('wiki/clases/mago/hechicero/herencia_necroplaga.html')
+
+@app.route('/wiki/mago/hechicero/azote_estrellas')
+def wiki_hechicero_estrellas():
+    if 'username' not in session:
+        flash('No has iniciado sesión.', 'error')  # Mensaje de error
+        return redirect(url_for('login'))  # Redirigir al login
+    
+    
+    return render_template('wiki/clases/mago/hechicero/azote_estrellas.html')
+
+@app.route('/wiki/mago/hechicero/sin_origen')
+def wiki_hechicero_custom():
+    if 'username' not in session:
+        flash('No has iniciado sesión.', 'error')  # Mensaje de error
+        return redirect(url_for('login'))  # Redirigir al login
+    
+    
+    return render_template('wiki/clases/mago/hechicero/custom/custom.html')
+########################################################################################
+
+# ENTRADAS PARA CLERIGOS
 @app.route('/wiki/mago/clerigo')
 def wiki_clerigo():
     if 'username' not in session:
