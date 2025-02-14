@@ -656,7 +656,7 @@ def wiki_hechicero_engendro():
         return redirect(url_for('login'))  # Redirigir al login
     
     
-    return render_template('wiki/clases/mago/hechicero/herencia_necroplaga.html')
+    return render_template('wiki/clases/mago/hechicero/engendro_caos.html')
 
 @app.route('/wiki/mago/hechicero/herencia_necroplaga')
 def wiki_hechicero_necroplaga():
