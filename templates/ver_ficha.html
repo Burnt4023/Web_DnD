@@ -19,6 +19,10 @@
         <p class="mb-2"><span class="font-bold">Nivel:</span> {{ contenido['nivel'] }}</p>
         <p class="mb-2"><span class="font-bold">Clase:</span> {{ contenido['clase'] }}</p>
       </div>
+      <div class="flex-1">
+      <p class="mb-2"><span class="font-bold">Magia:</span> {{ contenido['magia'] }}</p>
+      <p class="mb-2"><span class="font-bold">Talento:</span> {{ contenido['talento'] }}</p>
+      </div>
       <div class="ml-4">
         {% if contenido['foto'] %}
           <img src="{{ url_for('serve_photo', filename=contenido['foto']) }}" alt="Foto del personaje" class="w-60 h-auto rounded-md">
@@ -41,6 +45,9 @@
           <p><span class="font-bold">Velocidad:</span> <br>{{ contenido['velocidad'] }}</p>
           <p><span class="font-bold">Iniciativa:</span> <br>{{ contenido['iniciativa'] }}</p>
           <p><span class="font-bold">Tiradas:</span> <br>Éxitos: {{ contenido['tiradas']['exitos'] }}, Fallos: {{ contenido['tiradas']['fallos'] }}</p>
+          {% if contenido['magia'] == "Engendro del Caos" %}
+          <p><span class="font-bold">Caos:</span> <br>{{ contenido['caos'] }}</p>
+          {% endif %}
         </div>
       </div>
       <div class="w-64">

@@ -102,8 +102,14 @@
               <label for="resistencia_maxima" class="block text-sm font-medium">Resistencia Máxima:</label>
               <input type="number" id="resistencia_maxima" name="resistencia_maxima" value="{{ contenido['resistencia']['maxima'] }}" required class="w-full p-2 mt-1 bg-gray-700 rounded-lg">
             </div>
+            {% if contenido['magia'] == "Engendro del Caos" %}
+            <label for="caos" class="block text-sm font-medium">Caos:</label>
+            <input type="number" id="caos" name="caos" value="{{ contenido['caos'] }}" required class="w-full p-2 mt-1 bg-gray-700 rounded-lg">
+            {% endif %}
             <!-- Estados -->
             <h2 class="text-2xl font-semibold mt-8 mb-4 border-b border-gray-600 pb-2">Estados</h2>
+
+
             <div id="lista-estados" class="mb-4 space-y-2">
               {% for estado in contenido['estados'] %}
                 <div class="flex items-center space-x-2">

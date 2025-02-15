@@ -31,6 +31,7 @@ async function crearFicha() {
         vida: { actual: 10, maximo: 10 },
         mana: { actual: 10, maximo: 10 },
         resistencia: { actual: 10, maximo: 10 },
+        caos : 0,
         sobrecarga: 0,
         velocidad: 30,
         armadura: 10,

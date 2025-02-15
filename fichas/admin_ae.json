@@ -2,7 +2,7 @@
     "nombre": "aaeea",
     "nivel": 1,
     "clase": "Sin clase",
-    "magia": "Ninguna",
+    "magia": "Engendro del Caos",
     "talento": "Ninguno",
     "alineamiento": "Neutral",
     "historia": "No",
@@ -20,6 +20,7 @@
         "actual": 10,
         "maxima": 10
     },
+    "caos": 0,
     "sobrecarga": 0,
     "velocidad": 30,
     "armadura": 10,

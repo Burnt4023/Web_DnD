@@ -216,7 +216,7 @@ def modificar_ficha(nombre_ficha):
     if request.method == 'POST':
         # Definir todos los campos de la ficha
         campos = [
-            'nombre_personaje', 'nivel', 'clase', 'magia', 'talento', 'alineamiento', 'historia', 'foto',
+            'nombre_personaje', 'nivel', 'clase', 'magia', 'talento', 'alineamiento', 'historia', 'foto', 'caos',
             'vida_actual', 'vida_maxima', 'mana_actual', 'mana_maximo', 'resistencia_actual', 'resistencia_maxima',
             'sobrecarga', 'velocidad', 'armadura', 'iniciativa', 'tiradas_exito', 'tiradas_fallo'
         ]
@@ -267,6 +267,9 @@ def modificar_ficha(nombre_ficha):
         oro = int(dinero[2]) if len(dinero) > 2 else 0
         platino = int(dinero[3]) if len(dinero) > 3 else 0
 
+        if datos_ficha['caos'] == None:
+            datos_ficha['caos'] = 0
+            
         # Construcción del nuevo contenido de la ficha
         nuevo_contenido = {
             "nombre": datos_ficha['nombre_personaje'],
@@ -290,6 +293,7 @@ def modificar_ficha(nombre_ficha):
                 "actual": int(datos_ficha['resistencia_actual']) if datos_ficha['resistencia_actual'] else 10,
                 "maxima": int(datos_ficha['resistencia_maxima']) if datos_ficha['resistencia_maxima'] else 10
             },
+            "caos" : datos_ficha['caos'],
             "sobrecarga": int(datos_ficha['sobrecarga']) if datos_ficha['sobrecarga'] else 0,
             "velocidad": int(datos_ficha['velocidad']) if datos_ficha['velocidad'] else 30,
             "armadura": int(datos_ficha['armadura']) if datos_ficha['armadura'] else 10,
