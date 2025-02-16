@@ -755,10 +755,37 @@ def wiki_explorador():
         return redirect(url_for('login'))  # Redirigir al login
     return render_template('wiki/clases/picaro/explorador/explorador.html')
 
+@app.route('/wiki/magia')
+def wiki_magia():
+    if 'username' not in session:
+        flash('No has iniciado sesión.', 'error')  # Mensaje de error
+        return redirect(url_for('login'))  # Redirigir al login
+    return render_template('wiki/magias/magia.html')
+
+@app.route('/wiki/magia/magia_vacia')
+def wiki_magia_vacia():
+    if 'username' not in session:
+        flash('No has iniciado sesión.', 'error')  # Mensaje de error
+        return redirect(url_for('login'))  # Redirigir al login
+    return render_template('wiki/magias/magia_vacia.html')
 
 
 
+@app.route('/wiki/magia/<magia_nombre>')
+def wiki_magia_hechizos(magia_nombre):
+    if 'username' not in session:
+        flash('No has iniciado sesión.', 'error')
+        return redirect(url_for('login'))
+    print(magia_nombre)
+    hechizos = get_hechizos_magia(magia_nombre)  # Obtener hechizos de la magia
+    if not hechizos:
+        flash(f"No se encontraron hechizos para '{magia_nombre}'.", 'error')
+        return redirect(url_for('wiki_magia_vacia'))  # Redirigir a la lista de magias
 
+    return render_template('wiki/magias/magia_hechizos.html', hechizos=hechizos, magia_nombre=magia_nombre)
+
+
+# WIKI PARA RAZAS
 @app.route('/wiki/razas')
 def wiki_razas():
     if 'username' not in session:
@@ -767,6 +794,6 @@ def wiki_razas():
     
 
     return render_template('wiki/razas.html')
-
+#############################################################################
 if __name__ == '__main__':
     app.run(debug=True)

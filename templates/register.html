@@ -1,50 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Registrarse</title>
-    <link rel="icon" href="../static/images/favicon.png" type="image/png">
+    <link rel="icon" href="../static/images/favicon.png" type="image/png" />
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="../static/css/register.css">
-</head>
-<body class="bg-gray-900 bg-opacity-50 flex items-center justify-center min-h-screen">
+    <link rel="stylesheet" href="../static/css/register.css" />
+  </head>
+  <body class="bg-gray-900 bg-opacity-50 flex items-center justify-center min-h-screen">
     <div class="relative py-3 sm:max-w-xl sm:mx-auto w-full">
-        <div class="relative px-6 py-10 bg-gray-800 bg-opacity-90 text-white mx-8 md:mx-0 shadow rounded-3xl sm:p-10">
-            <h1 class="text-2xl font-bold text-center mb-6">Crear Cuenta</h1>
-            
-            <form method="POST" action="/register" class="space-y-5">
-                <div>
-                    <label for="username" class="block text-sm font-semibold text-gray-400">Usuario:</label>
-                    <input 
-                        type="text" 
-                        name="username" 
-                        id="username" 
-                        class="w-full px-3 py-2 bg-gray-700 text-white rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
-                        required>
-                </div>
+      <div class="relative px-6 py-10 bg-gray-800 bg-opacity-90 text-white mx-8 md:mx-0 shadow rounded-3xl sm:p-10">
+        <h1 class="text-2xl font-bold text-center mb-6">Crear Cuenta</h1>
 
-                <div>
-                    <label for="password" class="block text-sm font-semibold text-gray-400">Contraseña:</label>
-                    <input 
-                        type="password" 
-                        name="password" 
-                        id="password" 
-                        class="w-full px-3 py-2 bg-gray-700 text-white rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
-                        required>
-                </div>
+        <form method="POST" action="/register" class="space-y-5">
+          <div>
+            <label for="username" class="block text-sm font-semibold text-gray-400">Usuario:</label>
+            <input type="text" name="username" id="username" class="w-full px-3 py-2 bg-gray-700 text-white rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required />
+          </div>
 
-                <button 
-                    type="submit" 
-                    class="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 text-white rounded-lg shadow-md font-semibold transition ease-in duration-200">
-                    Registrarse
-                </button>
-            </form>
+          <div>
+            <label for="password" class="block text-sm font-semibold text-gray-400">Contraseña:</label>
+            <input type="password" name="password" id="password" class="w-full px-3 py-2 bg-gray-700 text-white rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required />
+          </div>
 
-            <div class="text-center mt-4">
-                <a href="/login" class="text-sm text-gray-400 hover:text-gray-300">¿Ya tienes cuenta? Inicia sesión aquí.</a>
-            </div>
+          <button type="submit" class="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 text-white rounded-lg shadow-md font-semibold transition ease-in duration-200">Registrarse</button>
+        </form>
+
+        <div class="text-center mt-4">
+          <a href="/login" class="text-sm text-gray-400 hover:text-gray-300">¿Ya tienes cuenta? Inicia sesión aquí.</a>
         </div>
+      </div>
     </div>
-</body>
+  </body>
 </html>

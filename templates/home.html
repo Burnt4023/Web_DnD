@@ -1,81 +1,61 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Bienvenido - Home</title>
-    <link rel="stylesheet" href="../static/css/home.css">
-    <link rel="icon" href="../static/images/favicon.png" type="image/png">
-</head>
-<body>
+    <link rel="stylesheet" href="../static/css/home.css" />
+    <link rel="icon" href="../static/images/favicon.png" type="image/png" />
+  </head>
+  <body>
     <div class="navbar">
-
-        <button class="Btn">
-            <a href="/logout">
-                <div class="sign"><svg viewBox="0 0 512 512"><path d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"></path></svg></div>
-                <div class="texto">Salir</div>
-            </a>
-        </button>  
+      <button class="Btn">
+        <a href="/logout">
+          <div class="sign">
+            <svg viewBox="0 0 512 512">
+              <path d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"></path>
+            </svg>
+          </div>
+          <div class="texto">Salir</div>
+        </a>
+      </button>
     </div>
 
     <h1 data-text="Bruleria & Bruleria">Bruleria & Bruleria</h1>
 
-    <h2>Bienvenido, {{ session['username'] }}!</h2>
-    
+    <h2>Bienvenido, {{ session.username }}!</h2>
+
     <div class="container">
-        <div class="columnexc">
-            <h2>Gestión de Fichas</h2>
-            <button onclick="location.href='/fichas'" class="gradient-border">
-                <span>Ir a Fichas</span>
-            </button>
-        </div>
-        <div class="column">
-            <h2>Wiki</h2>
-            <div style="display: flex;">
-                <div class="maincard">
-                    <div class="upcard">
-                    <button class="card1" onclick="location.href='/wiki/mundo'">
-                        <span style="font-size: 33px;">🌍</span>
-                    </button>
-                    <button class="card2" onclick="location.href='/wiki/habilidades'">
-                        <span style="font-size: 33px;">🔧</span>
-                    </button>
-                    </div>
-                    <div class="downcard">
-                    <button class="card3" onclick="location.href='/wiki/hechizos'">
-                        <span style="font-size: 33px;">💫</span>
-                    </button>
-                    <button class="card4" onclick="location.href='/wiki/objetos'">
-                        <span style="font-size: 33px;">💰</span>
-                    </button>
-                    </div>
-                </div>
-
-                <div class="maincard2">
-                    <div class="upcard2">
-                    <button class="card12" onclick="location.href='/wiki/clases'">
-                        <span style="font-size: 33px;">⚔️</span>
-                    </button>
-                    <button class="card22" onclick="location.href='/wiki/magias'">
-                        <span style="font-size: 33px;">⚡</span>
-                    </button>
-                    </div>
-                    <div class="downcard2">
-                    <button class="card32" onclick="location.href='/wiki/armaduras'">
-                        <span style="font-size: 33px;">🪖</span>
-                    </button>
-                    <button class="card42" onclick="location.href='/wiki/crear_personaje'">
-                        <span style="font-size: 33px;">🗣️</span>
-                    </button>
-                    </div>
-                </div>
+      <div class="columnexc">
+        <h2>Gestión de Fichas</h2>
+        <button onclick="location.href='/fichas'" class="gradient-border"><span>Ir a Fichas</span></button>
+      </div>
+      <div class="column">
+        <h2>Wiki</h2>
+        <div style="display: flex;">
+          <div class="maincard">
+            <div class="upcard">
+              <button class="card1" onclick="location.href='/wiki/mundo'"><span style="font-size: 33px;">🌍</span></button>
+              <button class="card2" onclick="location.href='/wiki/habilidades'"><span style="font-size: 33px;">🔧</span></button>
             </div>
+            <div class="downcard">
+              <button class="card3" onclick="location.href='/wiki/hechizos'"><span style="font-size: 33px;">💫</span></button>
+              <button class="card4" onclick="location.href='/wiki/objetos'"><span style="font-size: 33px;">💰</span></button>
+            </div>
+          </div>
+
+          <div class="maincard2">
+            <div class="upcard2">
+              <button class="card12" onclick="location.href='/wiki/clases'"><span style="font-size: 33px;">⚔️</span></button>
+              <button class="card22" onclick="location.href='/wiki/magias'"><span style="font-size: 33px;">⚡</span></button>
+            </div>
+            <div class="downcard2">
+              <button class="card32" onclick="location.href='/wiki/armaduras'"><span style="font-size: 33px;">🪖</span></button>
+              <button class="card42" onclick="location.href='/wiki/crear_personaje'"><span style="font-size: 33px;">🗣️</span></button>
+            </div>
+          </div>
         </div>
-
+      </div>
     </div>
-
-    
-   
-</body>
+  </body>
 </html>
-

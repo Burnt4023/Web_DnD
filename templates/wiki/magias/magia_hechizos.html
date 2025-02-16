@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hechizos</title>
+    <style>
+        table {
+
+            border-collapse: collapse;
+            margin-top: 10px;
+            display: none; /* Oculta todas las tablas al inicio */
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+    </style>
+    <script>
+        function mostrarTabla(nivel) {
+            let tablas = document.querySelectorAll("table");
+            tablas.forEach(tabla => tabla.style.display = "none");
+            let tablaMostrar = document.getElementById("nivel-" + nivel);
+            if (tablaMostrar) {
+                tablaMostrar.style.display = "table";
+            }
+        }
+    </script>
+</head>
+<body>
+
+    <div>
+        <button onclick="mostrarTabla(0)">Nivel 0</button>
+        <button onclick="mostrarTabla(1)">Nivel 1</button>
+        <button onclick="mostrarTabla(2)">Nivel 2</button>
+        <button onclick="mostrarTabla(3)">Nivel 3</button>
+        <button onclick="mostrarTabla(4)">Nivel 4</button>
+        <button onclick="mostrarTabla(5)">Nivel 5</button>
+    </div>
+
+    {% for nivel in range(0, 6) %}
+        {% set hechizos_nivel = hechizos | selectattr("nivel", "equalto", nivel) | list %}
+        {% if hechizos_nivel %}
+            <table id="nivel-{{ nivel }}">
+                <tr>
+                    <th>Nombre</th>
+                </tr>
+                {% for hechizo in hechizos_nivel %}
+                <tr>
+                    <td><a href="{{ url_for('wiki_hechizo', hechizo_nombre=hechizo['nombre']) }}">{{ hechizo.nombre }}</a></td>
+                </tr>
+                {% endfor %}
+            </table>
+        {% endif %}
+    {% endfor %}
+
+    <a href="{{ url_for('wiki_magia') }}">Volver a la lista de magias</a>
+
+    <script>
+        // Mostrar la primera tabla disponible por defecto
+        document.addEventListener("DOMContentLoaded", function() {
+            let tablas = document.querySelectorAll("table");
+            for (let tabla of tablas) {
+                if (tabla.rows.length > 1) { // Verifica que la tabla tenga contenido
+                    tabla.style.display = "table";
+                    break; // Muestra solo la primera tabla con hechizos
+                }
+            }
+        });
+    </script>
+</body>
+</html>

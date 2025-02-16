@@ -30,7 +30,9 @@
     },
     "habilidades": [],
     "hechizos": [],
-    "objetos": [],
+    "objetos": [
+        "Espada Insana"
+    ],
     "equipamiento": [
         "Espada Insana"
     ],

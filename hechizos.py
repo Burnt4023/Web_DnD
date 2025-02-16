@@ -161,3 +161,42 @@ def borrar_hechizo(id):
         print(f"Error al borrar el hechizo: {e}")
     finally:
         conn.close()
+        
+        
+def get_hechizos_magia(magia):
+    try:
+        conn = sqlite3.connect('database.db')
+        cursor = conn.cursor()
+
+        cursor.execute('SELECT * FROM hechizos WHERE magia = ?', (magia,))
+        filas = cursor.fetchall()
+
+        if not filas:
+            return None  # Retorna None en lugar de lista vacía para un mejor manejo en Flask
+
+        hechizos = [
+            {
+                "id": fila[0],
+                "nombre": fila[1],
+                "nivel": fila[2],
+                "magia": fila[3],
+                "coste": fila[4],
+                "rango": fila[5],
+                "duracion": fila[6],
+                "casteo": fila[7],
+                "descripcion": fila[8],
+                "clase": fila[9],
+                "raza": fila[10],
+                "otro": fila[11]
+            }
+            for fila in filas
+        ]
+
+        return hechizos
+
+    except sqlite3.Error as e:
+        print(f"Error en la base de datos: {e}")
+        return None  # Retorna None si hay un error
+
+    finally:
+        conn.close()
