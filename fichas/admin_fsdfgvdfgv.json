@@ -1,13 +1,13 @@
 {
-    "nombre": "aaeea",
+    "nombre": "fsdfgvdfgv",
     "nivel": 1,
     "clase": "Sin clase",
-    "magia": "Engendro del Caos",
+    "magia": "Ninguna",
     "talento": "Ninguno",
     "alineamiento": "Neutral",
     "historia": "No",
-    "foto": "admin_ae.png",
-    "iniciativa": 3,
+    "foto": "",
+    "iniciativa": 0,
     "vida": {
         "actual": 10,
         "maxima": 10
@@ -18,9 +18,9 @@
     },
     "resistencia": {
         "actual": 10,
-        "maxima": 10
+        "maxima": 11
     },
-    "caos": "4",
+    "caos": 0,
     "sobrecarga": 0,
     "velocidad": 30,
     "armadura": 10,
@@ -31,9 +31,7 @@
     "habilidades": [],
     "hechizos": [],
     "objetos": [],
-    "equipamiento": [
-        "Espada Insana"
-    ],
+    "equipamiento": [],
     "destrezas": [
         15,
         15,
@@ -70,5 +68,5 @@
         0,
         0
     ],
-    "publica": true
+    "publica": false
 }

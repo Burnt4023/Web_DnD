@@ -11,17 +11,19 @@
 <body class="bg-gray-100 text-gray-900">
   <div class="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg my-8">
 
-    <!-- Información básica y foto en paralelo -->
     <div class="mb-6 flex items-center">
-      <div class="flex-1">
-        <img src="{{ url_for('static', filename='images/bb.png') }}" alt="Logo del rol" class="w-40 h-auto mb-4">
-        <p class="mb-2"><span class="font-bold">Nombre del personaje:</span> {{ contenido['nombre'] }}</p>
-        <p class="mb-2"><span class="font-bold">Nivel:</span> {{ contenido['nivel'] }}</p>
-        <p class="mb-2"><span class="font-bold">Clase:</span> {{ contenido['clase'] }}</p>
-      </div>
-      <div class="flex-1">
-      <p class="mb-2"><span class="font-bold">Magia:</span> {{ contenido['magia'] }}</p>
-      <p class="mb-2"><span class="font-bold">Talento:</span> {{ contenido['talento'] }}</p>
+      <div class="flex-1 grid grid-cols-3 gap-4 gap-x-8 gap-y-4">
+          <div>
+              <img src="{{ url_for('static', filename='images/bb.png') }}" alt="Logo del rol" class="w-auto h-auto mb-5">
+          </div>
+          <div></div>
+          <div></div>
+          <p class="mb-2"><span class="font-bold">Nombre:</span><br> {{ contenido['nombre'] }}</p>
+          <p class="mb-2"><span class="font-bold">Nivel:</span><br> {{ contenido['nivel'] }}</p>
+          <p class="mb-2"><span class="font-bold">Clase:</span><br> {{ contenido['clase'] }}</p>
+          <p class="mb-2"><span class="font-bold">Magia:</span><br> {{ contenido['magia'] }}</p>
+          <p class="mb-2"><span class="font-bold">Talento:</span><br> {{ contenido['talento'] }}</p>
+          <p class="mb-2"><span class="font-bold">Alineamiento:</span><br> {{ contenido['alineamiento'] }}</p>
       </div>
       <div class="ml-4">
         {% if contenido['foto'] %}
@@ -342,10 +344,10 @@
 
     <!-- Enlaces para volver o editar -->
     <div class="text-center">
-      <a href="{{ url_for('fichas') }}" class="text-blue-500 hover:underline">
+      <a href="{{ url_for('fichas') }}" class="text-white hover:underline">
         Volver a la lista de fichas
       </a>
-      <a href="{{ url_for('modificar_ficha', nombre_ficha=nombre_ficha) }}" class="text-blue-500 hover:underline ml-4">
+      <a href="{{ url_for('modificar_ficha', nombre_ficha=nombre_ficha) }}" class="text-white hover:underline ml-4">
         Editar ficha
       </a>
     </div>

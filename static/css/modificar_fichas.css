@@ -13,7 +13,7 @@ h1 {
 }
 
 form {
-    background-color: white;
+    background-color: grey;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -29,7 +29,7 @@ input[type="text"], input[type="number"], select {
     width: 100%;
     padding: 8px;
     margin: 10px 0;
-    border: 1px solid #ccc;
+    border: 1px solid white;
     border-radius: 4px;
 }
 
@@ -53,11 +53,3 @@ h2 {
 div {
     margin-bottom: 10px;
 }
-
-.fondo-container {
-    background-image: url('../images/papel.png'); /* Asegúrate de que la ruta sea correcta */
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-  }
-  
