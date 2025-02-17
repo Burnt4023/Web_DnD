@@ -27,7 +27,8 @@ crear_tabla_estados()
 @app.route('/')
 def home():
     if 'username' in session:
-        return render_template('home.html')
+        usuario = obtener_usuario_por_nombre(session['username'])
+        return render_template('home.html', usuario=usuario)
     return redirect(url_for('login'))
 
 @app.route('/fichas/fotos/<path:filename>')
@@ -795,5 +796,155 @@ def wiki_razas():
 
     return render_template('wiki/razas.html')
 #############################################################################
+
+
+
+# MENU ADMIN HECHIZOS
+
+@app.route("/admin/hechizos")
+def admin_hechizos():
+    if 'username' not in session:
+        flash('No has iniciado sesión.', 'error')  # Mensaje de error
+        return redirect(url_for('login'))  # Redirigir al login
+    
+    usuario = obtener_usuario_por_nombre(session['username'])
+    
+    if not usuario[2]:
+        return redirect(url_for('home'))
+    
+    hechizos_detalle = {}
+    for hechizo in get_all_hechizos():
+        hechizos_detalle[hechizo['nombre']] = {
+            'nivel': hechizo['nivel'],
+            'magia': hechizo['magia'],
+            'coste': hechizo['coste'],
+            'rango': hechizo['rango'],
+            'duracion': str(hechizo.get('duracion', 'N/A')),
+            'casteo': str(hechizo.get('casteo', 'N/A')),
+            'clase': hechizo['clase'],
+            'raza': hechizo['raza'],
+            'otro': hechizo['otro'],
+            'descripcion': hechizo['descripcion']
+        }
+            
+    return render_template("admin/hechizos.html", hechizos=hechizos_detalle)
+
+@app.route('/admin/borrar_hechizo/<nombre_hechizo>', methods=['POST'])
+def admin_borrar_hechizo(nombre_hechizo):
+    if 'username' not in session:
+        flash('No has iniciado sesión.', 'error')  # Mensaje de error
+        return redirect(url_for('login'))  # Redirigir al login
+    usuario = obtener_usuario_por_nombre(session['username'])
+    if not usuario[2]:
+        return redirect(url_for('home'))
+    # Verificar si el hechizo existe antes de intentar borrarlo
+    hechizo = get_hechizo(nombre_hechizo)
+    if not hechizo:
+        flash('Hechizo no encontrado.', 'error')  # Mensaje de error
+        return redirect(url_for("admin_hechizos"))  # Redirigir a la página de hechizos
+    
+    # Eliminar el hechizo de la base de datos
+    borrar_hechizo(nombre_hechizo)
+    
+    flash('Hechizo eliminado exitosamente.', 'success')
+    return redirect(url_for("admin_hechizos"))
+
+
+@app.route("/admin/editar_hechizo/<nombre_hechizo>", methods=["POST", "GET"])
+def admin_editar_hechizo(nombre_hechizo):
+    if 'username' not in session:
+        flash('No has iniciado sesión.', 'error')  # Mensaje de error
+        return redirect(url_for('login'))  # Redirigir al login
+    
+    usuario = obtener_usuario_por_nombre(session['username'])
+    if not usuario[2]:
+        return redirect(url_for('home'))
+
+    # Obtener el hechizo a editar
+    hechizo = get_hechizo(nombre_hechizo)
+    if not hechizo:
+        flash('Hechizo no encontrado.', 'error')  # Mensaje de error
+        return redirect(url_for('admin_hechizos'))  # Redirigir a la página de hechizos
+    
+    if request.method == 'POST':
+        # Crear el diccionario 'hechizo' con todos los valores del formulario
+        datos_hechizo = {
+            'nombre': request.form['nombre'],
+            'nivel': request.form['nivel'],
+            'magia': request.form['magia'],
+            'coste': request.form['coste'],
+            'rango': request.form['rango'],
+            'duracion': request.form['duracion'],
+            'casteo': request.form['casteo'],
+            'descripcion': request.form['descripcion'],
+            'clase': request.form['clase'],
+            'raza': request.form['raza'],
+            'otro': request.form['otro']
+        }
+
+        # Modificar el hechizo en la base de datos usando el diccionario
+        try:
+            modificar_hechizo(nombre_hechizo, **datos_hechizo)
+            flash('Hechizo actualizado exitosamente.', 'success')  # Mensaje de éxito
+        except Exception as e:
+            flash(f'Error al actualizar el hechizo: {str(e)}', 'error')  # Mensaje de error
+        
+        return redirect(url_for('admin_hechizos'))  # Redirigir a la página de hechizos
+    
+    # Si es GET, mostrar el formulario de edición con los datos actuales del hechizo
+    return render_template("admin/editar_hechizo.html", hechizo=hechizo)
+
+@app.route("/admin/crear_hechizo", methods=["POST", "GET"])
+def admin_crear_hechizo():
+    if 'username' not in session:
+        flash('No has iniciado sesión.', 'error')  # Mensaje de error
+        return redirect(url_for('login'))  # Redirigir al login
+
+    usuario = obtener_usuario_por_nombre(session['username'])
+    if not usuario[2]:
+        return redirect(url_for('home'))  # Redirigir al home si no tiene permisos
+
+    if request.method == "POST":
+        # Recoger los datos del formulario
+        nombre = request.form['nombre']
+        nivel = request.form['nivel']
+        magia = request.form['magia']
+        coste = request.form['coste']
+        rango = request.form['rango']
+        duracion = request.form.get('duracion', '')
+        casteo = request.form.get('casteo', '')
+        descripcion = request.form['descripcion']
+        clase = request.form.get('clase', '')
+        raza = request.form.get('raza', '')
+        otro = request.form.get('otro', '')
+
+        # Crear el diccionario con los datos
+        hechizo_data = {
+            'nombre': nombre,
+            'nivel': nivel,
+            'magia': magia,
+            'coste': coste,
+            'rango': rango,
+            'duracion': duracion,
+            'casteo': casteo,
+            'descripcion': descripcion,
+            'clase': clase,
+            'raza': raza,
+            'otro': otro
+        }
+
+        # Llamar a la función que guarda el hechizo en la base de datos
+        try:
+            agregar_hechizo(**hechizo_data)
+            flash('Hechizo creado exitosamente.', 'success')
+            return redirect(url_for("admin_hechizos"))  # Redirigir a la página de hechizos
+        except Exception as e:
+            flash(f'Error al crear el hechizo: {str(e)}', 'error')
+            return render_template('admin/crear_hechizo.html', hechizo=hechizo_data)  # Volver al formulario con los datos ingresados
+
+    # Si es GET, renderizar el formulario vacío para crear un hechizo
+    return render_template("admin/crear_hechizo.html")
+
+
 if __name__ == '__main__':
     app.run(debug=True)

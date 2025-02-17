@@ -23,7 +23,7 @@ def obtener_usuario_por_nombre(username):
     conn = sqlite3.connect('database.db')
     cursor = conn.cursor()
 
-    cursor.execute('SELECT username FROM usuarios WHERE username = ?', (username,))
+    cursor.execute('SELECT * FROM usuarios WHERE username = ?', (username,))
     usuario = cursor.fetchone()
 
     conn.close()

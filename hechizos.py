@@ -148,13 +148,13 @@ def agregar_hechizo(nombre, nivel, magia, coste, rango, duracion, casteo, descri
         conn.close()
 
 
-# Borrar un hechizo por ID
-def borrar_hechizo(id):
+# Borrar un hechizo por nombre
+def borrar_hechizo(nombre):
     try:
         conn = sqlite3.connect('database.db')
         cursor = conn.cursor()
 
-        cursor.execute('DELETE FROM hechizos WHERE id = ?', (id,))
+        cursor.execute('DELETE FROM hechizos WHERE nombre = ?', (nombre,))
         conn.commit()
         print("Hechizo borrado con éxito.")
     except sqlite3.Error as e:
@@ -198,5 +198,27 @@ def get_hechizos_magia(magia):
         print(f"Error en la base de datos: {e}")
         return None  # Retorna None si hay un error
 
+    finally:
+        conn.close()
+        
+def modificar_hechizo(nombre_hechizo, nombre, nivel, magia, coste, rango, duracion, casteo, descripcion, clase="", raza="", otro=""):
+    if not re.match(r"^\d+(,\d+)*$", coste.strip()):
+        print("El formato del coste no es válido. Debe ser del tipo S,M,R con S = Salud, M = Mana, R = Resistencia.")
+        return
+
+    try:
+        conn = sqlite3.connect('database.db')
+        cursor = conn.cursor()
+
+        cursor.execute('''
+            UPDATE hechizos
+            SET nombre = ?, nivel = ?, magia = ?, coste = ?, rango = ?, duracion = ?, casteo = ?, descripcion = ?, clase = ?, raza = ?, otro = ?
+            WHERE nombre = ?
+        ''', (nombre, nivel, magia, coste, rango, duracion, casteo, descripcion, clase, raza, otro, nombre_hechizo))
+
+        conn.commit()
+        print("Hechizo actualizado con éxito.")
+    except sqlite3.Error as e:
+        print(f"Error al actualizar el hechizo en la base de datos: {e}")
     finally:
         conn.close()

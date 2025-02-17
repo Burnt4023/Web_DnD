@@ -1,0 +1,148 @@
+/* Estilo general */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+/* Contenedor de hechizos */
+.hechizos-container {
+    text-align: right;  /* Alineamos todo a la derecha */
+    margin: 20px;
+}
+
+/* Barra de búsqueda */
+.search-container {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.search-bar {
+    width: 400px;  /* Aumentamos el ancho de la barra de búsqueda */
+    height: 40px;  /* Aumentamos la altura */
+    padding: 8px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.search-bar:focus {
+    outline: none;
+    border-color: #2c3e50;
+}
+
+/* Botón de crear hechizo */
+#create-hechizo-btn {
+    margin-left: 10px;
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+#create-hechizo-btn:hover {
+    background-color: #218838;
+}
+
+/* Lista de hechizos */
+.hechizos-list {
+    margin-top: 10px;
+}
+
+/* Elemento individual de hechizo */
+.hechizo-item {
+    margin-bottom: 10px;
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    text-align: left;
+}
+
+/* Nombres de hechizos */
+.hechizo-name {
+    font-size: 22px;  /* Tamaño de fuente ajustado */
+    font-weight: bold;
+    cursor: pointer;
+    margin-bottom: 5px;
+    position: relative;
+}
+
+/* Estilo de los tooltips */
+.tooltip-content {
+    visibility: hidden; /* Ocultamos el tooltip por defecto */
+    opacity: 0;
+    background-color: #333;
+    color: #fff;
+    text-align: left;
+    border-radius: 5px;
+    padding: 15px;
+    position: absolute;
+    z-index: 1;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -10px);
+    white-space: normal;
+    width: 300px;
+    max-width: 90vw;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+    border: 1px solid #ccc;
+    background-color: #2c3e50;
+}
+
+/* Cuando el contenedor del hechizo tiene hover */
+.hechizo-item:hover .tooltip-content {
+    visibility: visible; /* Hacemos visible el tooltip */
+    opacity: 1;
+}
+
+/* Triángulo de la punta del tooltip */
+.tooltip-content::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: -10px;
+    margin-top: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent transparent #2c3e50;
+}
+
+/* Acciones de los botones (editar y borrar) */
+.hechizo-actions {
+    display: flex;
+    justify-content: flex-start;
+    margin-top: 10px;
+}
+
+.btn {
+    padding: 8px 15px;
+    font-size: 14px;
+    border-radius: 5px;
+    text-decoration: none;
+    color: white;
+    margin-right: 5px;
+    cursor: pointer;
+}
+
+.btn-edit {
+    background-color: #007bff;
+}
+
+.btn-edit:hover {
+    background-color: #0056b3;
+}
+
+.btn-delete {
+    background-color: #dc3545;
+}
+
+.btn-delete:hover {
+    background-color: #c82333;
+}

@@ -47,7 +47,7 @@
           <div class="maincard2">
             <div class="upcard2">
               <button class="card12" onclick="location.href='/wiki/clases'"><span style="font-size: 33px;">⚔️</span></button>
-              <button class="card22" onclick="location.href='/wiki/magias'"><span style="font-size: 33px;">⚡</span></button>
+              <button class="card22" onclick="location.href='/wiki/magia'"><span style="font-size: 33px;">⚡</span></button>
             </div>
             <div class="downcard2">
               <button class="card32" onclick="location.href='/wiki/armaduras'"><span style="font-size: 33px;">🪖</span></button>
@@ -56,6 +56,33 @@
           </div>
         </div>
       </div>
+      {% if usuario[2] %}
+      <div class="columnexc">
+        <h2>Menú Admin</h2>
+        <div class="maincard2">
+            <div class="upcard2">
+                <button class="card_admin card12 tooltip" onclick="location.href='/admin/hechizos'">
+                    <span style="font-size: 33px;">📖</span>
+                    <span class="tooltip-content">Crear hechizos</span>
+                </button>
+                <button class="card_admin card22 tooltip" onclick="location.href='/admin/habilidades'">
+                    <span style="font-size: 33px;">✨</span>
+                    <span class="tooltip-content">Crear habilidades</span>
+                </button>
+            </div>
+            <div class="downcard2">
+                <button class="card_admin card32 tooltip" onclick="location.href='/admin/estados'">
+                    <span style="font-size: 33px;">😷</span>
+                    <span class="tooltip-content">Crear estados</span>
+                </button>
+                <button class="card_admin card42 tooltip" onclick="location.href='/admin/objetos'">
+                    <span style="font-size: 33px;">💰</span>
+                    <span class="tooltip-content">Crear objetos</span>
+                </button>
+            </div>
+        </div>
+    </div>
+    {% endif %}
     </div>
   </body>
 </html>

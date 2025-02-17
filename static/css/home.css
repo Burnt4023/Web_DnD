@@ -641,3 +641,67 @@ button.gradient-border:active {
 .Btn:active {
   transform: translate(2px ,2px);
 }
+
+
+
+.card_admin {
+  position: relative;
+  padding: 15px;
+  border-radius: 10px;
+  background-color: #444;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  font-size: 33px;
+}
+
+.card_admin:hover {
+  background-color: #666;
+}
+
+/* Estilo de los tooltips */
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip .tooltip-content {
+  visibility: hidden;
+  opacity: 0;
+  background-color: #2c3e50;
+  color: #fff;
+  text-align: left;
+  border-radius: 5px;
+  padding: 5px 8px; /* Reducción del padding */
+  font-size: 12px; /* Tamaño de fuente más pequeño */
+  position: absolute;
+  z-index: 999; /* Aseguramos que el tooltip esté por encima de otros elementos */
+  bottom: 100%; /* Tooltip aparece encima del botón */
+  left: 50%;
+  transform: translateX(-50%) translateY(-10px); /* Centrado en el botón y ajustado un poco más arriba */
+  white-space: nowrap; /* Impide el desborde de texto */
+  width: auto; /* Se adapta al contenido */
+  max-width: 200px; /* Ancho máximo ajustado */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Sombra más sutil */
+  transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+  border: 1px solid #ccc;
+}
+
+.tooltip:hover .tooltip-content {
+  visibility: visible;
+  opacity: 1;
+  transform: translateX(-50%) translateY(-15px); /* Ajuste al hover para más espacio */
+}
+
+/* Triángulo del tooltip más pequeño */
+.tooltip-content::after {
+  content: '';
+  position: absolute;
+  top: 100%; /* Triángulo debajo del tooltip */
+  left: 50%;
+  margin-left: -6px; /* Centrado */
+  border-width: 6px; /* Triángulo más pequeño */
+  border-style: solid;
+  border-color: #2c3e50 transparent transparent transparent;
+}
