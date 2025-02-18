@@ -8,57 +8,76 @@
     <link rel="stylesheet" href="../../static/css/admin/hechizos.css" />
   </head>
   <body>
-    <div class="hechizos-container">
-      <!-- Barra de búsqueda -->
-      <div class="search-container">
-        <input type="text" id="search" class="search-bar" placeholder="Buscar hechizo..." onkeyup="filterHechizos()">
-        <a href= {{ url_for('admin_crear_hechizo') }} class="btn btn-edit">Crear Hechizo</a>
-        </button>
-      </div>
-
-      <ul class="hechizos-list" id="hechizos-list">
-        {% for hechizo, detalle in hechizos.items() %}
-          <li class="hechizo-item">
-            <div class="relative inline-block">
-              <span class="hechizo-name cursor-pointer text-blue-600 hover:underline">{{ hechizo }}</span>
-              <div class="tooltip-content absolute left-1/2 bottom-full transform -translate-x-1/2 mb-2 w-64 bg-gray-800 text-white text-xs rounded py-2 px-3 z-10 hidden">
-                <p><strong>Nivel:</strong> {{ detalle['nivel'] }}</p>
-                <p><strong>Magia:</strong> {{ detalle['magia'] }}</p>
-                <p><strong>Coste:</strong> {{ detalle['coste'] }}</p>
-                <p><strong>Rango:</strong> {{ detalle['rango'] }}ft</p>
-                <p><strong>Duración:</strong> {{ detalle['duracion'] }}</p>
-                <p><strong>Casteo:</strong> {{ detalle['casteo'] }}</p>
-                <p class="mt-2">{{ detalle['descripcion'] }}</p>
-              </div>
-              <div class="hechizo-actions">
-                <form action="{{ url_for('admin_borrar_hechizo', nombre_hechizo=hechizo) }}" method="POST" style="display: inline;">
-                    <button type="submit" class="btn btn-delete">Borrar</button>
-                </form>
-                <a href= {{ url_for('admin_editar_hechizo', nombre_hechizo=hechizo) }} class="btn btn-edit">Editar</a>
-            </div>            
-            </div>
-          </li>
-        {% endfor %}
-      </ul>
+    <div class="search-container">
+      <input type="text" id="search" class="search-bar" placeholder="Buscar hechizo..." onkeyup="filterHechizos()">
+      <select id="sortCriteria" class="sort-dropdown" onchange="filterHechizos()">
+        <option value="nombre">Orden Alfabético</option>
+        <option value="nivel">Nivel</option>
+        <option value="magia">Magia</option>
+        <option value="clase">Clase</option>
+      </select>
+      <a href="{{ url_for('admin_crear_hechizo') }}" class="btn btn-edit">Crear Hechizo</a>
     </div>
-
+    
+    <ul class="hechizos-list" id="hechizos-list">
+      {% for hechizo, detalle in hechizos.items() %}
+        <li class="hechizo-item" data-nombre="{{ hechizo }}" data-nivel="{{ detalle['nivel'] }}" data-magia="{{ detalle['magia'] }}" data-clase="{{ detalle['clase'] }}">
+          <div class="relative inline-block">
+            <span class="hechizo-name cursor-pointer text-blue-600 hover:underline">{{ hechizo }}</span>
+            <div class="tooltip-content absolute left-1/2 bottom-full transform -translate-x-1/2 mb-2 w-64 bg-gray-800 text-white text-xs rounded py-2 px-3 z-10 hidden">
+              <p><strong>Nivel:</strong> {{ detalle['nivel'] }}</p>
+              <p><strong>Magia:</strong> {{ detalle['magia'] }}</p>
+              <p><strong>Coste:</strong> {{ detalle['coste'] }}</p>
+              <p><strong>Rango:</strong> {{ detalle['rango'] }}ft</p>
+              <p><strong>Duración:</strong> {{ detalle['duracion'] }}</p>
+              <p><strong>Casteo:</strong> {{ detalle['casteo'] }}</p>
+              <p class="mt-2">{{ detalle['descripcion'] }}</p>
+              {% if detalle['otro'] and detalle['otro'] != 'None' %}
+                <p class="mt-2"> ({{ detalle['otro'] }})</p>
+              {% endif %}
+            </div>
+            <div class="hechizo-actions">
+              <form action="{{ url_for('admin_borrar_hechizo', nombre_hechizo=hechizo) }}" method="POST" style="display: inline;">
+                <button type="submit" class="btn btn-delete">Borrar</button>
+              </form>
+              <a href="{{ url_for('admin_editar_hechizo', nombre_hechizo=hechizo) }}" class="btn btn-edit">Editar</a>
+            </div>            
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+    
     <script>
       function filterHechizos() {
-        var input, filter, hechizosList, hechizosItem, nombre, i;
-        input = document.getElementById("search");
-        filter = input.value.toUpperCase();
-        hechizosList = document.getElementById("hechizos-list");
-        hechizosItem = hechizosList.getElementsByClassName("hechizo-item");
-
-        for (i = 0; i < hechizosItem.length; i++) {
-          nombre = hechizosItem[i].getElementsByClassName("hechizo-name")[0];
-          if (nombre.innerHTML.toUpperCase().indexOf(filter) > -1) {
-            hechizosItem[i].style.display = "";
-          } else {
-            hechizosItem[i].style.display = "none";
+        var input = document.getElementById("search").value.toUpperCase();
+        var criteria = document.getElementById("sortCriteria").value;
+        var hechizosList = document.getElementById("hechizos-list");
+        var hechizosItem = Array.from(hechizosList.getElementsByClassName("hechizo-item"));
+    
+        // Filtrar hechizos
+        hechizosItem.forEach(item => {
+          var nombre = item.getElementsByClassName("hechizo-name")[0].innerHTML.toUpperCase();
+          item.style.display = nombre.indexOf(input) > -1 ? "" : "none";
+        });
+    
+        // Ordenar hechizos según criterio seleccionado
+        hechizosItem.sort((a, b) => {
+          var valA = a.dataset[criteria] || "";
+          var valB = b.dataset[criteria] || "";
+    
+          // Si es un número (nivel), ordenar numéricamente
+          if (criteria === "nivel") {
+            return parseInt(valA) - parseInt(valB);
           }
-        }
+    
+          return valA.localeCompare(valB);
+        });
+    
+        // Limpiar la lista y volver a agregar los elementos en orden
+        hechizosList.innerHTML = "";
+        hechizosItem.forEach(item => hechizosList.appendChild(item));
       }
     </script>
+    
   </body>
 </html>
