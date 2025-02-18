@@ -42,7 +42,7 @@ def get_hechizo(nombre):
             "id": fila[0],
             "nombre": fila[1],
             "nivel": fila[2],
-            "magia": fila[3],
+            "magia": fila[3].split(",") if fila[3] else [],  # Convierte en lista separada por comas
             "coste": fila[4],
             "rango": fila[5],
             "duracion": fila[6],
@@ -70,7 +70,7 @@ def get_all_hechizos():
             "id": fila[0],
             "nombre": fila[1],
             "nivel": fila[2],
-            "magia": fila[3],
+            "magia": fila[3].split(",") if fila[3] else [],  # Convierte en lista separada por comas
             "coste": fila[4],
             "rango": fila[5],
             "duracion": fila[6],
@@ -108,7 +108,7 @@ def get_all_hechizos_por_clase():
             "id": fila[0],
             "nombre": fila[1],
             "nivel": fila[2],
-            "magia": fila[3],
+            "magia": fila[3].split(",") if fila[3] else [],  # Convierte en lista separada por comas
             "coste": fila[4],
             "rango": fila[5],
             "duracion": fila[6],
@@ -118,6 +118,7 @@ def get_all_hechizos_por_clase():
             "raza": fila[10],
             "otro": fila[11]
         }
+
         
         # Agregar el hechizo a la clase correspondiente
         if fila[9] in hechizos_por_clase:
@@ -163,23 +164,26 @@ def borrar_hechizo(nombre):
         conn.close()
         
         
+import sqlite3
+
 def get_hechizos_magia(magia):
     try:
         conn = sqlite3.connect('database.db')
         cursor = conn.cursor()
 
-        cursor.execute('SELECT * FROM hechizos WHERE magia = ?', (magia,))
+        # Usamos LIKE para buscar dentro de la lista separada por comas
+        cursor.execute("SELECT * FROM hechizos WHERE magia LIKE ? or magia = 'No'", ('%' + magia + '%',))
         filas = cursor.fetchall()
 
         if not filas:
-            return None  # Retorna None en lugar de lista vacía para un mejor manejo en Flask
+            return None  # Retorna None si no hay resultados
 
         hechizos = [
             {
                 "id": fila[0],
                 "nombre": fila[1],
                 "nivel": fila[2],
-                "magia": fila[3],
+                "magia": fila[3].split(",") if fila[3] else [],  # Convierte la cadena en lista
                 "coste": fila[4],
                 "rango": fila[5],
                 "duracion": fila[6],

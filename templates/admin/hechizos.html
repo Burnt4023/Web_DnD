@@ -26,7 +26,7 @@
             <span class="hechizo-name cursor-pointer text-blue-600 hover:underline">{{ hechizo }}</span>
             <div class="tooltip-content absolute left-1/2 bottom-full transform -translate-x-1/2 mb-2 w-64 bg-gray-800 text-white text-xs rounded py-2 px-3 z-10 hidden">
               <p><strong>Nivel:</strong> {{ detalle['nivel'] }}</p>
-              <p><strong>Magia:</strong> {{ detalle['magia'] }}</p>
+              <p><strong>Magia:</strong> {{ ", ".join(detalle['magia']) }}</p>
               <p><strong>Coste:</strong> {{ detalle['coste'] }}</p>
               <p><strong>Rango:</strong> {{ detalle['rango'] }}ft</p>
               <p><strong>Duración:</strong> {{ detalle['duracion'] }}</p>
