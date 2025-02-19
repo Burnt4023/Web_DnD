@@ -92,3 +92,28 @@ def borrar_estado(id):
         print(f"Error al borrar el estado: {e}")
     finally:
         conn.close()
+
+# Modificar un estado existente
+def modificar_estado(nombre, nombre_nuevo, efecto):
+    try:
+        conn = sqlite3.connect('database.db')
+        cursor = conn.cursor()
+
+        cursor.execute('''
+            UPDATE estados
+            SET efecto = ?,
+            nombre = ?
+            WHERE nombre = ?
+        ''', (efecto, nombre_nuevo, nombre))
+
+        conn.commit()
+
+        if cursor.rowcount > 0:
+            print("Estado actualizado con éxito.")
+        else:
+            print(f"No se encontró un estado con el nombre '{nombre}', no se modificó nada.")
+            
+    except sqlite3.Error as e:
+        print(f"Error al modificar el estado: {e}")
+    finally:
+        conn.close()

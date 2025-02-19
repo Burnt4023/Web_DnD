@@ -799,7 +799,7 @@ def wiki_magia_hechizos(magia_nombre):
     return render_template('wiki/magias/magia_hechizos.html', hechizos=hechizos, magia_nombre=magia_nombre)
 
 
-# WIKI PARA RAZAS
+######################### WIKI PARA RAZAS ###################################
 @app.route('/wiki/razas')
 def wiki_razas():
     if 'username' not in session:
@@ -812,8 +812,7 @@ def wiki_razas():
 
 
 
-# MENU ADMIN HECHIZOS
-
+################################### MENU ADMIN HECHIZOS ##############################
 @app.route("/admin/hechizos")
 def admin_hechizos():
     if 'username' not in session:
@@ -840,7 +839,7 @@ def admin_hechizos():
             'descripcion': hechizo['descripcion']
         }
             
-    return render_template("admin/hechizos.html", hechizos=hechizos_detalle)
+    return render_template("admin/hechizos/hechizos.html", hechizos=hechizos_detalle)
 
 @app.route('/admin/borrar_hechizo/<nombre_hechizo>', methods=['POST'])
 def admin_borrar_hechizo(nombre_hechizo):
@@ -905,7 +904,7 @@ def admin_editar_hechizo(nombre_hechizo):
         return redirect(url_for('admin_hechizos'))  # Redirigir a la página de hechizos
     
     # Si es GET, mostrar el formulario de edición con los datos actuales del hechizo
-    return render_template("admin/editar_hechizo.html", hechizo=hechizo)
+    return render_template("admin/hechizos/editar_hechizo.html", hechizo=hechizo)
 
 @app.route("/admin/crear_hechizo", methods=["POST", "GET"])
 def admin_crear_hechizo():
@@ -953,11 +952,124 @@ def admin_crear_hechizo():
             return redirect(url_for("admin_hechizos"))  # Redirigir a la página de hechizos
         except Exception as e:
             flash(f'Error al crear el hechizo: {str(e)}', 'error')
-            return render_template('admin/crear_hechizo.html', hechizo=hechizo_data)  # Volver al formulario con los datos ingresados
+            return render_template('admin/hechizos/crear_hechizo.html', hechizo=hechizo_data)  # Volver al formulario con los datos ingresados
 
     # Si es GET, renderizar el formulario vacío para crear un hechizo
     return render_template("admin/crear_hechizo.html")
+##################################################################################
 
 
+
+################################### MENU ADMIN ESTADOS ##############################
+@app.route("/admin/estados")
+def admin_estados():
+    if 'username' not in session:
+        flash('No has iniciado sesión.', 'error')  # Mensaje de error
+        return redirect(url_for('login'))  # Redirigir al login
+    
+    usuario = obtener_usuario_por_nombre(session['username'])
+    
+    if not usuario[2]:
+        return redirect(url_for('home'))
+    
+    estados_detalle = {}
+    for estado in get_all_estados():
+        estados_detalle[estado['nombre']] = {
+            'estado': estado['efecto']
+
+        }
+            
+    return render_template("admin/estados/estados.html", estados=estados_detalle)
+
+@app.route('/admin/borrar_estado/<nombre_estado>', methods=['POST'])
+def admin_borrar_estado(nombre_estado):
+    if 'username' not in session:
+        flash('No has iniciado sesión.', 'error')
+        return redirect(url_for('login'))
+
+    usuario = obtener_usuario_por_nombre(session['username'])
+    if not usuario[2]:  # Si no es admin
+        return redirect(url_for('home'))
+
+    # Verificar si el estado existe antes de eliminarlo
+    estado = get_estado(nombre_estado)
+    if not estado:
+        flash('Estado no encontrado.', 'error')
+        return redirect(url_for("admin_estados"))
+
+    # Eliminar el estado de la base de datos
+    borrar_estado(nombre_estado)
+
+    flash('Estado eliminado exitosamente.', 'success')
+    return redirect(url_for("admin_estados"))
+
+@app.route("/admin/editar_estado/<nombre_estado>", methods=["POST", "GET"])
+def admin_editar_estado(nombre_estado):
+    if 'username' not in session:
+        flash('No has iniciado sesión.', 'error')
+        return redirect(url_for('login'))
+
+    usuario = obtener_usuario_por_nombre(session['username'])
+    if not usuario[2]:  # Si no es admin
+        return redirect(url_for('home'))
+
+    # Obtener el estado a editar
+    estado = get_estado(nombre_estado)
+    if not estado:
+        flash('Estado no encontrado.', 'error')
+        return redirect(url_for('admin_estados'))
+    
+    
+    if request.method == 'POST':
+        # Recoger los datos del formulario
+        datos_estado = {
+            'nombre': request.form['nombre'],
+            'efecto': request.form['efecto']
+        }
+        # Modificar el estado en la base de datos
+        try:
+            modificar_estado(nombre_estado, datos_estado['nombre'], datos_estado['efecto'])
+            flash('Estado actualizado exitosamente.', 'success')
+        except Exception as e:
+            flash(f'Error al actualizar el estado: {str(e)}', 'error')
+
+        return redirect(url_for('admin_estados'))
+
+    # Si es GET, mostrar el formulario con los datos actuales
+    return render_template("admin/estados/editar_estado.html", estado=estado)
+
+@app.route("/admin/crear_estado", methods=["POST", "GET"])
+def admin_crear_estado():
+    if 'username' not in session:
+        flash('No has iniciado sesión.', 'error')
+        return redirect(url_for('login'))
+
+    usuario = obtener_usuario_por_nombre(session['username'])
+    if not usuario[2]:  # Si no es admin
+        return redirect(url_for('home'))
+
+    if request.method == "POST":
+        # Recoger los datos del formulario
+        nombre = request.form['nombre']
+        efecto = request.form['efecto']
+
+        # Crear diccionario con los datos
+        estado_data = {
+            'nombre': nombre,
+            'efecto': efecto
+        }
+
+        # Guardar en la base de datos
+        try:
+            agregar_estado(**estado_data)
+            flash('Estado creado exitosamente.', 'success')
+            return redirect(url_for("admin_estados"))
+        except Exception as e:
+            flash(f'Error al crear el estado: {str(e)}', 'error')
+            return render_template('admin/estados/crear_estado.html', estado=estado_data)
+
+    # Si es GET, mostrar formulario vacío
+    return render_template("admin/estados/crear_estado.html")
+##################################################################################
 if __name__ == '__main__':
     app.run(debug=True)

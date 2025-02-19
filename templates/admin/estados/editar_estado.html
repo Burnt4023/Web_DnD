@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Estado</title>
+</head>
+
+<body>
+
+    <div class="container mt-4">
+        <h2>Editar Estado: {{ estado['nombre'] }}</h2>
+        <form action="{{ url_for('admin_editar_estado', nombre_estado=estado['nombre']) }}" method="POST">
+            
+            <!-- Nombre del Estado -->
+            <div class="form-group">
+                <label for="nombre">Nombre del Estado</label>
+                <input type="text" class="form-control" id="nombre" name="nombre" value="{{ estado['nombre'] }}" required>
+            </div>
+
+            <!-- Efecto del Estado -->
+            <div class="form-group">
+                <label for="efecto">Efecto</label>
+                <textarea class="form-control" id="efecto" name="efecto" rows="3" required>{{ estado['efecto'] }}</textarea>
+            </div>
+
+            <!-- Botones de acción -->
+            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+            <a href="{{ url_for('admin_estados') }}" class="btn btn-secondary">Cancelar</a>
+        </form>
+    </div>
+
+</body>
+
+</html>

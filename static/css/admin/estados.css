@@ -1,0 +1,156 @@
+/* Estilo general */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+/* Contenedor de estados */
+.estados-container {
+    text-align: right;  /* Alineamos todo a la derecha */
+    margin: 20px;
+}
+
+/* Barra de búsqueda */
+.search-container {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.search-bar {
+    width: 400px;
+    height: 40px;
+    padding: 8px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.search-bar:focus {
+    outline: none;
+    border-color: #2c3e50;
+}
+
+/* Botón de crear estado */
+#create-estado-btn {
+    margin-left: 10px;
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+#create-estado-btn:hover {
+    background-color: #218838;
+}
+
+/* Lista de estados */
+.estados-list {
+    width: 60%;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 0;
+    list-style: none;
+}
+
+.estado-item {
+    position: relative;
+    background-color: #222;  /* Color de fondo oscuro */
+    color: white;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Nombres de estados */
+.estado-name {
+    font-size: 22px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-bottom: 5px;
+    position: relative;
+}
+
+/* Tooltip */
+.tooltip-content {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%) translateY(-5px);
+    width: 250px;
+    background-color: rgba(0, 0, 0, 0.85);
+    color: white;
+    text-align: left;
+    padding: 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    line-height: 1.4;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+    z-index: 50;
+}
+
+/* Mostrar tooltip al hacer hover */
+.estado-item:hover .tooltip-content {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Si el tooltip se sale de la pantalla por arriba, se muestra abajo */
+.tooltip-below {
+    bottom: auto !important;
+    top: 100% !important;
+    transform: translateX(-50%) translateY(5px) !important;
+}
+
+/* Triángulo de la punta del tooltip */
+.tooltip-content::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: -10px;
+    margin-top: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent transparent #2c3e50;
+}
+
+/* Acciones de los botones (editar y borrar) */
+.estado-actions {
+    display: flex;
+    justify-content: flex-start;
+    margin-top: 10px;
+}
+
+.btn {
+    padding: 8px 15px;
+    font-size: 14px;
+    border-radius: 5px;
+    text-decoration: none;
+    color: white;
+    margin-right: 5px;
+    cursor: pointer;
+}
+
+.btn-edit {
+    background-color: #007bff;
+}
+
+.btn-edit:hover {
+    background-color: #0056b3;
+}
+
+.btn-delete {
+    background-color: #dc3545;
+}
+
+.btn-delete:hover {
+    background-color: #c82333;
+}
