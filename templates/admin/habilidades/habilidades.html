@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Habilidades</title>
+    <link rel="icon" href="../../../../../static/images/favicon.png" type="image/png" />
+    <link rel="stylesheet" href="../../static/css/admin/habilidades.css" />
+  </head>
+  <body>
+    <div class="search-container">
+      <input type="text" id="search" class="search-bar" placeholder="Buscar por nombre o descripción..." onkeyup="filterHabilidades()">
+      
+      <select id="sortCriteria" class="sort-dropdown" onchange="filterHabilidades()">
+        <option value="nombre">Orden Alfabético</option>
+        <option value="coste">Coste</option>
+        <option value="rango">Rango</option>
+        <option value="duracion">Duración</option>
+        <option value="casteo">Casteo</option>
+      </select>
+
+      <a href="{{ url_for('admin_crear_habilidad') }}" class="btn btn-edit">Crear Habilidad</a>
+    </div>
+    
+    <ul class="habilidades-list" id="habilidades-list">
+      {% for habilidad, detalle in habilidades.items() %}
+        <li class="habilidad-item" 
+            data-nombre="{{ habilidad }}" 
+            data-coste="{{ detalle['coste'] }}" 
+            data-rango="{{ detalle['rango'] }}" 
+            data-duracion="{{ detalle['duracion'] }}" 
+            data-casteo="{{ detalle['casteo'] }}">
+          <div class="relative inline-block">
+            <span class="habilidad-name cursor-pointer text-blue-600 hover:underline">{{ habilidad }}</span>
+            <div class="tooltip-content absolute left-1/2 bottom-full transform -translate-x-1/2 mb-2 w-64 bg-gray-800 text-white text-xs rounded py-2 px-3 z-10 hidden">
+              <p><strong>Coste:</strong> {{ detalle['coste'] }}</p>
+              <p><strong>Rango:</strong> {{ detalle['rango'] }} ft</p>
+              <p><strong>Duración:</strong> {{ detalle['duracion'] }}</p>
+              <p><strong>Casteo:</strong> {{ detalle['casteo'] }}</p>
+              <p class="mt-2"><strong>Descripción:</strong> {{ detalle['descripcion'] }}</p>
+              {% if detalle['clase'] %}
+                <p><strong>Clase:</strong> {{ detalle['clase'] }}</p>
+              {% endif %}
+              {% if detalle['raza'] %}
+                <p><strong>Raza:</strong> {{ detalle['raza'] }}</p>
+              {% endif %}
+              {% if detalle['otro'] and detalle['otro'] != 'None' %}
+                <p class="mt-2"> ({{ detalle['otro'] }})</p>
+              {% endif %}
+            </div>
+            <div class="habilidad-actions">
+              <form action="{{ url_for('admin_borrar_habilidad', nombre_habilidad=habilidad) }}" method="POST" style="display: inline;">
+                <button type="submit" class="btn btn-delete">Borrar</button>
+              </form>
+              <a href="{{ url_for('admin_editar_habilidad', nombre_habilidad=habilidad) }}" class="btn btn-edit">Editar</a>
+            </div>            
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+    
+    <script>
+      function filterHabilidades() {
+        var input = document.getElementById("search").value.toUpperCase();
+        var criteria = document.getElementById("sortCriteria").value;
+        var habilidadesList = document.getElementById("habilidades-list");
+        var habilidadesItem = Array.from(habilidadesList.getElementsByClassName("habilidad-item"));
+    
+        // Filtrar habilidades por nombre o descripción
+        habilidadesItem.forEach(item => {
+          var nombre = item.getElementsByClassName("habilidad-name")[0].innerHTML.toUpperCase();
+          var descripcion = item.getElementsByClassName("tooltip-content")[0].innerText.toUpperCase();
+          item.style.display = (nombre.indexOf(input) > -1 || descripcion.indexOf(input) > -1) ? "" : "none";
+        });
+    
+        // Ordenar habilidades según criterio seleccionado
+        habilidadesItem.sort((a, b) => {
+          var valA = a.dataset[criteria] || "";
+          var valB = b.dataset[criteria] || "";
+
+          // Si es un número (rango), ordenar numéricamente
+          if (criteria === "rango") {
+            return parseInt(valA) - parseInt(valB);
+          }
+
+          return valA.localeCompare(valB);
+        });
+    
+        // Limpiar la lista y volver a agregar los elementos en orden
+        habilidadesList.innerHTML = "";
+        habilidadesItem.forEach(item => habilidadesList.appendChild(item));
+      }
+    </script>
+    
+  </body>
+</html>

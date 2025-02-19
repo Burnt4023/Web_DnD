@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Habilidad</title>
+</head>
+
+<body>
+
+    <div class="container mt-4">
+        <h2>Editar Habilidad: {{ habilidad['nombre'] }}</h2>
+        <form action="{{ url_for('admin_editar_habilidad', nombre_habilidad=habilidad['nombre']) }}" method="POST">
+            
+            <!-- Nombre de la Habilidad -->
+            <div class="form-group">
+                <label for="nombre">Nombre de la Habilidad</label>
+                <input type="text" class="form-control" id="nombre" name="nombre" value="{{ habilidad['nombre'] }}" required>
+            </div>
+
+            <!-- Coste -->
+            <div class="form-group">
+                <label for="coste">Coste</label>
+                <input type="text" class="form-control" id="coste" name="coste" value="{{ habilidad['coste'] }}" required>
+            </div>
+
+            <!-- Rango -->
+            <div class="form-group">
+                <label for="rango">Rango</label>
+                <input type="number" class="form-control" id="rango" name="rango" value="{{ habilidad['rango'] }}" required>
+            </div>
+
+            <!-- Duración -->
+            <div class="form-group">
+                <label for="duracion">Duración</label>
+                <input type="text" class="form-control" id="duracion" name="duracion" value="{{ habilidad['duracion'] }}" required>
+            </div>
+
+            <!-- Casteo -->
+            <div class="form-group">
+                <label for="casteo">Casteo</label>
+                <input type="text" class="form-control" id="casteo" name="casteo" value="{{ habilidad['casteo'] }}" required>
+            </div>
+
+            <!-- Descripción -->
+            <div class="form-group">
+                <label for="descripcion">Descripción</label>
+                <textarea class="form-control" id="descripcion" name="descripcion" rows="3" required>{{ habilidad['descripcion'] }}</textarea>
+            </div>
+
+            <!-- Clase -->
+            <div class="form-group">
+                <label for="clase">Clase</label>
+                <input type="text" class="form-control" id="clase" name="clase" value="{{ habilidad['clase'] }}">
+            </div>
+
+            <!-- Raza -->
+            <div class="form-group">
+                <label for="raza">Raza</label>
+                <input type="text" class="form-control" id="raza" name="raza" value="{{ habilidad['raza'] }}">
+            </div>
+
+            <!-- Otro -->
+            <div class="form-group">
+                <label for="otro">Otro</label>
+                <input type="text" class="form-control" id="otro" name="otro" value="{{ habilidad['otro'] }}">
+            </div>
+
+            <!-- Botones de acción -->
+            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+            <a href="{{ url_for('admin_habilidades') }}" class="btn btn-secondary">Cancelar</a>
+        </form>
+    </div>
+
+</body>
+
+</html>

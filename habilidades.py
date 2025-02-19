@@ -81,7 +81,8 @@ def get_all_habilidades():
 
 
 # Agregar una habilidad
-def agregar_habilidad(nombre, coste, rango, descripcion, clase="", raza="", otro=""):
+def agregar_habilidad(nombre, coste, rango, duracion, casteo, descripcion, clase="", raza="", otro=""):
+    # Validación del coste
     if not re.match(r"^\d+(,\d+)*$", coste.strip()):
         print("El formato del coste no es válido. Debe ser del tipo S,M,R con S = Salud, M = Mana, R = Resistencia.")
         return
@@ -90,10 +91,11 @@ def agregar_habilidad(nombre, coste, rango, descripcion, clase="", raza="", otro
         conn = sqlite3.connect('database.db')
         cursor = conn.cursor()
 
+        # Insertar los datos en la base de datos
         cursor.execute(''' 
-            INSERT INTO habilidades (nombre, coste, rango, descripcion, clase, raza, otro) 
-            VALUES (?, ?, ?, ?, ?, ?, ?)
-        ''', (nombre, coste, rango, descripcion, clase, raza, otro))
+            INSERT INTO habilidades (nombre, coste, rango, duracion, casteo, descripcion, clase, raza, otro) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ''', (nombre, coste, rango, duracion, casteo, descripcion, clase, raza, otro))
 
         conn.commit()
         print("Habilidad agregada con éxito.")
@@ -114,5 +116,30 @@ def borrar_habilidad(id):
         print("Habilidad borrada con éxito.")
     except sqlite3.Error as e:
         print(f"Error al borrar la habilidad: {e}")
+    finally:
+        conn.close()
+        
+def modificar_habilidad(nombre_original, nombre, coste, rango, duracion, casteo, descripcion, clase, raza, otro):
+    try:
+        conn = sqlite3.connect('database.db')
+        cursor = conn.cursor()
+
+        # Ejecutar la actualización en la base de datos
+        cursor.execute('''
+            UPDATE habilidades
+            SET nombre = ?, coste = ?, rango = ?, duracion = ?, casteo = ?, descripcion = ?, clase = ?, raza = ?, otro = ?
+            WHERE nombre = ?
+        ''', (nombre, coste, rango, duracion, casteo, descripcion, clase, raza, otro, nombre_original))
+
+        conn.commit()
+
+        # Verificar si realmente se actualizó alguna fila
+        if cursor.rowcount > 0:
+            print(f"Habilidad '{nombre_original}' actualizada con éxito.")
+        else:
+            print(f"No se encontró una habilidad con el nombre '{nombre_original}', no se modificó nada.")
+
+    except sqlite3.Error as e:
+        print(f"Error al modificar la habilidad: {e}")
     finally:
         conn.close()

@@ -1071,5 +1071,152 @@ def admin_crear_estado():
     # Si es GET, mostrar formulario vacío
     return render_template("admin/estados/crear_estado.html")
 ##################################################################################
+
+
+################################### MENU ADMIN ESTADOS ##############################
+@app.route("/admin/habilidades")
+def admin_habilidades():
+    if 'username' not in session:
+        flash('No has iniciado sesión.', 'error')
+        return redirect(url_for('login'))
+
+    usuario = obtener_usuario_por_nombre(session['username'])
+    if not usuario[2]:  # Si no es admin
+        return redirect(url_for('home'))
+
+    habilidades_detalle = {}
+    for habilidad in get_all_habilidades():
+        habilidades_detalle[habilidad['nombre']] = {
+            'coste': habilidad['coste'],
+            'rango': habilidad['rango'],
+            'duracion': habilidad['duracion'],
+            'casteo': habilidad['casteo'],
+            'descripcion': habilidad['descripcion'],
+            'clase': habilidad['clase'],
+            'raza': habilidad['raza'],
+            'otro': habilidad['otro']
+        }
+
+    return render_template("admin/habilidades/habilidades.html", habilidades=habilidades_detalle)
+
+@app.route("/admin/crear_habilidad", methods=["POST", "GET"])
+def admin_crear_habilidad():
+    if 'username' not in session:
+        flash('No has iniciado sesión.', 'error')
+        return redirect(url_for('login'))
+
+    usuario = obtener_usuario_por_nombre(session['username'])
+    if not usuario[2]:  # Si no es admin
+        return redirect(url_for('home'))
+
+    if request.method == "POST":
+        # Recoger los datos del formulario de manera segura
+        nombre = request.form.get('nombre')
+        coste = request.form.get('coste')
+        rango = request.form.get('rango')
+        duracion = request.form.get('duracion')
+        casteo = request.form.get('casteo')
+        descripcion = request.form.get('descripcion', '')  # Definir un valor por defecto en caso de que falte
+        clase = request.form.get('clase', '')
+        raza = request.form.get('raza', '')
+        otro = request.form.get('otro', '')
+
+        # Verificar si los campos requeridos no están vacíos
+        if not nombre or not coste or not rango:
+            flash('Por favor complete todos los campos requeridos.', 'error')
+            return render_template('admin/habilidades/crear_habilidad.html')
+
+        # Crear diccionario con los datos
+        habilidad_data = {
+            'nombre': nombre,
+            'coste': coste,
+            'rango': rango,
+            'duracion': duracion,
+            'casteo': casteo,
+            'descripcion': descripcion,
+            'clase': clase,
+            'raza': raza,
+            'otro': otro
+        }
+
+        # Guardar en la base de datos
+        try:
+            agregar_habilidad(**habilidad_data)
+            flash('Habilidad creada exitosamente.', 'success')
+            return redirect(url_for("admin_habilidades"))
+        except Exception as e:
+            flash(f'Error al crear la habilidad: {str(e)}', 'error')
+            print(str(e))
+            return render_template('admin/habilidades/crear_habilidad.html', habilidad=habilidad_data)
+
+    # Si es GET, mostrar formulario vacío
+    return render_template("admin/habilidades/crear_habilidad.html")
+
+
+# ✏️ Editar una habilidad
+@app.route("/admin/editar_habilidad/<nombre_habilidad>", methods=["POST", "GET"])
+def admin_editar_habilidad(nombre_habilidad):
+    if 'username' not in session:
+        flash('No has iniciado sesión.', 'error')
+        return redirect(url_for('login'))
+
+    usuario = obtener_usuario_por_nombre(session['username'])
+    if not usuario[2]:  # Si no es admin
+        return redirect(url_for('home'))
+
+    # Obtener la habilidad a editar
+    habilidad = get_habilidad(nombre_habilidad)
+    if not habilidad:
+        flash('Habilidad no encontrada.', 'error')
+        return redirect(url_for('admin_habilidades'))
+
+    if request.method == 'POST':
+        # Recoger los datos del formulario
+        datos_habilidad = {
+            'nombre': request.form['nombre'],
+            'coste': request.form['coste'],
+            'rango': request.form['rango'],
+            'duracion': request.form['duracion'],
+            'casteo': request.form['casteo'],
+            'descripcion': request.form['descripcion'],
+            'clase': request.form.get('clase', ''),
+            'raza': request.form.get('raza', ''),
+            'otro': request.form.get('otro', '')
+        }
+
+        # Modificar la habilidad en la base de datos
+        try:
+            modificar_habilidad(nombre_habilidad, **datos_habilidad)
+            flash('Habilidad actualizada exitosamente.', 'success')
+            return redirect(url_for('admin_habilidades'))
+        except Exception as e:
+            flash(f'Error al actualizar la habilidad: {str(e)}', 'error')
+
+    # Si es GET, mostrar el formulario con los datos actuales
+    return render_template("admin/habilidades/editar_habilidad.html", habilidad=habilidad)
+
+# 🗑️ Eliminar una habilidad
+@app.route('/admin/borrar_habilidad/<nombre_habilidad>', methods=['POST'])
+def admin_borrar_habilidad(nombre_habilidad):
+    if 'username' not in session:
+        flash('No has iniciado sesión.', 'error')
+        return redirect(url_for('login'))
+
+    usuario = obtener_usuario_por_nombre(session['username'])
+    if not usuario[2]:  # Si no es admin
+        return redirect(url_for('home'))
+
+    # Verificar si la habilidad existe antes de eliminarla
+    habilidad = get_habilidad(nombre_habilidad)
+    if not habilidad:
+        flash('Habilidad no encontrada.', 'error')
+        return redirect(url_for("admin_habilidades"))
+
+    # Eliminar la habilidad de la base de datos
+    borrar_habilidad(nombre_habilidad)
+
+    flash('Habilidad eliminada exitosamente.', 'success')
+    return redirect(url_for("admin_habilidades"))
+##################################################################################
 if __name__ == '__main__':
     app.run(debug=True)

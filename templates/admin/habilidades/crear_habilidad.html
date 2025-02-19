@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../static/css/admin/crear_habilidad.css" />
+    <title>Crear Habilidad</title>
+</head>
+
+<body>
+
+    <div class="container mt-4">
+        <h2>Crear Habilidad</h2>
+        <form action="{{ url_for('admin_crear_habilidad') }}" method="POST">
+            
+            <!-- Nombre de la Habilidad -->
+            <div class="form-group">
+                <label for="nombre">Nombre de la Habilidad</label>
+                <input type="text" class="form-control" id="nombre" name="nombre" required>
+            </div>
+
+           <!-- Duración de la habilidad -->
+            <div class="form-group">
+                <label for="duracion">Duración</label>
+                <input type="text" class="form-control" id="duracion" name="duracion" required>
+            </div>
+
+
+            <!-- Coste -->
+            <div class="form-group">
+                <label for="coste">Coste</label>
+                <input type="text" class="form-control" id="coste" name="coste" required>
+            </div>
+
+            <!-- Rango -->
+            <div class="form-group">
+                <label for="rango">Rango</label>
+                <input type="text" class="form-control" id="rango" name="rango" required>
+            </div>
+
+            <!-- Duración -->
+            <div class="form-group">
+                <label for="duracion">Duración</label>
+                <input type="text" class="form-control" id="duracion" name="duracion">
+            </div>
+
+            <!-- Casteo de la habilidad -->
+            <div class="form-group">
+                <label for="casteo">Casteo</label>
+                <input type="text" class="form-control" id="casteo" name="casteo" required>
+            </div>
+
+            <!-- Clase -->
+            <div class="form-group">
+                <label for="clase">Clase</label>
+                <input type="text" class="form-control" id="clase" name="clase">
+            </div>
+
+            <!-- Raza -->
+            <div class="form-group">
+                <label for="raza">Raza</label>
+                <input type="text" class="form-control" id="raza" name="raza">
+            </div>
+
+            <!-- Otro -->
+            <div class="form-group">
+                <label for="otro">Otro</label>
+                <input type="text" class="form-control" id="otro" name="otro">
+            </div>
+
+            <!-- Botones de acción -->
+            <button type="submit" class="btn btn-primary">Crear Habilidad</button>
+            <a href="{{ url_for('admin_habilidades') }}" class="btn btn-secondary">Cancelar</a>
+        </form>
+    </div>
+
+</body>
+
+</html>
