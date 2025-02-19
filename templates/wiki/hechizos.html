@@ -1,60 +1,100 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wiki</title>
-</head>
-
-<body>
-
-    <h1>Wiki de Hechizos</h1>
-    <table border="1">
-        <tr>
-            <th>Hechicero</th>
-            <th>Clérigo</th>
-            <th>Bardo</th>
-            <th>Monje</th>
-            <th>Paladín</th>
-        </tr>
-        <tr>
-            <td>
-                <ul>
-                    {% for hechizo in hechizos['Hechicero'] %}
-                        <li><a href="{{ url_for('wiki_hechizo', hechizo_nombre=hechizo['nombre']) }}">{{ hechizo['nombre'] }}</a></li>
-                    {% endfor %}
-                </ul>
-            </td>
-            <td>
-                <ul>
-                    {% for hechizo in hechizos['Clérigo'] %}
-                        <li><a href="{{ url_for('wiki_hechizo', hechizo_nombre=hechizo['nombre']) }}">{{ hechizo['nombre'] }}</a></li>
-                    {% endfor %}
-                </ul>
-            </td>
-            <td>
-                <ul>
-                    {% for hechizo in hechizos['Bardo'] %}
-                        <li><a href="{{ url_for('wiki_hechizo', hechizo_nombre=hechizo['nombre']) }}">{{ hechizo['nombre'] }}</a></li>
-                    {% endfor %}
-                </ul>
-            </td>
-            <td>
-                <ul>
-                    {% for hechizo in hechizos['Monje'] %}
-                        <li><a href="{{ url_for('wiki_hechizo', hechizo_nombre=hechizo['nombre']) }}">{{ hechizo['nombre'] }}</a></li>
-                    {% endfor %}
-                </ul>
-            </td>
-            <td>
-                <ul>
-                    {% for hechizo in hechizos['Paladín'] %}
-                        <li><a href="{{ url_for('wiki_hechizo', hechizo_nombre=hechizo['nombre']) }}">{{ hechizo['nombre'] }}</a></li>
-                    {% endfor %}
-                </ul>
-            </td>
-        </tr>
-    </table>
-
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hechizos</title>
+    <link rel="icon" href="../../../../../static/images/favicon.png" type="image/png" />
+    <link rel="stylesheet" href="../../static/css/admin/hechizos.css" />
+  </head>
+  <body>
+    <div class="search-container">
+        <!-- Barra de búsqueda por nombre del hechizo -->
+        <input type="text" id="searchHechizo" class="search-bar" placeholder="Buscar por nombre..." onkeyup="filterHechizos()">
+        
+        <!-- Barra de búsqueda por clase -->
+        <input type="text" id="searchClase" class="search-bar" placeholder="Buscar por clase..." onkeyup="filterHechizos()">
+      
+        <!-- Barra de búsqueda por magia -->
+        <input type="text" id="searchMagia" class="search-bar" placeholder="Buscar por magia..." onkeyup="filterHechizos()">
+      
+        <!-- Selector de ordenación -->
+        <select id="sortCriteria" class="sort-dropdown" onchange="filterHechizos()">
+          <option value="nombre">Orden Alfabético</option>
+          <option value="nivel">Nivel</option>
+          <option value="magia">Magia</option>
+          <option value="clase">Clase</option>
+        </select>
+      </div>
+      
+      <ul class="hechizos-list" id="hechizos-list">
+        {% for hechizo, detalle in hechizos.items() %}
+          <li class="hechizo-item" 
+              data-nombre="{{ hechizo }}" 
+              data-nivel="{{ detalle['nivel'] }}" 
+              data-magia="{{ ', '.join(detalle['magia']) }}" 
+              data-clase="{{ detalle['clase'] }}">
+            
+            <div class="relative inline-block">
+              <span class="hechizo-name cursor-pointer text-blue-600 hover:underline">{{ hechizo }}</span>
+              <div class="tooltip-content absolute left-1/2 bottom-full transform -translate-x-1/2 mb-2 w-64 bg-gray-800 text-white text-xs rounded py-2 px-3 z-10 hidden">
+                <p><strong>Nivel:</strong> {{ detalle['nivel'] }}</p>
+                <p><strong>Magia:</strong> {{ ", ".join(detalle['magia']) }}</p>
+                <p><strong>Coste:</strong> {{ detalle['coste'] }}</p>
+                <p><strong>Rango:</strong> {{ detalle['rango'] }}ft</p>
+                <p><strong>Duración:</strong> {{ detalle['duracion'] }}</p>
+                <p><strong>Casteo:</strong> {{ detalle['casteo'] }}</p>
+                <p class="mt-2">{{ detalle['descripcion'] }}</p>
+                {% if detalle['otro'] and detalle['otro'] != 'None' %}
+                  <p class="mt-2"> ({{ detalle['otro'] }})</p>
+                {% endif %}
+              </div>           
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
+      
+      <script>
+      function filterHechizos() {
+          var inputHechizo = document.getElementById("searchHechizo").value.toUpperCase();
+          var inputClase = document.getElementById("searchClase").value.toUpperCase();
+          var inputMagia = document.getElementById("searchMagia").value.toUpperCase();
+          var criteria = document.getElementById("sortCriteria").value;
+          var hechizosList = document.getElementById("hechizos-list");
+          var hechizosItem = Array.from(hechizosList.getElementsByClassName("hechizo-item"));
+      
+          // Filtrar hechizos por nombre, clase y magia
+          hechizosItem.forEach(item => {
+              var nombre = item.dataset.nombre.toUpperCase();
+              var clase = item.dataset.clase.toUpperCase();
+              var magia = item.dataset.magia.toUpperCase(); // La magia puede tener múltiples valores separados por comas
+      
+              var matchHechizo = nombre.indexOf(inputHechizo) > -1;
+              var matchClase = clase.indexOf(inputClase) > -1;
+              var matchMagia = magia.indexOf(inputMagia) > -1;
+      
+              // Mostrar solo si coinciden los criterios ingresados (o si están vacíos)
+              item.style.display = (matchHechizo && matchClase && matchMagia) ? "" : "none";
+          });
+      
+          // Ordenar hechizos según criterio seleccionado
+          hechizosItem.sort((a, b) => {
+              var valA = a.dataset[criteria] || "";
+              var valB = b.dataset[criteria] || "";
+      
+              // Si es un número (nivel), ordenar numéricamente
+              if (criteria === "nivel") {
+                  return parseInt(valA) - parseInt(valB);
+              }
+      
+              return valA.localeCompare(valB);
+          });
+      
+          // Limpiar la lista y volver a agregar los elementos en orden
+          hechizosList.innerHTML = "";
+          hechizosItem.forEach(item => hechizosList.appendChild(item));
+      }
+      </script>
+      
+  </body>
 </html>

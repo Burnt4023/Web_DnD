@@ -514,7 +514,20 @@ def wiki_hechizos():
     if 'username' not in session:
         flash('No has iniciado sesión.', 'error')  # Mensaje de error
         return redirect(url_for('login'))  # Redirigir al login
-    hechizos = get_all_hechizos_por_clase()
+    hechizos = {}
+    for hechizo in get_all_hechizos():
+        hechizos[hechizo['nombre']] = {
+            'nivel': hechizo['nivel'],
+            'magia': hechizo['magia'],
+            'coste': hechizo['coste'],
+            'rango': hechizo['rango'],
+            'duracion': str(hechizo.get('duracion', 'N/A')),
+            'casteo': str(hechizo.get('casteo', 'N/A')),
+            'clase': hechizo['clase'],
+            'raza': hechizo['raza'],
+            'otro': hechizo['otro'],
+            'descripcion': hechizo['descripcion']
+        }
     return render_template('wiki/hechizos.html', hechizos = hechizos)
 
 
