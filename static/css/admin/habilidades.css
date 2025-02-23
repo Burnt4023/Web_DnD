@@ -1,14 +1,15 @@
 /* Estilo general */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(to right, #1a1a2e, #16213e, #0f3460);
+    color: white;
     margin: 0;
     padding: 0;
 }
 
 /* Contenedor de habilidades */
 .habilidades-container {
-    text-align: right;  /* Alineamos todo a la derecha */
+    text-align: center;
     margin: 20px;
 }
 
@@ -16,110 +17,110 @@ body {
 .search-container {
     margin-bottom: 20px;
     display: flex;
-    justify-content: flex-end;
+    justify-content: center;
     align-items: center;
 }
 
 .search-bar {
-    width: 400px;  /* Aumentamos el ancho de la barra de búsqueda */
-    height: 40px;  /* Aumentamos la altura */
-    padding: 8px;
+    width: 400px;
+    height: 45px;
+    padding: 10px;
     font-size: 16px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
+    border-radius: 10px;
+    border: none;
+    background: #1b1b3a;
+    color: white;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
 }
 
 .search-bar:focus {
     outline: none;
-    border-color: #2c3e50;
+    border: none;
+    box-shadow: 0 0 15px rgba(104, 228, 255, 0.8);
 }
 
 /* Botón de crear habilidad */
 #create-habilidad-btn {
-    margin-left: 10px;
-    padding: 10px 20px;
-    background-color: #28a745;
+    padding: 12px 25px;
+    background: linear-gradient(to right, #4caf50, #2ecc71);
     color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 50px;
+    font-size: 18px;
+    font-weight: bold;
     cursor: pointer;
-    font-size: 16px;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 4px 15px rgba(72, 239, 128, 0.3);
 }
 
 #create-habilidad-btn:hover {
-    background-color: #218838;
+    background: linear-gradient(to right, #2ecc71, #27ae60);
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(72, 239, 128, 0.5);
 }
 
+/* Lista de habilidades */
 .habilidades-list {
-    width: 60%; /* Ajusta el ancho de la lista */
-    max-width: 600px; /* Evita que se expanda demasiado en pantallas grandes */
-    margin: 0 auto; /* Centra la lista en la pantalla */
+    width: 80%;
+    max-width: 800px;
+    margin: 0 auto;
     padding: 0;
     list-style: none;
-  }
-  
-  .habilidad-item {
-    position: relative;
-    background-color: #222; /* Color de fondo oscuro */
-    color: white;
-    padding: 10px;
-    margin-bottom: 10px;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-/* Nombres de habilidades */
-.habilidad-name {
-    font-size: 22px;  /* Tamaño de fuente ajustado */
-    font-weight: bold;
-    cursor: pointer;
-    margin-bottom: 5px;
-    position: relative;
 }
 
+.habilidad-item {
+    position: relative;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(104, 228, 255, 0.3);
+    transition: all 0.3s ease-in-out;
+}
+
+.habilidad-item:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(104, 228, 255, 0.5);
+}
+
+/* Nombres de habilidades */
+.habilidad-name {
+    font-size: 22px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+.habilidad-name:hover {
+    color: #6be3ff;
+}
+
+/* Tooltip */
 .tooltip-content {
     position: absolute;
     left: 50%;
-    transform: translateX(-50%) translateY(-5px);
-    width: 250px;
-    background-color: rgba(0, 0, 0, 0.85);
+    top: 100%;
+    transform: translateX(-50%) translateY(10px);
+    width: 260px;
+    background: rgba(0, 0, 0, 0.9);
     color: white;
     text-align: left;
-    padding: 8px;
-    border-radius: 4px;
-    font-size: 12px;
-    line-height: 1.4;
+    padding: 10px;
+    border-radius: 6px;
+    font-size: 14px;
     opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
-    z-index: 50;
-  }
-  
-  /* Mostrar tooltip al hacer hover */
-  .habilidad-item:hover .tooltip-content {
-    opacity: 1;
-    pointer-events: auto;
-  }
-  
-  /* Si el tooltip se sale de la pantalla por arriba, se muestra abajo */
-  .tooltip-below {
-    bottom: auto !important;
-    top: 100% !important;
-    transform: translateX(-50%) translateY(5px) !important;
-  }
-  
-/* Triángulo de la punta del tooltip */
-.tooltip-content::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: -10px;
-    margin-top: -5px;
-    border-width: 5px;
-    border-style: solid;
-    border-color: transparent transparent transparent #2c3e50;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
+    z-index: 10;
 }
 
-/* Acciones de los botones (editar y borrar) */
+.habilidad-item:hover .tooltip-content {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* Acciones de los botones */
 .habilidad-actions {
     display: flex;
     justify-content: flex-start;
@@ -127,27 +128,31 @@ body {
 }
 
 .btn {
-    padding: 8px 15px;
-    font-size: 14px;
-    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 10px;
     text-decoration: none;
     color: white;
-    margin-right: 5px;
+    font-weight: bold;
+    transition: all 0.3s ease-in-out;
     cursor: pointer;
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
 }
 
 .btn-edit {
-    background-color: #007bff;
+    background: linear-gradient(to right, #2196f3, #42a5f5);
 }
 
 .btn-edit:hover {
-    background-color: #0056b3;
+    background: linear-gradient(to right, #42a5f5, #64b5f6);
+    transform: scale(1.1);
 }
 
 .btn-delete {
-    background-color: #dc3545;
+    background: linear-gradient(to right, #e53935, #ff5252);
 }
 
 .btn-delete:hover {
-    background-color: #c82333;
+    background: linear-gradient(to right, #ff5252, #ff867f);
+    transform: scale(1.1);
 }

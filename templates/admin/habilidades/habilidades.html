@@ -4,61 +4,64 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Habilidades</title>
-    <link rel="icon" href="../../../../../static/images/favicon.png" type="image/png" />
     <link rel="stylesheet" href="../../static/css/admin/habilidades.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
   </head>
-  <body>
-    <div class="search-container">
-      <input type="text" id="search" class="search-bar" placeholder="Buscar por nombre o descripción..." onkeyup="filterHabilidades()">
+  <body class="bg-gradient-to-r from-purple-800 via-blue-800 to-indigo-900 text-white flex flex-col items-center p-5 min-h-screen">
+    <div class="w-full max-w-3xl">
+      <div class="flex items-center justify-between mb-6">
+        <input type="text" id="search" class="w-2/3 px-4 py-2 rounded-lg bg-gray-900 text-white focus:outline-none focus:ring-4 focus:ring-purple-500 transition-all duration-300 shadow-xl" placeholder="Buscar habilidad..." onkeyup="filterHabilidades()">
+        
+        <select id="sortCriteria" class="px-4 py-2 rounded-lg bg-gray-900 text-white focus:ring-4 focus:ring-purple-500 transition-all duration-300 shadow-xl" onchange="filterHabilidades()">
+          <option value="nombre">Orden Alfabético</option>
+          <option value="coste">Coste</option>
+          <option value="rango">Rango</option>
+          <option value="duracion">Duración</option>
+          <option value="casteo">Casteo</option>
+        </select>
+      </div>
       
-      <select id="sortCriteria" class="sort-dropdown" onchange="filterHabilidades()">
-        <option value="nombre">Orden Alfabético</option>
-        <option value="coste">Coste</option>
-        <option value="rango">Rango</option>
-        <option value="duracion">Duración</option>
-        <option value="casteo">Casteo</option>
-      </select>
-
-      <a href="{{ url_for('admin_crear_habilidad') }}" class="btn btn-edit">Crear Habilidad</a>
+      <a href="{{ url_for('admin_crear_habilidad') }}" class="block text-center bg-gradient-to-r from-green-400 to-blue-500 hover:from-green-500 hover:to-blue-600 text-white font-bold py-2 px-6 rounded-full shadow-2xl transform transition hover:scale-110">Crear Habilidad</a>
     </div>
     
-    <ul class="habilidades-list" id="habilidades-list">
+    <ul class="w-full max-w-3xl mt-6 space-y-6" id="habilidades-list">
       {% for habilidad, detalle in habilidades.items() %}
-        <li class="habilidad-item" 
+        <li class="bg-gray-900 p-6 rounded-xl shadow-2xl transition-transform transform hover:scale-105 relative habilidad-item border border-purple-600 hover:border-blue-400" 
             data-nombre="{{ habilidad }}" 
             data-coste="{{ detalle['coste'] }}" 
             data-rango="{{ detalle['rango'] }}" 
             data-duracion="{{ detalle['duracion'] }}" 
             data-casteo="{{ detalle['casteo'] }}">
-          <div class="relative inline-block">
-            <span class="habilidad-name cursor-pointer text-blue-600 hover:underline">{{ habilidad }}</span>
-            <div class="tooltip-content absolute left-1/2 bottom-full transform -translate-x-1/2 mb-2 w-64 bg-gray-800 text-white text-xs rounded py-2 px-3 z-10 hidden">
-              <p><strong>Coste:</strong> {{ detalle['coste'] }}</p>
-              <p><strong>Rango:</strong> {{ detalle['rango'] }} ft</p>
-              <p><strong>Duración:</strong> {{ detalle['duracion'] }}</p>
-              <p><strong>Casteo:</strong> {{ detalle['casteo'] }}</p>
-              <p class="mt-2"><strong>Descripción:</strong> {{ detalle['descripcion'] }}</p>
-              {% if detalle['clase'] %}
-                <p><strong>Clase:</strong> {{ detalle['clase'] }}</p>
-              {% endif %}
-              {% if detalle['raza'] %}
-                <p><strong>Raza:</strong> {{ detalle['raza'] }}</p>
-              {% endif %}
-              {% if detalle['otro'] and detalle['otro'] != 'None' %}
-                <p class="mt-2"> ({{ detalle['otro'] }})</p>
-              {% endif %}
-            </div>
-            <div class="habilidad-actions">
-              <form action="{{ url_for('admin_borrar_habilidad', nombre_habilidad=habilidad) }}" method="POST" style="display: inline;">
-                <button type="submit" class="btn btn-delete">Borrar</button>
+          <div class="flex justify-between items-center">
+            <span class="habilidad-name text-2xl font-bold text-purple-300 cursor-pointer hover:underline">{{ habilidad }}</span>
+            
+            <div class="habilidad-actions flex space-x-4">
+              <form action="{{ url_for('admin_borrar_habilidad', nombre_habilidad=habilidad) }}" method="POST">
+                <button type="submit" class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-full shadow-lg transform transition hover:scale-110">Borrar</button>
               </form>
-              <a href="{{ url_for('admin_editar_habilidad', nombre_habilidad=habilidad) }}" class="btn btn-edit">Editar</a>
-            </div>            
+              <a href="{{ url_for('admin_editar_habilidad', nombre_habilidad=habilidad) }}" class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-full shadow-lg transform transition hover:scale-110">Editar</a>
+            </div>
+          </div>
+          
+          <div class="tooltip-content bg-gray-800 text-sm text-white rounded-lg p-4 mt-2 hidden shadow-xl border border-blue-500">
+            <p><strong>Coste:</strong> {{ detalle['coste'] }}</p>
+            <p><strong>Rango:</strong> {{ detalle['rango'] }} ft</p>
+            <p><strong>Duración:</strong> {{ detalle['duracion'] }}</p>
+            <p><strong>Casteo:</strong> {{ detalle['casteo'] }}</p>
+            <p><strong>Descripción:</strong> {{ detalle['descripcion'] }}</p>
+            {% if detalle['clase'] %}
+              <p><strong>Clase:</strong> {{ detalle['clase'] }}</p>
+            {% endif %}
+            {% if detalle['raza'] %}
+              <p><strong>Raza:</strong> {{ detalle['raza'] }}</p>
+            {% endif %}
           </div>
         </li>
       {% endfor %}
     </ul>
     
+    <a href="/" class="block mt-6 text-lg font-bold text-indigo-280 hover:text-indigo-400 transition-transform transform hover:scale-105">⬅ Volver al Home</a>
+  
     <script>
       function filterHabilidades() {
         var input = document.getElementById("search").value.toUpperCase();
@@ -66,31 +69,20 @@
         var habilidadesList = document.getElementById("habilidades-list");
         var habilidadesItem = Array.from(habilidadesList.getElementsByClassName("habilidad-item"));
     
-        // Filtrar habilidades por nombre o descripción
         habilidadesItem.forEach(item => {
           var nombre = item.getElementsByClassName("habilidad-name")[0].innerHTML.toUpperCase();
-          var descripcion = item.getElementsByClassName("tooltip-content")[0].innerText.toUpperCase();
-          item.style.display = (nombre.indexOf(input) > -1 || descripcion.indexOf(input) > -1) ? "" : "none";
+          item.style.display = (nombre.indexOf(input) > -1) ? "" : "none";
         });
     
-        // Ordenar habilidades según criterio seleccionado
         habilidadesItem.sort((a, b) => {
           var valA = a.dataset[criteria] || "";
           var valB = b.dataset[criteria] || "";
-
-          // Si es un número (rango), ordenar numéricamente
-          if (criteria === "rango") {
-            return parseInt(valA) - parseInt(valB);
-          }
-
-          return valA.localeCompare(valB);
+          return isNaN(valA) ? valA.localeCompare(valB) : parseInt(valA) - parseInt(valB);
         });
     
-        // Limpiar la lista y volver a agregar los elementos en orden
         habilidadesList.innerHTML = "";
         habilidadesItem.forEach(item => habilidadesList.appendChild(item));
       }
     </script>
-    
   </body>
 </html>
