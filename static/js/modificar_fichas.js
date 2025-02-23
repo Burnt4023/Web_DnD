@@ -6,8 +6,8 @@ function agregarHabilidad() {
     if (habilidadSeleccionada) {
         const div = document.createElement('div');
         div.innerHTML = `
-            <input type="text" name="habilidades[]" value="${habilidadSeleccionada}" readonly required>
-            <button type="button" onclick="eliminarHabilidad(this)">Eliminar</button>
+            <input type="text" name="habilidades[]" value="${habilidadSeleccionada}" readonly required class="w-full p-2 bg-gray-700 rounded-lg">
+            <button type="button" onclick="eliminarHabilidad(this)" class="bg-red-500 hover:bg-red-600 px-2 py-1 rounded-lg">Eliminar</button>
         `;
         lista.appendChild(div);
 
@@ -30,8 +30,8 @@ function agregarHechizo() {
     if (hechizoSeleccionado) {
         const div = document.createElement('div');
         div.innerHTML = `
-            <input type="text" name="hechizos[]" value="${hechizoSeleccionado}" readonly required>
-            <button type="button" onclick="eliminarHechizo(this)">Eliminar</button>
+            <input type="text" name="hechizos[]" value="${hechizoSeleccionado}" readonly required class="w-full p-2 bg-gray-700 rounded-lg">
+            <button type="button" onclick="eliminarHechizo(this)" class="bg-red-500 hover:bg-red-600 px-2 py-1 rounded-lg">Eliminar</button>
         `;
         lista.appendChild(div);
 
@@ -54,8 +54,8 @@ function agregarEquipo() {
     if (equipoSeleccionado) {
         const div = document.createElement('div');
         div.innerHTML = `
-            <input type="text" name="equipo[]" value="${equipoSeleccionado}" readonly required>
-            <button type="button" onclick="eliminarEquipo(this)">Eliminar</button>
+            <input type="text" name="equipo[]" value="${equipoSeleccionado}" readonly required class="w-full p-2 bg-gray-700 rounded-lg">
+            <button type="button" onclick="eliminarEquipo(this)" class="bg-red-500 hover:bg-red-600 px-2 py-1 rounded-lg">Eliminar</button>
         `;
         lista.appendChild(div);
 
@@ -78,8 +78,8 @@ function agregarObjeto() {
     if (objetoSeleccionado) {
         const div = document.createElement('div');
         div.innerHTML = `
-            <input type="text" name="objetos[]" value="${objetoSeleccionado}" readonly required>
-            <button type="button" onclick="eliminarObjeto(this)">Eliminar</button>
+            <input type="text" name="objetos[]" value="${objetoSeleccionado}" readonly required class="w-full p-2 bg-gray-700 rounded-lg">
+            <button type="button" onclick="eliminarObjeto(this)" class="bg-red-500 hover:bg-red-600 px-2 py-1 rounded-lg">Eliminar</button>
         `;
         lista.appendChild(div);
 
@@ -102,8 +102,8 @@ function agregarInventario() {
     if (inventarioSeleccionado) {
         const div = document.createElement('div');
         div.innerHTML = `
-            <input type="text" name="objetos[]" value="${inventarioSeleccionado}" readonly required>
-            <button type="button" onclick="eliminarInventario(this)">Eliminar</button>
+            <input type="text" name="objetos[]" value="${inventarioSeleccionado}" readonly required class="w-full p-2 bg-gray-700 rounded-lg">
+            <button type="button" onclick="eliminarInventario(this)" class="bg-red-500 hover:bg-red-600 px-2 py-1 rounded-lg">Eliminar</button>
         `;
         lista.appendChild(div);
 
@@ -147,8 +147,8 @@ function agregarEstado() {
     if (estadoSeleccionado) {
         const div = document.createElement('div');
         div.innerHTML = `
-            <input type="text" name="estados[]" value="${estadoSeleccionado}" readonly required>
-            <button type="button" onclick="eliminarEstado(this)">Eliminar</button>
+            <input type="text" name="estados[]" value="${estadoSeleccionado}" readonly required class="w-full p-2 bg-gray-700 rounded-lg">
+            <button type="button" onclick="eliminarEstado(this)" class="bg-red-500 hover:bg-red-600 px-2 py-1 rounded-lg">Eliminar</button>
         `;
         lista.appendChild(div);
 

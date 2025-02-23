@@ -1,5 +1,5 @@
 {
-    "nombre": "fsdfgvdfgv",
+    "nombre": "pepe",
     "nivel": 1,
     "clase": "Sin clase",
     "magia": "Ninguna",
@@ -10,7 +10,7 @@
     "iniciativa": 0,
     "vida": {
         "actual": 10,
-        "maxima": 10
+        "maxima": 33123
     },
     "mana": {
         "actual": 10,
@@ -18,15 +18,15 @@
     },
     "resistencia": {
         "actual": 10,
-        "maxima": 11
+        "maxima": 213
     },
     "caos": 0,
     "sobrecarga": 0,
-    "velocidad": 30,
+    "velocidad": 301231,
     "armadura": 10,
     "tiradas": {
-        "exitos": 0,
-        "fallos": 0
+        "exitos": 3,
+        "fallos": 3
     },
     "habilidades": [],
     "hechizos": [],
@@ -68,5 +68,5 @@
         0,
         0
     ],
-    "publica": false
+    "publica": true
 }

@@ -106,33 +106,42 @@
             <label for="caos" class="block text-sm font-medium">Caos:</label>
             <input type="number" id="caos" name="caos" value="{{ contenido['caos'] }}" required class="w-full p-2 mt-1 bg-gray-700 rounded-lg">
             {% endif %}
+
             <!-- Estados -->
             <h2 class="text-2xl font-semibold mt-8 mb-4 border-b border-gray-600 pb-2">Estados</h2>
-
-
-            <div id="lista-estados" class="mb-4 space-y-2">
-              {% for estado in contenido['estados'] %}
-                <div class="flex items-center space-x-2">
-                  <input type="text" name="estados[]" value="{{ estado }}" readonly required class="w-full p-2 bg-gray-700 rounded-lg">
-                  <button type="button" onclick="eliminarEstado(this)" class="bg-red-500 hover:bg-red-600 px-2 py-1 rounded-lg">Eliminar</button>
+            <div></div>          
+            <div>
+              <div>
+                <h3 class="text-lg font-semibold">Lista de Estados</h3>
+                <div id="lista-estados" class="space-y-2 mt-2">
+                  {% for estado in contenido['estados'] %}
+                    <div class="flex items-center space-x-2">
+                      <input type="text" name="estados[]" value="{{ estado }}" readonly required class="w-full p-2 bg-gray-700 rounded-lg">
+                      <button type="button" onclick="eliminarEstado(this)" class="bg-red-500 hover:bg-red-600 px-2 py-1 rounded-lg">Eliminar</button>
+                    </div>
+                  {% endfor %}
                 </div>
-              {% endfor %}
+                <div class="mt-4">
+                  <label for="busqueda-estado" class="block text-sm font-medium">Buscar estado:</label>
+                  <input type="text" id="busqueda-estado" placeholder="Escribe el nombre del estado..." oninput="filtrarEstados()" class="w-full p-2 mt-1 bg-gray-700 rounded-lg">
+                </div>
+              </div>
             </div>
-            <div class="mb-4">
-              <label for="busqueda-estado" class="block text-sm font-medium">Buscar estado:</label>
-              <input type="text" id="busqueda-estado" placeholder="Escribe el nombre del estado..." oninput="filtrarEstados()" class="w-full p-2 mt-1 bg-gray-700 rounded-lg">
+            <div>
+              <div>
+                <h3 class="text-lg font-semibold">Añadir Estado</h3>
+                <div class="mt-2">
+                  <label for="estados-disponibles" class="block text-sm font-medium">Seleccionar estado:</label>
+                  <select id="estados-disponibles" class="w-full p-2 mt-1 bg-gray-700 rounded-lg">
+                    <option value="" disabled selected>Selecciona un estado</option>
+                    {% for estado in lista_estados %}
+                      <option value="{{ estado }}">{{ estado }}</option>
+                    {% endfor %}
+                  </select>
+                  <button type="button" onclick="agregarEstado()" class="mt-2 bg-green-500 hover:bg-green-600 px-2 py-1 rounded-lg">Añadir</button>
+                </div>
+              </div>
             </div>
-            <div class="mb-4">
-              <label for="estados-disponibles" class="block text-sm font-medium">Añadir estado:</label>
-              <select id="estados-disponibles" class="w-full p-2 mt-1 bg-gray-700 rounded-lg">
-                <option value="" disabled selected>Selecciona un estado</option>
-                {% for estado in lista_estados %}
-                  <option value="{{ estado }}">{{ estado }}</option>
-                {% endfor %}
-              </select>
-              <button type="button" onclick="agregarEstado()" class="mt-2 bg-green-500 hover:bg-green-600 px-2 py-1 rounded-lg">Añadir</button>
-            </div>
-
           </div>
         </div>
         
