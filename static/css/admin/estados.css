@@ -12,7 +12,168 @@ body {
     margin: 20px;
 }
 
+/* Barra de búsqueda *//* Estilo general */
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(to right, #1a1a2e, #16213e, #0f3460);
+    color: white;
+    margin: 0;
+    padding: 0;
+}
+
+/* Contenedor de estados */
+.estados-container {
+    text-align: center;
+    margin: 20px;
+}
+
 /* Barra de búsqueda */
+.search-container {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.search-bar {
+    width: 400px;
+    height: 45px;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 10px;
+    border: none;
+    background: #1b1b3a;
+    color: white;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+}
+
+.search-bar:focus {
+    outline: none;
+    border: none;
+    box-shadow: 0 0 15px rgba(104, 228, 255, 0.8);
+}
+
+/* Botón de crear estado */
+#create-estado-btn {
+    padding: 12px 25px;
+    background: linear-gradient(to right, #4caf50, #2ecc71);
+    color: white;
+    border: none;
+    border-radius: 50px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 4px 15px rgba(72, 239, 128, 0.3);
+}
+
+#create-estado-btn:hover {
+    background: linear-gradient(to right, #2ecc71, #27ae60);
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(72, 239, 128, 0.5);
+}
+
+/* Lista de estados */
+.estados-list {
+    width: 80%;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0;
+    list-style: none;
+}
+
+/* Elemento de estado */
+.estado-item {
+    position: relative;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(104, 228, 255, 0.3);
+    transition: all 0.3s ease-in-out;
+}
+
+.estado-item:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(104, 228, 255, 0.5);
+}
+
+/* Nombres de estados */
+.estado-name {
+    font-size: 22px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+.estado-name:hover {
+    color: #6be3ff;
+}
+
+/* Tooltip */
+.tooltip-content {
+    position: absolute;
+    left: 50%;
+    top: 100%;
+    transform: translateX(-50%) translateY(10px);
+    width: 260px;
+    background: rgba(0, 0, 0, 0.9);
+    color: white;
+    text-align: left;
+    padding: 10px;
+    border-radius: 6px;
+    font-size: 14px;
+    opacity: 0;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
+    z-index: 10;
+}
+
+.estado-item:hover .tooltip-content {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* Acciones de los botones */
+.estado-actions {
+    display: flex;
+    justify-content: flex-start;
+    margin-top: 10px;
+}
+
+.btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 10px;
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+}
+
+/* Botón editar */
+.btn-edit {
+    background: linear-gradient(to right, #2196f3, #42a5f5);
+}
+
+.btn-edit:hover {
+    background: linear-gradient(to right, #42a5f5, #64b5f6);
+    transform: scale(1.1);
+}
+
+/* Botón borrar */
+.btn-delete {
+    background: linear-gradient(to right, #e53935, #ff5252);
+}
+
+.btn-delete:hover {
+    background: linear-gradient(to right, #ff5252, #ff867f);
+    transform: scale(1.1);
+}
+
 .search-container {
     margin-bottom: 20px;
     display: flex;

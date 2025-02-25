@@ -25,6 +25,8 @@
       <a href="{{ url_for('admin_crear_habilidad') }}" class="block text-center bg-gradient-to-r from-green-400 to-blue-500 hover:from-green-500 hover:to-blue-600 text-white font-bold py-2 px-6 rounded-full shadow-2xl transform transition hover:scale-110">Crear Habilidad</a>
     </div>
     
+    <a href="/" class="block mt-6 text-lg font-bold text-indigo-200 hover:text-indigo-100 transition-transform transform hover:scale-105">⬅ Volver al Home</a>
+  
     <ul class="w-full max-w-3xl mt-6 space-y-6" id="habilidades-list">
       {% for habilidad, detalle in habilidades.items() %}
         <li class="bg-gray-900 p-6 rounded-xl shadow-2xl transition-transform transform hover:scale-105 relative habilidad-item border border-purple-600 hover:border-blue-400" 
@@ -61,8 +63,7 @@
       {% endfor %}
     </ul>
     
-    <a href="/" class="block mt-6 text-lg font-bold text-indigo-200 hover:text-indigo-100 transition-transform transform hover:scale-105">⬅ Volver al Home</a>
-  
+    
     <script>
       function filterHabilidades() {
         var input = document.getElementById("search").value.toUpperCase();

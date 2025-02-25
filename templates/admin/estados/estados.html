@@ -1,69 +1,74 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Estados</title>
-    <link rel="icon" href="../../../../../static/images/favicon.png" type="image/png" />
+    <link rel="icon" href="../../../../../static/images/favicon.png" type="image/png">
     <link rel="stylesheet" href="../../static/css/admin/estados.css" />
-  </head>
-  <body>
-    <div class="search-container">
-      <input type="text" id="search" class="search-bar" placeholder="Buscar por nombre..." onkeyup="filterEstados()">
-      
-      <select id="sortCriteria" class="sort-dropdown" onchange="filterEstados()">
-        <option value="nombre">Orden Alfabético</option>
-        <option value="estado">Estado</option>
-      </select>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-r from-purple-800 via-blue-800 to-indigo-900 text-white flex flex-col items-center p-5 min-h-screen">
+    <div class="w-full max-w-3xl">
+        <div class="flex items-center justify-between mb-6">
+            <input type="text" id="search" class="w-2/3 px-4 py-2 rounded-lg bg-gray-900 text-white focus:outline-none focus:ring-4 focus:ring-purple-500 transition-all duration-300 shadow-xl" placeholder="Buscar por nombre..." onkeyup="filterEstados()">
+            
+            <select id="sortCriteria" class="px-4 py-2 rounded-lg bg-gray-900 text-white focus:ring-4 focus:ring-purple-500 transition-all duration-300 shadow-xl" onchange="filterEstados()">
+                <option value="nombre">Orden Alfabético</option>
+                <option value="estado">Estado</option>
+            </select>
+        </div>
 
-      <a href="{{ url_for('admin_crear_estado') }}" class="btn btn-edit">Crear Estado</a>
+        <a href="{{ url_for('admin_crear_estado') }}" class="block text-center bg-gradient-to-r from-green-400 to-blue-500 hover:from-green-500 hover:to-blue-600 text-white font-bold py-2 px-6 rounded-full shadow-2xl transform transition hover:scale-110">Crear Estado</a>
     </div>
-    
-    <ul class="estados-list" id="estados-list">
-      {% for estado, detalle in estados.items() %}
-        <li class="estado-item" data-nombre="{{ estado }}" data-estado="{{ detalle['estado'] }}">
-          <div class="relative inline-block">
-            <span class="estado-name cursor-pointer text-blue-600 hover:underline">{{ estado }}</span>
-            <div class="tooltip-content absolute left-1/2 bottom-full transform -translate-x-1/2 mb-2 w-64 bg-gray-800 text-white text-xs rounded py-2 px-3 z-10 hidden">
-              <p><strong>Estado:</strong> {{ detalle['estado'] }}</p>
+
+    <a href="/" class="block mt-6 text-lg font-bold text-indigo-200 hover:text-indigo-100 transition-transform transform hover:scale-105">⬅ Volver al Home</a>
+
+    <ul class="w-full max-w-3xl mt-6 space-y-6" id="estados-list">
+        {% for estado, detalle in estados.items() %}
+        <li class="bg-gray-900 p-6 rounded-xl shadow-2xl transition-transform transform hover:scale-105 relative border border-purple-600 hover:border-blue-400 estado-item" 
+            data-nombre="{{ estado }}" 
+            data-estado="{{ detalle['estado'] }}">
+            <div class="flex justify-between items-center">
+                <span class="text-2xl font-bold text-purple-300 cursor-pointer hover:underline estado-name">{{ estado }}</span>
+                
+                <div class="flex space-x-4">
+                    <form action="{{ url_for('admin_borrar_estado', nombre_estado=estado) }}" method="POST">
+                        <button type="submit" class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-full shadow-lg transform transition hover:scale-110">Borrar</button>
+                    </form>
+                    <a href="{{ url_for('admin_editar_estado', nombre_estado=estado) }}" class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-full shadow-lg transform transition hover:scale-110">Editar</a>
+                </div>
             </div>
-            <div class="estado-actions">
-              <form action="{{ url_for('admin_borrar_estado', nombre_estado=estado) }}" method="POST" style="display: inline;">
-                <button type="submit" class="btn btn-delete">Borrar</button>
-              </form>
-              <a href="{{ url_for('admin_editar_estado', nombre_estado=estado) }}" class="btn btn-edit">Editar</a>
-            </div>            
-          </div>
+
+            <div class="tooltip-content bg-gray-800 text-sm text-white rounded-lg p-4 mt-2 hidden shadow-xl border border-blue-500">
+                <p><strong>Estado:</strong> {{ detalle['estado'] }}</p>
+            </div>
         </li>
-      {% endfor %}
+        {% endfor %}
     </ul>
-    
+
     <script>
-      function filterEstados() {
-        var input = document.getElementById("search").value.toUpperCase();
-        var criteria = document.getElementById("sortCriteria").value;
-        var estadosList = document.getElementById("estados-list");
-        var estadosItem = Array.from(estadosList.getElementsByClassName("estado-item"));
-    
-        // Filtrar estados
-        estadosItem.forEach(item => {
-          var nombre = item.getElementsByClassName("estado-name")[0].innerHTML.toUpperCase();
-          item.style.display = nombre.indexOf(input) > -1 ? "" : "none";
-        });
-    
-        // Ordenar estados según criterio seleccionado
-        estadosItem.sort((a, b) => {
-          var valA = a.dataset[criteria] || "";
-          var valB = b.dataset[criteria] || "";
-    
-          return valA.localeCompare(valB);
-        });
-    
-        // Limpiar la lista y volver a agregar los elementos en orden
-        estadosList.innerHTML = "";
-        estadosItem.forEach(item => estadosList.appendChild(item));
-      }
+        function filterEstados() {
+            var input = document.getElementById("search").value.toUpperCase();
+            var criteria = document.getElementById("sortCriteria").value;
+            var estadosList = document.getElementById("estados-list");
+            var estadosItem = Array.from(estadosList.getElementsByClassName("estado-item"));
+
+            estadosItem.forEach(item => {
+                var nombre = item.getElementsByClassName("estado-name")[0].innerHTML.toUpperCase();
+                item.style.display = (nombre.indexOf(input) > -1) ? "" : "none";
+            });
+
+            estadosItem.sort((a, b) => {
+                var valA = a.dataset[criteria] || "";
+                var valB = b.dataset[criteria] || "";
+
+                return valA.localeCompare(valB);
+            });
+
+            estadosList.innerHTML = "";
+            estadosItem.forEach(item => estadosList.appendChild(item));
+        }
     </script>
-    
-  </body>
+</body>
 </html>
