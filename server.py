@@ -911,7 +911,7 @@ def admin_editar_hechizo(nombre_hechizo):
     # Si es GET, mostrar el formulario de edición con los datos actuales del hechizo
     return render_template("admin/hechizos/editar_hechizo.html", hechizo=hechizo)
 
-@app.route("/admin/crear_hechizo", methods=["POST", "GET"])
+@app.route("/admin/hechizos/crear_hechizo", methods=["POST", "GET"])
 def admin_crear_hechizo():
     if 'username' not in session:
         flash('No has iniciado sesión.', 'error')  # Mensaje de error
@@ -960,7 +960,7 @@ def admin_crear_hechizo():
             return render_template('admin/hechizos/crear_hechizo.html', hechizo=hechizo_data)  # Volver al formulario con los datos ingresados
 
     # Si es GET, renderizar el formulario vacío para crear un hechizo
-    return render_template("admin/crear_hechizo.html")
+    return render_template("admin/hechizos/crear_hechizo.html")
 ##################################################################################
 
 
