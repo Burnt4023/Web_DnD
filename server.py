@@ -712,9 +712,14 @@ def wiki_clerigo():
         return redirect(url_for('login'))  # Redirigir al login
     return render_template('wiki/clases/mago/clerigo/clerigo.html')
 
+@app.route('/wiki/mago/clerigo/yses')
+def wiki_clerigo_yses():
+    if 'username' not in session:
+        flash('No has iniciado sesión.', 'error')  # Mensaje de error
+        return redirect(url_for('login'))  # Redirigir al login
+    return render_template('wiki/clases/mago/clerigo/Yses.html')
 
-
-
+###############################################
 # ENTRADAS PARA GUERRERO
 @app.route('/wiki/guerrero/ronin')
 def wiki_ronin():
@@ -1073,7 +1078,7 @@ def admin_crear_estado():
 ##################################################################################
 
 
-################################### MENU ADMIN ESTADOS ##############################
+################################### MENU ADMIN HABILIDADES ##############################
 @app.route("/admin/habilidades")
 def admin_habilidades():
     if 'username' not in session:
@@ -1218,5 +1223,7 @@ def admin_borrar_habilidad(nombre_habilidad):
     flash('Habilidad eliminada exitosamente.', 'success')
     return redirect(url_for("admin_habilidades"))
 ##################################################################################
+
+
 if __name__ == '__main__':
     app.run(debug=True)

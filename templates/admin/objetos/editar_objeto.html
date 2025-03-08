@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Hechizo</title>
+</head>
+
+<body>
+
+    <div class="container mt-4">
+        <h2>Editar Hechizo: {{ hechizo['nombre'] }}</h2>
+        <form action="{{ url_for('admin_editar_hechizo', nombre_hechizo=hechizo['nombre']) }}" method="POST">
+            <div class="form-group">
+                <label for="nombre">Nombre del Hechizo</label>
+                <input type="text" class="form-control" id="nombre" name="nombre" value="{{ hechizo['nombre'] }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="nivel">Nivel</label>
+                <input type="number" class="form-control" id="nivel" name="nivel" value="{{ hechizo['nivel'] }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="magia">Magia</label>
+                <input type="text" class="form-control" id="magia" name="magia" value="{{ ', '.join(hechizo['magia']) }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="coste">Coste (S, M, R)</label>
+                <input type="text" class="form-control" id="coste" name="coste" value="{{ hechizo['coste'] }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="rango">Rango</label>
+                <input type="text" class="form-control" id="rango" name="rango" value="{{ hechizo['rango'] }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="duracion">Duración</label>
+                <input type="text" class="form-control" id="duracion" name="duracion" value="{{ hechizo['duracion'] }}">
+            </div>
+
+            <div class="form-group">
+                <label for="casteo">Casteo</label>
+                <input type="text" class="form-control" id="casteo" name="casteo" value="{{ hechizo['casteo'] }}">
+            </div>
+
+            <div class="form-group">
+                <label for="descripcion">Descripción</label>
+                <textarea class="form-control" id="descripcion" name="descripcion" rows="3" required>{{ hechizo['descripcion'] }}</textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="clase">Clase</label>
+                <input type="text" class="form-control" id="clase" name="clase" value="{{ hechizo['clase'] }}">
+            </div>
+
+            <div class="form-group">
+                <label for="raza">Raza</label>
+                <input type="text" class="form-control" id="raza" name="raza" value="{{ hechizo['raza'] }}">
+            </div>
+
+            <div class="form-group">
+                <label for="otro">Otro</label>
+                <input type="text" class="form-control" id="otro" name="otro" value="{{ hechizo['otro'] }}">
+            </div>
+
+            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+            <a href="{{ url_for('admin_hechizos') }}" class="btn btn-secondary">Cancelar</a>
+        </form>
+    </div>
+</body>
+
+</html>
