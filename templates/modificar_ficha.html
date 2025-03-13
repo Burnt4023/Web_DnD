@@ -303,12 +303,14 @@
                                       'Cocina', 'Medicina', 'Sigilo', 'Arco', 
                                       'Espada', 'Desarmado', 'Persuasión', 'Percepción'] %}
           {% for valor in contenido['destrezas'] %}
-            <div class="mb-2">
-              <span class="font-bold">{{ destrezas_nombres[loop.index0] }}:</span> {{ valor }}
+            <div class="mb-2 flex items-center">
+              <label class="font-bold w-32" for="destreza-{{ loop.index0 }}">{{ destrezas_nombres[loop.index0] }}:</label>
+              <input type="number" id="destreza-{{ loop.index0 }}" name="destrezas[{{ loop.index0 }}]" 
+                     value="{{ valor }}" min="0" class="border border-gray-400 rounded px-2 py-1 w-16">
             </div>
           {% endfor %}
         </div>
-      </div>
+      </div>      
       
       <!-- Nueva sección: Imagen e Historia en paralelo -->
       <div class="mt-8 flex flex-col md:flex-row gap-4">
@@ -346,11 +348,13 @@
         <h2 class="text-2xl font-semibold mb-4 border-b border-gray-600 pb-2">Estadísticas</h2>
         <div id="estadisticas" class="grid grid-cols-1 md:grid-cols-3 gap-4">
           {% set estadisticas_nombres = ['Fuerza', 'Resistencia', 'Agilidad', 
-                                          'Poder', 'Control', 'Capacidad', 
-                                          'Carisma', 'Inteligencia', 'Sabiduría'] %}
+                                         'Poder', 'Control', 'Capacidad', 
+                                         'Carisma', 'Inteligencia', 'Sabiduría'] %}
           {% for valor in contenido['estadisticas'] %}
-            <div class="mb-2">
-              <span class="font-bold">{{ estadisticas_nombres[loop.index0] }}:</span> {{ valor }}
+            <div class="mb-2 flex items-center">
+              <label class="font-bold w-32" for="estadistica-{{ loop.index0 }}">{{ estadisticas_nombres[loop.index0] }}:</label>
+              <input type="number" id="estadistica-{{ loop.index0 }}" name="estadisticas[{{ loop.index0 }}]" 
+                     value="{{ valor }}" min="0" class="border border-gray-400 rounded px-2 py-1 w-16">
             </div>
           {% endfor %}
         </div>
