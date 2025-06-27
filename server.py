@@ -2,7 +2,7 @@ from flask import Flask, render_template, render_template_string, request, redir
 from usuarios import *
 from fichas import *
 from habilidades import *
-from hechizos import *
+#from hechizos import *
 from Objetos import *
 from estados import *
 import os
@@ -15,7 +15,7 @@ UPLOAD_FOLDER = os.path.join(os.getcwd(), 'fichas', 'fotos')
 crear_tabla_usuarios()
 crear_tabla_fichas()
 crear_tabla_habilidades()
-crear_tabla_hechizos()
+#crear_tabla_hechizos()
 crear_tabla_armaduras()
 crear_tabla_armas()
 crear_tabla_objetos()
@@ -103,107 +103,13 @@ def fichas():
 
     return render_template('fichas.html', fichas_usuario=fichas_usuario, fichas_publicas=fichas_publicas)
 
-@app.route('/fichas/ver/<nombre_ficha>/<owner_username>', methods=['GET'])
-def ver_ficha(nombre_ficha, owner_username):
+@app.route('/fichas/ver/<owner_username>/<nombre_ficha>', methods=['GET'])
+def ver_ficha(owner_username, nombre_ficha ):
     if 'username' not in session:
         return redirect(url_for('login'))
 
-    ficha = obtener_ficha_por_nombre(owner_username, nombre_ficha)
-    if ficha is None or (not ficha[2] and owner_username != session["username"]):  # Comprobar acceso
-        flash('La ficha no existe o no es pública.', 'error')
-        return redirect(url_for('fichas'))
-
-    try:
-        contenido = obtener_contenido_de_archivo(owner_username, nombre_ficha)
-    except FileNotFoundError:
-        flash('El archivo de la ficha no se encontró.', 'error')
-        return redirect(url_for('fichas'))
-
-    # Obtener todas las habilidades de la base de datos
-    habilidades_detalle = {}
-    for habilidad in get_all_habilidades():
-        if habilidad['nombre'] in contenido['habilidades']:
-            habilidades_detalle[habilidad['nombre']] = {
-                'coste': habilidad['coste'],
-                'rango': habilidad['rango'],
-                'descripcion': habilidad['descripcion'],
-                'clase': habilidad['clase'],
-                'raza': habilidad['raza'],
-                'otro': habilidad['otro'],
-                'duracion': str(habilidad.get('duracion', 'N/A')),
-                'casteo': str(habilidad.get('casteo', 'N/A'))
-            }
-
-    # Obtener todos los hechizos de la base de datos
-    hechizos_detalle = {}
-    for hechizo in get_all_hechizos():
-        if hechizo['nombre'] in contenido['hechizos']:
-            hechizos_detalle[hechizo['nombre']] = {
-                'nivel': hechizo['nivel'],
-                'magia': hechizo['magia'],
-                'coste': hechizo['coste'],
-                'rango': hechizo['rango'],
-                'duracion': str(hechizo.get('duracion', 'N/A')),
-                'casteo': str(hechizo.get('casteo', 'N/A')),
-                'clase': hechizo['clase'],
-                'raza': hechizo['raza'],
-                'otro': hechizo['otro'],
-                'descripcion': hechizo['descripcion']
-            }
-
-
-
-    # Obtener todos los objetos de la base de datos (armas, armaduras, objetos)
-    armas_detalle = []
-    for arma in get_all_armas():
-        if arma['nombre'] in contenido['objetos']:
-            armas_detalle.append({
-                'nombre': arma['nombre'],
-                'descripcion': arma['descripcion'],
-                'daño': arma['daño'],  # Se usa 'daño' en lugar de 'coste'
-                'calidad': arma['calidad'],  # Se usa 'calidad' en lugar de 'rango'
-                'tipo': 'Arma'
-            })
-
-    # Detalles de armaduras
-    armaduras_detalle = []
-    for armadura in get_all_armaduras():
-        if armadura['nombre'] in contenido['objetos']:
-            armaduras_detalle.append({
-                'nombre': armadura['nombre'],
-                'descripcion': armadura['descripcion'],
-                'rating': armadura['rating'],  # Se usa 'rating' en lugar de 'coste'
-                'calidad': armadura['calidad'],  # Se usa 'calidad' en lugar de 'rango'
-                'tipo': 'Armadura'
-            })
-
-    # Detalles de objetos
-    objetos_detalle = []
-    for objeto in get_all_objetos():
-        if objeto['nombre'] in contenido['objetos']:
-            objetos_detalle.append({
-                'nombre': objeto['nombre'],
-                'descripcion': objeto['descripcion'],
-                'otros': objeto['otros'],  
-            })
-
-    estados_detalle = []
-    for estado in get_all_estados():
-        if estado['nombre'] in contenido['estados']:
-            estados_detalle.append({
-                'nombre': estado['nombre'],
-                'efecto': estado['efecto'],
-            })
     return render_template(
         'ver_ficha.html',
-        nombre_ficha=nombre_ficha,
-        contenido=contenido,
-        habilidades_detalle=habilidades_detalle,
-        hechizos_detalle=hechizos_detalle,
-        armas_detalle=armas_detalle,
-        armaduras_detalle=armaduras_detalle,
-        objetos_detalle=objetos_detalle,
-        estados_detalle=estados_detalle
     )
 
 @app.route('/fichas/modificar/<nombre_ficha>', methods=['GET', 'POST'])
@@ -212,139 +118,11 @@ def modificar_ficha(nombre_ficha):
     if 'username' not in session:
         return redirect(url_for('login'))
 
-    username = session['username']
-
     if request.method == 'POST':
-        # Definir todos los campos de la ficha
-        campos = [
-            'nombre_personaje', 'nivel', 'clase', 'magia', 'talento', 'alineamiento', 'historia', 'foto', 'caos',
-            'vida_actual', 'vida_maxima', 'mana_actual', 'mana_maximo', 'resistencia_actual', 'resistencia_maxima',
-            'sobrecarga', 'velocidad', 'armadura', 'iniciativa', 'tiradas_exito', 'tiradas_fallo'
-        ]
-
-        # Capturar los datos del formulario con valores por defecto
-        datos_ficha = {campo: request.form.get(campo, None) for campo in campos}
-        
-        
-        
-        
-        
-        
-        
-        # Capturar el estado del checkbox de "ficha pública"
-        ficha_publica = 'ficha_publica' in request.form  # True si el checkbox está marcado
-
-        # Capturar habilidades, hechizos y objetos
-        habilidades = request.form.getlist('habilidades[]')
-        hechizos = request.form.getlist('hechizos[]')
-        objetos = request.form.getlist('objetos[]')
-        equipo = request.form.getlist('equipo[]')
-        estados = request.form.getlist('estados[]')
-        
-
-        fotoname = ""
-        # Verificar si se subió una nueva foto
-        foto = request.files.get('foto')
-
-        # Si se sube una nueva foto
-        if foto:
-            # Crear el nombre de archivo con un formato único (usando el username y nombre del personaje)
-            fotoname = f"{username}_{datos_ficha['nombre_personaje']}.{foto.filename.split('.')[-1].lower()}"
-            foto.save(os.path.join(UPLOAD_FOLDER, fotoname))  # Guardar la foto en la carpeta de subida
-        else:
-            # Si no se sube una nueva foto, mantener la foto anterior
-            fotoname = get_photo(username, nombre_ficha)
-
-        # Captura de destrezas
-        destrezas = [int(request.form.get(f"destrezas[{i}]", 15)) for i in range(16)]
-
-        # Captura de estadísticas
-        estadisticas = [int(request.form.get(f"estadisticas[{i}]", 0)) for i in range(9)]
-
-        # Captura de los valores de dinero enviados por el formulario
-        dinero = request.form.getlist('dinero[]')
-        cobre = int(dinero[0]) if len(dinero) > 0 else 0
-        plata = int(dinero[1]) if len(dinero) > 1 else 0
-        oro = int(dinero[2]) if len(dinero) > 2 else 0
-        platino = int(dinero[3]) if len(dinero) > 3 else 0
-
-        if datos_ficha['caos'] == None:
-            datos_ficha['caos'] = 0
-            
-        # Construcción del nuevo contenido de la ficha
-        nuevo_contenido = {
-            "nombre": datos_ficha['nombre_personaje'],
-            "nivel": int(datos_ficha['nivel']) if datos_ficha['nivel'] else 1,
-            "clase": datos_ficha['clase'] or 'Sin clase',
-            "magia": datos_ficha['magia'] or 'Ninguna',
-            "talento": datos_ficha['talento'] or 'Ninguno',
-            "alineamiento": datos_ficha['alineamiento'] or 'Neutral',
-            "historia": datos_ficha['historia'] or 'No',
-            "foto": fotoname,  # Usar la URL de la foto
-            "iniciativa": datos_ficha['iniciativa'],
-            "vida": {
-                "actual": int(datos_ficha['vida_actual']) if datos_ficha['vida_actual'] else 10,
-                "maxima": int(datos_ficha['vida_maxima']) if datos_ficha['vida_maxima'] else 10
-            },
-            "mana": {
-                "actual": int(datos_ficha['mana_actual']) if datos_ficha['mana_actual'] else 10,
-                "maximo": int(datos_ficha['mana_maximo']) if datos_ficha['mana_maximo'] else 10
-            },
-            "resistencia": {
-                "actual": int(datos_ficha['resistencia_actual']) if datos_ficha['resistencia_actual'] else 10,
-                "maxima": int(datos_ficha['resistencia_maxima']) if datos_ficha['resistencia_maxima'] else 10
-            },
-            "caos" : datos_ficha['caos'],
-            "sobrecarga": int(datos_ficha['sobrecarga']) if datos_ficha['sobrecarga'] else 0,
-            "velocidad": int(datos_ficha['velocidad']) if datos_ficha['velocidad'] else 30,
-            "armadura": int(datos_ficha['armadura']) if datos_ficha['armadura'] else 10,
-            "iniciativa": int(datos_ficha['iniciativa']) if datos_ficha['iniciativa'] else 0,
-            "tiradas": {
-                "exitos": int(datos_ficha['tiradas_exito']) if datos_ficha['tiradas_exito'] else 0,
-                "fallos": int(datos_ficha['tiradas_fallo']) if datos_ficha['tiradas_fallo'] else 0
-            },
-            "habilidades": habilidades,
-            "hechizos": hechizos,
-            "objetos": objetos,
-            "equipamiento": equipo,
-            "destrezas": destrezas,
-            "estadisticas": estadisticas,
-            "estados": estados,
-            "dinero": [cobre, plata, oro, platino],
-            "publica": ficha_publica
-        }
-
-        # Actualizar la ficha en la base de datos
-        actualizar_ficha_en_bd(username, nombre_ficha, nuevo_contenido, ficha_publica, fotoname)
-
-        flash('Ficha modificada exitosamente.', 'success')
-        return redirect(url_for('ver_ficha', nombre_ficha=nombre_ficha, owner_username=session['username']))
-
-    # Obtener los datos actuales de la ficha
-    contenido = obtener_contenido_de_archivo(username, nombre_ficha)
-    if contenido is None:
-        flash('La ficha no existe o está dañada.', 'error')
-        return redirect(url_for('fichas'))
-
-    # Obtener todas las habilidades, hechizos, armas, armaduras y objetos posibles
-    lista_habilidades = [habilidad['nombre'] for habilidad in get_all_habilidades()]
-    lista_hechizos = [hechizo['nombre'] for hechizo in get_all_hechizos()]
-    lista_armas = [arma['nombre'] for arma in get_all_armas()]
-    lista_armaduras = [armadura['nombre'] for armadura in get_all_armaduras()]
-    lista_estados = [estado['nombre'] for estado in get_all_estados()]
-    nombres_objetos = lista_armas + lista_armaduras + [objeto['nombre'] for objeto in get_all_objetos()]
+        print("nada")
 
     return render_template(
-        'modificar_ficha.html',
-        nombre_ficha=nombre_ficha,
-        contenido=contenido,
-        ficha_publica=contenido.get('publica', False),
-        equipo=contenido.get('equipamiento', []),
-        objetos=contenido.get('objetos', []),
-        lista_habilidades=lista_habilidades,
-        lista_hechizos=lista_hechizos,
-        lista_estados=lista_estados,
-        nombres_objetos=nombres_objetos,
+        'modificar_ficha.html'
     )
 
     
@@ -403,6 +181,9 @@ def borrar_ficha(nombre_ficha):
         return redirect(url_for('fichas'))  # Redirigir a la página de fichas
 
 
+
+
+
 @app.route('/wiki')
 def wiki():
     if 'username' in session:
@@ -410,6 +191,9 @@ def wiki():
     return redirect(url_for('login'))   
 
 
+
+
+# APARTADO PARA OBJETOS
 @app.route('/wiki/objetos')
 def wiki_objetos():
     if 'username' in session:
@@ -508,67 +292,10 @@ def wiki_objeto(objeto_nombre):
     """
     
     return render_template_string(html_content)
-
-@app.route('/wiki/hechizos')
-def wiki_hechizos():
-    if 'username' not in session:
-        flash('No has iniciado sesión.', 'error')  # Mensaje de error
-        return redirect(url_for('login'))  # Redirigir al login
-    hechizos = {}
-    for hechizo in get_all_hechizos():
-        hechizos[hechizo['nombre']] = {
-            'nivel': hechizo['nivel'],
-            'magia': hechizo['magia'],
-            'coste': hechizo['coste'],
-            'rango': hechizo['rango'],
-            'duracion': str(hechizo.get('duracion', 'N/A')),
-            'casteo': str(hechizo.get('casteo', 'N/A')),
-            'clase': hechizo['clase'],
-            'raza': hechizo['raza'],
-            'otro': hechizo['otro'],
-            'descripcion': hechizo['descripcion']
-        }
-    return render_template('wiki/hechizos.html', hechizos = hechizos)
+#####################################################################
 
 
-@app.route('/wiki/hechizo/<hechizo_nombre>')
-def wiki_hechizo(hechizo_nombre):
-    # Lógica para obtener el hechizo por su nombre y mostrarlo
-    hechizo = get_hechizo(hechizo_nombre)
-    if not hechizo:
-        return f"Hechizo '{hechizo_nombre}' no encontrado."
 
-    # Desglosar el coste en vida, mana y resistencia (suponiendo que coste es una cadena 'x,y,z')
-    coste_vida, coste_mana, coste_resistencia = hechizo['coste'].split(',')
-
-    # Generamos el HTML dinámicamente con los parámetros del hechizo
-    html_content = f"""
-    <html lang="es">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>{hechizo['nombre']}</title>
-    </head>
-    <body>
-        <h1>{hechizo['nombre']}</h1>
-        <p><strong>Descripción:</strong> {hechizo['descripcion']}</p>
-        <p><strong>Nivel:</strong> {hechizo['nivel']}</p>
-        <p><strong>Magia:</strong> {hechizo['magia']}</p>
-        <p><strong>Coste de vida:</strong> {coste_vida}</p>
-        <p><strong>Coste de mana:</strong> {coste_mana}</p>
-        <p><strong>Coste de resistencia:</strong> {coste_resistencia}</p>
-        <p><strong>Rango:</strong> {hechizo['rango']}</p>
-        <p><strong>Duración:</strong> {hechizo['duracion']}</p>
-        <p><strong>Casteo:</strong> {hechizo['casteo']}</p>
-        <p><strong>Clase:</strong> {hechizo['clase']}</p>
-        <p><strong>Raza:</strong> {hechizo['raza']}</p>
-        <p><strong>Otros:</strong> {hechizo['otro']}</p>
-        <a href="/wiki/hechizos">Volver a la lista de hechizos</a>
-    </body>
-    </html>
-    """
-    
-    return render_template_string(html_content)
 
 
 
@@ -704,6 +431,8 @@ def wiki_hechicero_custom():
     return render_template('wiki/clases/mago/hechicero/custom/custom.html')
 ########################################################################################
 
+
+
 # ENTRADAS PARA CLERIGOS
 @app.route('/wiki/mago/clerigo')
 def wiki_clerigo():
@@ -720,6 +449,10 @@ def wiki_clerigo_yses():
     return render_template('wiki/clases/mago/clerigo/Yses.html')
 
 ###############################################
+
+
+
+
 # ENTRADAS PARA GUERRERO
 @app.route('/wiki/guerrero/ronin')
 def wiki_ronin():
@@ -790,6 +523,10 @@ def wiki_magia_vacia():
 
 
 
+
+
+
+
 @app.route('/wiki/magia/<magia_nombre>')
 def wiki_magia_hechizos(magia_nombre):
     if 'username' not in session:
@@ -814,155 +551,6 @@ def wiki_razas():
 
     return render_template('wiki/razas.html')
 #############################################################################
-
-
-
-################################### MENU ADMIN HECHIZOS ##############################
-@app.route("/admin/hechizos")
-def admin_hechizos():
-    if 'username' not in session:
-        flash('No has iniciado sesión.', 'error')  # Mensaje de error
-        return redirect(url_for('login'))  # Redirigir al login
-    
-    usuario = obtener_usuario_por_nombre(session['username'])
-    
-    if not usuario[2]:
-        return redirect(url_for('home'))
-    
-    hechizos_detalle = {}
-    for hechizo in get_all_hechizos():
-        hechizos_detalle[hechizo['nombre']] = {
-            'nivel': hechizo['nivel'],
-            'magia': hechizo['magia'],
-            'coste': hechizo['coste'],
-            'rango': hechizo['rango'],
-            'duracion': str(hechizo.get('duracion', 'N/A')),
-            'casteo': str(hechizo.get('casteo', 'N/A')),
-            'clase': hechizo['clase'],
-            'raza': hechizo['raza'],
-            'otro': hechizo['otro'],
-            'descripcion': hechizo['descripcion']
-        }
-            
-    return render_template("admin/hechizos/hechizos.html", hechizos=hechizos_detalle)
-
-@app.route('/admin/borrar_hechizo/<nombre_hechizo>', methods=['POST'])
-def admin_borrar_hechizo(nombre_hechizo):
-    if 'username' not in session:
-        flash('No has iniciado sesión.', 'error')  # Mensaje de error
-        return redirect(url_for('login'))  # Redirigir al login
-    usuario = obtener_usuario_por_nombre(session['username'])
-    if not usuario[2]:
-        return redirect(url_for('home'))
-    # Verificar si el hechizo existe antes de intentar borrarlo
-    hechizo = get_hechizo(nombre_hechizo)
-    if not hechizo:
-        flash('Hechizo no encontrado.', 'error')  # Mensaje de error
-        return redirect(url_for("admin_hechizos"))  # Redirigir a la página de hechizos
-    
-    # Eliminar el hechizo de la base de datos
-    borrar_hechizo(nombre_hechizo)
-    
-    flash('Hechizo eliminado exitosamente.', 'success')
-    return redirect(url_for("admin_hechizos"))
-
-
-@app.route("/admin/editar_hechizo/<nombre_hechizo>", methods=["POST", "GET"])
-def admin_editar_hechizo(nombre_hechizo):
-    if 'username' not in session:
-        flash('No has iniciado sesión.', 'error')  # Mensaje de error
-        return redirect(url_for('login'))  # Redirigir al login
-    
-    usuario = obtener_usuario_por_nombre(session['username'])
-    if not usuario[2]:
-        return redirect(url_for('home'))
-
-    # Obtener el hechizo a editar
-    hechizo = get_hechizo(nombre_hechizo)
-    if not hechizo:
-        flash('Hechizo no encontrado.', 'error')  # Mensaje de error
-        return redirect(url_for('admin_hechizos'))  # Redirigir a la página de hechizos
-    
-    if request.method == 'POST':
-        # Crear el diccionario 'hechizo' con todos los valores del formulario
-        datos_hechizo = {
-            'nombre': request.form['nombre'],
-            'nivel': request.form['nivel'],
-            'magia': request.form['magia'],
-            'coste': request.form['coste'],
-            'rango': request.form['rango'],
-            'duracion': request.form['duracion'],
-            'casteo': request.form['casteo'],
-            'descripcion': request.form['descripcion'],
-            'clase': request.form['clase'],
-            'raza': request.form['raza'],
-            'otro': request.form['otro']
-        }
-
-        # Modificar el hechizo en la base de datos usando el diccionario
-        try:
-            modificar_hechizo(nombre_hechizo, **datos_hechizo)
-            flash('Hechizo actualizado exitosamente.', 'success')  # Mensaje de éxito
-        except Exception as e:
-            flash(f'Error al actualizar el hechizo: {str(e)}', 'error')  # Mensaje de error
-        
-        return redirect(url_for('admin_hechizos'))  # Redirigir a la página de hechizos
-    
-    # Si es GET, mostrar el formulario de edición con los datos actuales del hechizo
-    return render_template("admin/hechizos/editar_hechizo.html", hechizo=hechizo)
-
-@app.route("/admin/hechizos/crear_hechizo", methods=["POST", "GET"])
-def admin_crear_hechizo():
-    if 'username' not in session:
-        flash('No has iniciado sesión.', 'error')  # Mensaje de error
-        return redirect(url_for('login'))  # Redirigir al login
-
-    usuario = obtener_usuario_por_nombre(session['username'])
-    if not usuario[2]:
-        return redirect(url_for('home'))  # Redirigir al home si no tiene permisos
-
-    if request.method == "POST":
-        # Recoger los datos del formulario
-        nombre = request.form['nombre']
-        nivel = request.form['nivel']
-        magia = request.form['magia']
-        coste = request.form['coste']
-        rango = request.form['rango']
-        duracion = request.form.get('duracion', '')
-        casteo = request.form.get('casteo', '')
-        descripcion = request.form['descripcion']
-        clase = request.form.get('clase', '')
-        raza = request.form.get('raza', '')
-        otro = request.form.get('otro', '')
-
-        # Crear el diccionario con los datos
-        hechizo_data = {
-            'nombre': nombre,
-            'nivel': nivel,
-            'magia': magia,
-            'coste': coste,
-            'rango': rango,
-            'duracion': duracion,
-            'casteo': casteo,
-            'descripcion': descripcion,
-            'clase': clase,
-            'raza': raza,
-            'otro': otro
-        }
-
-        # Llamar a la función que guarda el hechizo en la base de datos
-        try:
-            agregar_hechizo(**hechizo_data)
-            flash('Hechizo creado exitosamente.', 'success')
-            return redirect(url_for("admin_hechizos"))  # Redirigir a la página de hechizos
-        except Exception as e:
-            flash(f'Error al crear el hechizo: {str(e)}', 'error')
-            return render_template('admin/hechizos/crear_hechizo.html', hechizo=hechizo_data)  # Volver al formulario con los datos ingresados
-
-    # Si es GET, renderizar el formulario vacío para crear un hechizo
-    return render_template("admin/hechizos/crear_hechizo.html")
-##################################################################################
-
 
 
 ################################### MENU ADMIN ESTADOS ##############################

@@ -43,7 +43,6 @@ Los usuarios pueden crear nuevas fichas de personajes con los siguientes campos 
 - **Magia**
 - **Vida, Mana y Resistencia** (Homebrew)
 - **Habilidades**: Lista de habilidades del personaje.
-- **Hechizos**: Lista de hechizos disponibles para el personaje.
 - **Objetos**: Lista de objetos y equipo del personaje.
 
 El proyecto es código abierto, de modo que los campos de las fichas pueden modificarse a gusto para ajustarlos a cualquier campaña.
