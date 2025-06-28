@@ -104,26 +104,131 @@ def fichas():
     return render_template('fichas.html', fichas_usuario=fichas_usuario, fichas_publicas=fichas_publicas)
 
 @app.route('/fichas/ver/<owner_username>/<nombre_ficha>', methods=['GET'])
-def ver_ficha(owner_username, nombre_ficha ):
+def ver_ficha(owner_username, nombre_ficha):
     if 'username' not in session:
         return redirect(url_for('login'))
 
+    contenido = obtener_contenido_de_archivo(owner_username, nombre_ficha)
+
+    if contenido is None:
+        return "Ficha no encontrada o archivo corrupto", 404
+
     return render_template(
         'ver_ficha.html',
+        nombre_ficha=nombre_ficha,
+        contenido=contenido
     )
 
 @app.route('/fichas/modificar/<nombre_ficha>', methods=['GET', 'POST'])
 def modificar_ficha(nombre_ficha):
-    """Modifica una ficha existente."""
     if 'username' not in session:
         return redirect(url_for('login'))
+    username = session['username']
+
+    if request.method == 'GET':
+        contenido = obtener_contenido_de_archivo(username, nombre_ficha)
+        return render_template(
+            'modificar_ficha.html',
+            nombre_ficha=nombre_ficha,
+            contenido=contenido,
+        )
 
     if request.method == 'POST':
-        print("nada")
+        # Campos simples
+        nombre = request.form.get('nombre', nombre_ficha)
+        nivel = int(request.form.get('nivel', 1))
+        clase = request.form.get('clase', 'Sin clase')
+        magia = request.form.get('magia', 'Ninguna')
+        talento = request.form.get('talento', 'Ninguno')
+        alineamiento = request.form.get('alineamiento', 'Neutral')
+        historia = request.form.get('historia', 'No')
+        
 
-    return render_template(
-        'modificar_ficha.html'
-    )
+
+        fotoname = ""
+        # Verificar si se subió una nueva foto
+        foto = request.files.get('foto')
+
+        # Si se sube una nueva foto
+        if foto:
+            # Crear el nombre de archivo con un formato único (usando el username y nombre del personaje)
+            fotoname = f"{username}_{request.form.get('nombreFicha')}.{foto.filename.split('.')[-1].lower()}"
+            foto.save(os.path.join(UPLOAD_FOLDER, fotoname))  # Guardar la foto en la carpeta de subida
+        else:
+            # Si no se sube una nueva foto, mantener la foto anterior
+            fotoname = get_photo(username, nombre_ficha)
+
+        
+
+        # Campos compuestos
+        vida_actual = int(request.form.get('vida_actual', 10))
+        vida_maximo = int(request.form.get('vida_maxima', 10))
+        mana_actual = int(request.form.get('mana_actual', 10))
+        mana_maximo = int(request.form.get('mana_maxima', 10))
+        stamina_actual = int(request.form.get('resistencia_actual', 10))
+        stamina_maximo = int(request.form.get('resistencia_maxima', 10))
+
+        sobrecarga = int(request.form.get('sobrecarga', 0))
+        velocidad = int(request.form.get('velocidad', 30))
+        armadura = int(request.form.get('armadura', 10))
+        iniciativa = int(request.form.get('iniciativa', 0))
+
+        # Listas: espera que lleguen como cadenas separadas por comas
+        proficiencias_str = request.form.get('proficiencias', '15,15,15,15,15,15,15,15,15')
+        proficiencias = [int(x) for x in proficiencias_str.split(',') if x.strip().isdigit()]
+
+        estadisticas = [int(request.form.get(f'estadisticas[{i}]', '0')) for i in range(9)]
+
+        ficha_publica = 'ficha_publica' in request.form
+        # Listas complejas que probablemente deban venir en JSON string
+        import json
+        habilidades = []
+        estados = []
+        objetos = []
+        equipamiento = []
+        dinero = [0, 0, 0, 0]
+
+        try:
+            habilidades = json.loads(request.form.get('habilidades', '[]'))
+            estados = json.loads(request.form.get('estados', '[]'))
+            objetos = json.loads(request.form.get('objetos', '[]'))
+            equipamiento = json.loads(request.form.get('equipamiento', '[]'))
+            dinero = json.loads(request.form.get('dinero', '[0,0,0,0]'))
+        except Exception:
+            pass  # Si no viene bien, quedan vacíos o default
+
+        datos_ficha = {
+            "nombre": nombre,
+            "nivel": nivel,
+            "clase": clase,
+            "magia": magia,
+            "talento": talento,
+            "alineamiento": alineamiento,
+            "vida": {"actual": vida_actual, "maximo": vida_maximo},
+            "mana": {"actual": mana_actual, "maximo": mana_maximo},
+            "stamina": {"actual": stamina_actual, "maximo": stamina_maximo},
+            "sobrecarga": sobrecarga,
+            "velocidad": velocidad,
+            "armadura": armadura,
+            "iniciativa": iniciativa,
+            "historia": historia,
+            "foto": fotoname,
+            "Proficiencias": proficiencias,
+            "estadisticas": estadisticas,
+            "habilidades": habilidades,
+            "estados": estados,
+            "objetos": objetos,
+            "equipamiento": equipamiento,
+            "dinero": dinero
+        }
+
+        # Guardar el JSON con función que implementes
+        exito = actualizar_ficha_en_bd(username, nombre_ficha, datos_ficha, ficha_publica, fotoname)
+        if not exito:
+            return "Error al guardar la ficha", 500
+
+        return redirect(url_for('ver_ficha', owner_username=username, nombre_ficha=nombre_ficha))
+    
 
     
     

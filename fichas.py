@@ -161,18 +161,25 @@ def obtener_contenido_de_archivo(username, nombre_ficha):
 def guardar_contenido_en_archivo(username, nombre_ficha, contenido):
     """Guarda el contenido de una ficha en un archivo JSON."""
     ruta_archivo = f"fichas/{username}_{nombre_ficha}.json"
-    with open(ruta_archivo, 'w', encoding='utf-8') as archivo:
-        json.dump(contenido, archivo, ensure_ascii=False, indent=4)
+    try:
+        with open(ruta_archivo, 'w', encoding='utf-8') as archivo:
+            json.dump(contenido, archivo, ensure_ascii=False, indent=4)
+        return True
+    except Exception as e:
+        print(f"Error guardando ficha: {e}")
+        return False
+    
 
 # Modificar el contenido de la ficha
 def actualizar_ficha_en_bd(username, nombre_ficha, nuevo_contenido, public=False, photo=""):
-    # Actualizar la ficha en la base de datos
-    actualizar_ficha(username, nombre_ficha, public)
-
-    set_photo(username, nombre_ficha, photo)
-    
-    # Guardar el nuevo contenido en el archivo correspondiente
-    guardar_contenido_en_archivo(username, nombre_ficha, nuevo_contenido)
+    try:
+        actualizar_ficha(username, nombre_ficha, public)
+        set_photo(username, nombre_ficha, photo)
+        exito = guardar_contenido_en_archivo(username, nombre_ficha, nuevo_contenido)
+        return exito
+    except Exception as e:
+        print(f"Error actualizando ficha en BD: {e}")
+        return False
 
 # Mostrar el contenido de una ficha
 def mostrar_contenido_ficha(username, nombre_ficha):

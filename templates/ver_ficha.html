@@ -40,16 +40,12 @@
       <div class="flex-1">
         <h2 class="text-2xl font-semibold border-b pb-2 mb-4">Datos adicionales</h2>
         <div class="grid grid-cols-3 gap-4">
-          <p><span class="font-bold">Vida:</span><br> {{ contenido['vida']['actual'] }} / {{ contenido['vida']['maxima'] }}</p>
+          <p><span class="font-bold">Vida:</span><br> {{ contenido['vida']['actual'] }} / {{ contenido['vida']['maximo'] }}</p>
           <p><span class="font-bold">Mana:</span><br> {{ contenido['mana']['actual'] }} / {{ contenido['mana']['maximo'] }}</p>
-          <p><span class="font-bold">Resistencia:</span> <br>{{ contenido['resistencia']['actual'] }} / {{ contenido['resistencia']['maxima'] }}</p>
+          <p><span class="font-bold">Stamina:</span> <br>{{ contenido['stamina']['actual'] }} / {{ contenido['stamina']['maximo'] }}</p>
           <p><span class="font-bold">Sobrecarga:</span> <br>{{ contenido['sobrecarga'] }}</p>
           <p><span class="font-bold">Velocidad:</span> <br>{{ contenido['velocidad'] }}</p>
           <p><span class="font-bold">Iniciativa:</span> <br>{{ contenido['iniciativa'] }}</p>
-          <p><span class="font-bold">Tiradas:</span> <br>Éxitos: {{ contenido['tiradas']['exitos'] }}, Fallos: {{ contenido['tiradas']['fallos'] }}</p>
-          {% if contenido['magia'] == "Engendro del Caos" %}
-          <p><span class="font-bold">Caos:</span> <br>{{ contenido['caos'] }}</p>
-          {% endif %}
         </div>
       </div>
       <div class="w-64">
@@ -68,7 +64,7 @@
       <div class="radio-inputs">
         <label class="radio">
           <input type="radio" name="secciones" onclick="mostrarSeccion('seccionDestrezas')" checked>
-          <span class="name">Destrezas</span>
+          <span class="name">Proficiencias</span>
         </label>
         <label class="radio">
           <input type="radio" name="secciones" onclick="mostrarSeccion('seccionEstadisticas')">
@@ -80,7 +76,7 @@
         </label>
         <label class="radio">
           <input type="radio" name="secciones" onclick="mostrarSeccion('seccionHabilidadesHechizos')">
-          <span class="name">Habilidades y Hechizos</span>
+          <span class="name">Habilidades</span>
         </label>
         <label class="radio">
           <input type="radio" name="secciones" onclick="mostrarSeccion('seccionEstados')">
@@ -96,15 +92,15 @@
 
     <!-- Sección: Destrezas en 3 columnas -->
     <div id="seccionDestrezas" class="seccion mb-7">
-      <h2 class="text-2xl font-semibold border-b pb-2 mb-4">Destrezas</h2>
+      <h2 class="text-2xl font-semibold border-b pb-2 mb-4">Proficiencias</h2>
       <div class="grid grid-cols-3 gap-4">
-        {% set destrezas_nombres = ['Minería', 'Herrería', 'Costura', 'Carpintería', 
-                                  'Arcano', 'Supervivencia', 'Pesca', 'Alquimia', 
-                                  'Cocina', 'Medicina', 'Sigilo', 'Arco', 
-                                  'Espada', 'Desarmado', 'Persuasión', 'Percepción'] %}
-        {% for valor in contenido['destrezas'] %}
+        {% set proficiencias_nombres = [
+          'Herrería', 'Sastrería', 'Carpintería', 'Alquimia',
+          'Supervivencia', 'Medicina', 'Cocina', 'Pesca', 'Arcano'
+        ] %}
+        {% for valor in contenido['Proficiencias'] %}
           <div>
-            <span class="font-bold">{{ destrezas_nombres[loop.index0] }}:</span> {{ valor }}
+            <span class="font-bold">{{ proficiencias_nombres[loop.index0] }}:</span> {{ valor }}
           </div>
         {% endfor %}
       </div>
@@ -220,10 +216,9 @@
 
     <!-- Sección: Habilidades y Hechizos -->
     <div id="seccionHabilidadesHechizos" class="seccion hidden mb-7">
-      <h2 class="text-2xl font-semibold border-b pb-2 mb-4">Habilidades y Hechizos</h2>
+      <h2 class="text-2xl font-semibold border-b pb-2 mb-4">Habilidades</h2>
       
       <!-- Habilidades -->
-      <h3 class="text-xl font-semibold mt-4">Habilidades</h3>
       {% if habilidades_detalle %}
         <ul class="list-disc pl-5 space-y-2">
           {% for habilidad, detalle in habilidades_detalle.items() %}
@@ -256,30 +251,6 @@
         <p>No hay habilidades registradas.</p>
       {% endif %}
       
-      <!-- Hechizos -->
-      <h3 class="text-xl font-semibold mt-4">Hechizos</h3>
-      {% if hechizos_detalle %}
-        <ul class="list-disc pl-5 space-y-2">
-          {% for hechizo, detalle in hechizos_detalle.items() %}
-            <li>
-              <div class="relative group inline-block">
-                <span class="cursor-pointer text-blue-600 hover:underline">{{ hechizo }}</span>
-                <div class="absolute left-1/2 bottom-full transform -translate-x-1/2 mb-2 hidden group-hover:block w-64 bg-gray-800 text-white text-xs rounded py-2 px-3 z-10">
-                  <p><strong>Nivel:</strong> {{ detalle['nivel'] }}</p>
-                  <p><strong>Magia:</strong> {{ detalle['magia'] }}</p>
-                  <p><strong>Coste:</strong> {{ detalle['coste'] }}</p>
-                  <p><strong>Rango:</strong> {{ detalle['rango'] }}ft</p>
-                  <p><strong>Duración:</strong> {{ detalle['duracion'] }}</p>
-                  <p><strong>Casteo:</strong> {{ detalle['casteo'] }}</p>
-                  <p class="mt-2">{{ detalle['descripcion'] }}</p>
-                </div>
-              </div>
-            </li>
-          {% endfor %}
-        </ul>
-      {% else %}
-        <p>No hay hechizos registrados.</p>
-      {% endif %}
     </div>
     <div id="seccionEstados" class="seccion hidden mb-7">
     <h3 class="text-xl font-semibold mt-4">Estados</h3>

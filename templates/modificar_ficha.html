@@ -67,7 +67,7 @@
       
       <!-- Contenedor principal en 3 columnas (el resto de la ficha) -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <!-- Columna 1: Estadísticas de Vida y Maná/Resistencia -->
+        <!-- Columna 1: Estadísticas de Vida y Maná/Stamina -->
         <div>
           <h2 class="text-2xl font-semibold mb-4 border-b border-gray-600 pb-2">Estadísticas de Vida</h2>
           <!-- Vida -->
@@ -77,10 +77,10 @@
           </div>
           <div class="mb-4">
             <label for="vida_maxima" class="block text-sm font-medium">Vida Máxima:</label>
-            <input type="number" id="vida_maxima" name="vida_maxima" value="{{ contenido['vida']['maxima'] }}" required class="w-full p-2 mt-1 bg-gray-700 rounded-lg">
+            <input type="number" id="vida_maxima" name="vida_maxima" value="{{ contenido['vida']['maximo'] }}" required class="w-full p-2 mt-1 bg-gray-700 rounded-lg">
           </div>
           
-          <h2 class="text-2xl font-semibold mt-8 mb-4 border-b border-gray-600 pb-2">Maná y Resistencia</h2>
+          <h2 class="text-2xl font-semibold mt-8 mb-4 border-b border-gray-600 pb-2">Maná y Stamina</h2>
           <!-- Maná -->
           <div class="mb-4 grid grid-cols-2 gap-4">
             <div>
@@ -92,20 +92,16 @@
               <input type="number" id="mana_maximo" name="mana_maximo" value="{{ contenido['mana']['maximo'] }}" required class="w-full p-2 mt-1 bg-gray-700 rounded-lg">
             </div>
           </div>
-          <!-- Resistencia -->
+          <!-- Stamina -->
           <div class="mb-4 grid grid-cols-2 gap-4">
             <div>
-              <label for="resistencia_actual" class="block text-sm font-medium">Resistencia Actual:</label>
-              <input type="number" id="resistencia_actual" name="resistencia_actual" value="{{ contenido['resistencia']['actual'] }}" required class="w-full p-2 mt-1 bg-gray-700 rounded-lg">
+              <label for="resistencia_actual" class="block text-sm font-medium">Stamina Actual:</label>
+              <input type="number" id="resistencia_actual" name="resistencia_actual" value="{{ contenido['stamina']['actual'] }}" required class="w-full p-2 mt-1 bg-gray-700 rounded-lg">
             </div>
             <div>
-              <label for="resistencia_maxima" class="block text-sm font-medium">Resistencia Máxima:</label>
-              <input type="number" id="resistencia_maxima" name="resistencia_maxima" value="{{ contenido['resistencia']['maxima'] }}" required class="w-full p-2 mt-1 bg-gray-700 rounded-lg">
+              <label for="resistencia_maxima" class="block text-sm font-medium">Stamina Máxima:</label>
+              <input type="number" id="resistencia_maxima" name="resistencia_maxima" value="{{ contenido['stamina']['maximo'] }}" required class="w-full p-2 mt-1 bg-gray-700 rounded-lg">
             </div>
-            {% if contenido['magia'] == "Engendro del Caos" %}
-            <label for="caos" class="block text-sm font-medium">Caos:</label>
-            <input type="number" id="caos" name="caos" value="{{ contenido['caos'] }}" required class="w-full p-2 mt-1 bg-gray-700 rounded-lg">
-            {% endif %}
 
             <!-- Estados -->
             <h2 class="text-2xl font-semibold mt-8 mb-4 border-b border-gray-600 pb-2">Estados</h2>
@@ -164,17 +160,6 @@
               <input type="number" id="iniciativa" name="iniciativa" value="{{ contenido['iniciativa'] }}" required class="w-full p-2 mt-1 bg-gray-700 rounded-lg">
             </div>
           </div>
-          <!-- Tiradas de salvación -->
-          <div class="mb-4 grid grid-cols-2 gap-4">
-            <div>
-              <label for="tiradas_exito" class="block text-sm font-medium">Tiradas de Salvación (Éxitos):</label>
-              <input type="number" id="tiradas_exito" name="tiradas_exito" value="{{ contenido['tiradas']['exitos'] }}" min="0" max="3" required class="w-full p-2 mt-1 bg-gray-700 rounded-lg">
-            </div>
-            <div>
-              <label for="tiradas_fallo" class="block text-sm font-medium">Tiradas de Salvación (Fallos):</label>
-              <input type="number" id="tiradas_fallo" name="tiradas_fallo" value="{{ contenido['tiradas']['fallos'] }}" min="0" max="3" required class="w-full p-2 mt-1 bg-gray-700 rounded-lg">
-            </div>
-          </div>
           
           <!-- Habilidades -->
           <h2 class="text-2xl font-semibold mt-8 mb-4 border-b border-gray-600 pb-2">Habilidades</h2>
@@ -199,30 +184,6 @@
               {% endfor %}
             </select>
             <button type="button" onclick="agregarHabilidad()" class="mt-2 bg-green-500 hover:bg-green-600 px-2 py-1 rounded-lg">Añadir</button>
-          </div>
-          <!-- Hechizos -->
-          <h2 class="text-2xl font-semibold mt-8 mb-4 border-b border-gray-600 pb-2">Hechizos</h2>
-          <div id="lista-hechizos" class="mb-4 space-y-2">
-            {% for hechizo in contenido['hechizos'] %}
-              <div class="flex items-center space-x-2">
-                <input type="text" name="hechizos[]" value="{{ hechizo }}" readonly required class="w-full p-2 bg-gray-700 rounded-lg">
-                <button type="button" onclick="eliminarHechizo(this)" class="bg-red-500 hover:bg-red-600 px-2 py-1 rounded-lg">Eliminar</button>
-              </div>
-            {% endfor %}
-          </div>
-          <div class="mb-4">
-            <label for="busqueda-hechizo" class="block text-sm font-medium">Buscar hechizo:</label>
-            <input type="text" id="busqueda-hechizo" placeholder="Escribe el nombre del hechizo..." oninput="filtrarHechizos()" class="w-full p-2 mt-1 bg-gray-700 rounded-lg">
-          </div>
-          <div class="mb-4">
-            <label for="hechizos-disponibles" class="block text-sm font-medium">Añadir hechizo:</label>
-            <select id="hechizos-disponibles" class="w-full p-2 mt-1 bg-gray-700 rounded-lg">
-              <option value="" disabled selected>Selecciona un hechizo</option>
-              {% for hechizo in lista_hechizos %}
-                <option value="{{ hechizo }}">{{ hechizo }}</option>
-              {% endfor %}
-            </select>
-            <button type="button" onclick="agregarHechizo()" class="mt-2 bg-green-500 hover:bg-green-600 px-2 py-1 rounded-lg">Añadir</button>
           </div>
         </div>
         
@@ -294,23 +255,23 @@
         </div>
       </div>
            
-      <!-- Contenedor independiente para Destrezas, distribuidas en 3 columnas -->
+      <!-- Contenedor independiente para Proficiencias, distribuidas en 3 columnas -->
       <div class="mt-8">
-        <h2 class="text-2xl font-semibold mb-4 border-b border-gray-600 pb-2">Destrezas</h2>
-        <div id="destrezas-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-          {% set destrezas_nombres = ['Minería', 'Herrería', 'Costura', 'Carpintería', 
-                                      'Arcano', 'Supervivencia', 'Pesca', 'Alquimia', 
-                                      'Cocina', 'Medicina', 'Sigilo', 'Arco', 
-                                      'Espada', 'Desarmado', 'Persuasión', 'Percepción'] %}
-          {% for valor in contenido['destrezas'] %}
+        <h2 class="text-2xl font-semibold mb-4 border-b border-gray-600 pb-2">Proficiencias</h2>
+        <div id="proficiencias-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+          {% set proficiencias_nombres = [
+            'Herrería', 'Sastrería', 'Carpintería', 'Alquimia', 
+            'Supervivencia', 'Medicina', 'Cocina', 'Pesca', 'Arcano'
+          ] %}
+          {% for valor in contenido['Proficiencias'] %}
             <div class="mb-2 flex items-center">
-              <label class="font-bold w-32" for="destreza-{{ loop.index0 }}">{{ destrezas_nombres[loop.index0] }}:</label>
-              <input type="number" id="destreza-{{ loop.index0 }}" name="destrezas[{{ loop.index0 }}]" 
-                     value="{{ valor }}" min="0" class="border border-gray-400 rounded px-2 py-1 w-16">
+              <label class="font-bold w-32" for="proficiencia-{{ loop.index0 }}">{{ proficiencias_nombres[loop.index0] }}:</label>
+              <input type="number" id="proficiencia-{{ loop.index0 }}" name="proficiencias[{{ loop.index0 }}]" 
+                    value="{{ valor }}" min="0" class="border border-gray-400 rounded px-2 py-1 w-16">
             </div>
           {% endfor %}
         </div>
-      </div>      
+      </div>
       
       <!-- Nueva sección: Imagen e Historia en paralelo -->
       <div class="mt-8 flex flex-col md:flex-row gap-4">

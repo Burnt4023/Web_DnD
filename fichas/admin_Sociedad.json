@@ -1,45 +1,29 @@
 {
-    "nombre": "pepe",
-    "nivel": 1,
+    "nombre": "Sociedad",
+    "nivel": 5,
     "clase": "Sin clase",
     "magia": "Ninguna",
     "talento": "Ninguno",
     "alineamiento": "Neutral",
-    "historia": "No",
-    "foto": "",
-    "iniciativa": 0,
     "vida": {
         "actual": 10,
-        "maxima": 33123
+        "maximo": 111
     },
     "mana": {
         "actual": 10,
         "maximo": 10
     },
-    "resistencia": {
+    "stamina": {
         "actual": 10,
-        "maxima": 213
+        "maximo": 11
     },
-    "caos": 0,
-    "sobrecarga": 0,
-    "velocidad": 301231,
+    "sobrecarga": 5,
+    "velocidad": 30,
     "armadura": 10,
-    "tiradas": {
-        "exitos": 3,
-        "fallos": 3
-    },
-    "habilidades": [],
-    "hechizos": [],
-    "objetos": [],
-    "equipamiento": [],
-    "destrezas": [
-        15,
-        15,
-        15,
-        15,
-        15,
-        15,
-        15,
+    "iniciativa": 10,
+    "historia": "No",
+    "foto": "admin_None.png",
+    "Proficiencias": [
         15,
         15,
         15,
@@ -51,22 +35,24 @@
         15
     ],
     "estadisticas": [
+        1,
         0,
         0,
+        1,
         0,
         0,
-        0,
-        0,
-        0,
+        1,
         0,
         0
     ],
+    "habilidades": [],
     "estados": [],
+    "objetos": [],
+    "equipamiento": [],
     "dinero": [
         0,
         0,
         0,
         0
-    ],
-    "publica": true
+    ]
 }
