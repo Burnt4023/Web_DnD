@@ -37,6 +37,7 @@ async function crearFicha() {
         iniciativa: 0,
         historia: 'No',
         foto : "",
+        notas : "",
         Proficiencias: [
             15,15,15,
             15,15,15,

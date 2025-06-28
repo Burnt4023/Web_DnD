@@ -142,7 +142,7 @@ def modificar_ficha(nombre_ficha):
         talento = request.form.get('talento', 'Ninguno')
         alineamiento = request.form.get('alineamiento', 'Neutral')
         historia = request.form.get('historia', 'No')
-        
+        notas = request.form.get('notas', '')
 
 
         fotoname = ""
@@ -213,6 +213,7 @@ def modificar_ficha(nombre_ficha):
             "iniciativa": iniciativa,
             "historia": historia,
             "foto": fotoname,
+            "notas": notas,
             "Proficiencias": proficiencias,
             "estadisticas": estadisticas,
             "habilidades": habilidades,
