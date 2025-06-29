@@ -56,6 +56,8 @@
           <p class="mb-2"><span class="font-bold">Oro:</span> {{ contenido['dinero'][2] }}</p>
           <p class="mb-2"><span class="font-bold">Platino:</span> {{ contenido['dinero'][3] }}</p>
         </div>
+        {% if contenido['especial']['nombre'] %}<p><span class="font-bold"> {{contenido['especial']['nombre']}}:</span> <br>{{ contenido['especial']['actual'] }} / {{ contenido['especial']['maximo'] }}</p>{%endif%}
+
       </div>
     </div>
 

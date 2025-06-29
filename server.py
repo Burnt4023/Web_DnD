@@ -221,7 +221,9 @@ def modificar_ficha(nombre_ficha):
         alineamiento = request.form.get('alineamiento', 'Neutral')
         historia = request.form.get('historia', 'No')
         notas = request.form.get('notas', '')
-        
+        especial_nombre = request.form.get('especial_nombre', 'Sin especial')
+        especial_actual = int(request.form.get('especial_actual', 0))
+        especial_maximo = int(request.form.get('especial_maximo', 0))
 
         fotoname = ""
         # Verificar si se subió una nueva foto
@@ -273,6 +275,7 @@ def modificar_ficha(nombre_ficha):
             "vida": {"actual": vida_actual, "maximo": vida_maximo},
             "mana": {"actual": mana_actual, "maximo": mana_maximo},
             "stamina": {"actual": stamina_actual, "maximo": stamina_maximo},
+            "especial": {"nombre": especial_nombre, "actual": especial_actual, "maximo": especial_maximo},
             "sobrecarga": sobrecarga,
             "velocidad": velocidad,
             "armadura": armadura,

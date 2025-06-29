@@ -17,6 +17,11 @@
         "actual": 10,
         "maximo": 11
     },
+    "especial": {
+        "nombre": "Caosidad",
+        "actual": 15,
+        "maximo": 20
+    },
     "sobrecarga": 5,
     "velocidad": 30,
     "armadura": 10,
@@ -36,9 +41,7 @@
     "objetos": [
         "Espada Insana"
     ],
-    "equipamiento": [
-        "Espada Insana"
-    ],
+    "equipamiento": [],
     "dinero": [
         "1",
         "1",
