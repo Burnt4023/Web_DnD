@@ -5,6 +5,7 @@ from habilidades import *
 #from hechizos import *
 from Objetos import *
 from estados import *
+from talentos import *
 import os
 
 app = Flask(__name__)
@@ -20,7 +21,7 @@ crear_tabla_armaduras()
 crear_tabla_armas()
 crear_tabla_objetos()
 crear_tabla_estados()
-
+crear_tabla_talentos()
 
 
 # Lleva a login si no hay sesión, muestra home si hay
@@ -129,9 +130,9 @@ def ver_ficha(owner_username, nombre_ficha):
                 'casteo': str(habilidad.get('casteo', 'N/A'))
             }
 
+    talento = get_talento(contenido['talento'])
 
-
-
+    print(talento)
     # Obtener todos los objetos de la base de datos (armas, armaduras, objetos)
     armas_detalle = []
     for arma in get_all_armas():
@@ -174,7 +175,6 @@ def ver_ficha(owner_username, nombre_ficha):
                 'efecto': estado['efecto'],
             })
 
-
     return render_template(
         'ver_ficha.html',
         nombre_ficha=nombre_ficha,
@@ -184,6 +184,7 @@ def ver_ficha(owner_username, nombre_ficha):
         armaduras_detalle=armaduras_detalle,
         objetos_detalle=objetos_detalle,
         estados_detalle=estados_detalle,
+        talento=talento,
     )
 
 @app.route('/fichas/modificar/<nombre_ficha>', methods=['GET', 'POST'])

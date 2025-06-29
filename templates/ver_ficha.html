@@ -22,7 +22,31 @@
           <p class="mb-2"><span class="font-bold">Nivel:</span><br> {{ contenido['nivel'] }}</p>
           <p class="mb-2"><span class="font-bold">Clase:</span><br> {{ contenido['clase'] }}</p>
           <p class="mb-2"><span class="font-bold">Magia:</span><br> {{ contenido['magia'] }}</p>
-          <p class="mb-2"><span class="font-bold">Talento:</span><br> {{ contenido['talento'] }}</p>
+          
+          <!--  TALENTO CON TOOLTIP  -->
+          <div class="mb-2">
+            <span class="font-bold block">Talento:</span>
+            <div class="relative group inline-block">
+              <span class="cursor-pointer text-blue-600 hover:underline">{{ talento['nombre'] }}</span>
+              <div class="absolute left-1/2 bottom-full transform -translate-x-1/2 mb-2 hidden group-hover:block w-64 bg-gray-800 text-white text-xs rounded py-2 px-3 z-10 whitespace-normal">
+                <p><strong>Duración:</strong> {{ talento['duracion'].strip('"') }}</p>
+                <p><strong>Coste:</strong> {{ talento['coste'] }}</p>
+                <p><strong>Rango:</strong> {{ talento['rango'] }} ft</p>
+                {% if talento['clase'] %}
+                  <p><strong>Clase:</strong> {{ talento['clase'] }}</p>
+                {% endif %}
+                {% if talento['raza'] %}
+                  <p><strong>Raza:</strong> {{ talento['raza'] }}</p>
+                {% endif %}
+                {% if talento['otro'] %}
+                  <p><strong>Otro:</strong> {{ talento['otro'] }}</p>
+                {% endif %}
+                <p><strong>Casteo:</strong> {{ talento['casteo'].strip('"') }}</p>
+                <p class="mt-2">{{ talento['descripcion'].strip('"') }}</p>
+              </div>
+            </div>
+          </div>
+                    
           <p class="mb-2"><span class="font-bold">Alineamiento:</span><br> {{ contenido['alineamiento'] }}</p>
       </div>
       <div class="ml-4">
