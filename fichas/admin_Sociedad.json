@@ -1,13 +1,13 @@
 {
     "nombre": "Sociedad",
-    "nivel": 5,
+    "nivel": 10,
     "clase": "Sin clase",
     "magia": "Ninguna",
     "talento": "Ninguno",
     "alineamiento": "Neutral",
     "vida": {
         "actual": 10,
-        "maximo": 111
+        "maximo": 1111
     },
     "mana": {
         "actual": 10,
@@ -20,40 +20,29 @@
     "sobrecarga": 5,
     "velocidad": 30,
     "armadura": 10,
-    "iniciativa": 10,
+    "iniciativa": 2,
     "historia": "No",
-    "foto": "admin_None.png",
-    "notas": "",
-    "Proficiencias": [
-        15,
-        15,
-        15,
-        15,
-        15,
-        15,
-        15,
-        15,
-        15
+    "foto": "admin_Sociedad.png",
+    "notas": "aaa",
+    "Proficiencias": [],
+    "estadisticas": [],
+    "habilidades": [
+        "control mental de tablos",
+        "Pasen furras tetonas y culonas"
     ],
-    "estadisticas": [
-        1,
-        0,
-        0,
-        1,
-        0,
-        0,
-        1,
-        0,
-        0
+    "estados": [
+        "elpepe777"
     ],
-    "habilidades": [],
-    "estados": [],
-    "objetos": [],
-    "equipamiento": [],
+    "objetos": [
+        "Espada Insana"
+    ],
+    "equipamiento": [
+        "Espada Insana"
+    ],
     "dinero": [
-        0,
-        0,
-        0,
-        0
+        "1",
+        "1",
+        "1",
+        "1"
     ]
 }

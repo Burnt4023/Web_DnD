@@ -110,13 +110,80 @@ def ver_ficha(owner_username, nombre_ficha):
 
     contenido = obtener_contenido_de_archivo(owner_username, nombre_ficha)
 
+
+    
     if contenido is None:
         return "Ficha no encontrada o archivo corrupto", 404
+
+    habilidades_detalle = {}
+    for habilidad in get_all_habilidades():
+        if habilidad['nombre'] in contenido['habilidades']:
+            habilidades_detalle[habilidad['nombre']] = {
+                'coste': habilidad['coste'],
+                'rango': habilidad['rango'],
+                'descripcion': habilidad['descripcion'],
+                'clase': habilidad['clase'],
+                'raza': habilidad['raza'],
+                'otro': habilidad['otro'],
+                'duracion': str(habilidad.get('duracion', 'N/A')),
+                'casteo': str(habilidad.get('casteo', 'N/A'))
+            }
+
+
+
+
+    # Obtener todos los objetos de la base de datos (armas, armaduras, objetos)
+    armas_detalle = []
+    for arma in get_all_armas():
+        if arma['nombre'] in contenido['objetos']:
+            armas_detalle.append({
+                'nombre': arma['nombre'],
+                'descripcion': arma['descripcion'],
+                'daño': arma['daño'],  # Se usa 'daño' en lugar de 'coste'
+                'calidad': arma['calidad'],  # Se usa 'calidad' en lugar de 'rango'
+                'tipo': 'Arma'
+            })
+
+    # Detalles de armaduras
+    armaduras_detalle = []
+    for armadura in get_all_armaduras():
+        if armadura['nombre'] in contenido['objetos']:
+            armaduras_detalle.append({
+                'nombre': armadura['nombre'],
+                'descripcion': armadura['descripcion'],
+                'rating': armadura['rating'],  # Se usa 'rating' en lugar de 'coste'
+                'calidad': armadura['calidad'],  # Se usa 'calidad' en lugar de 'rango'
+                'tipo': 'Armadura'
+            })
+
+    # Detalles de objetos
+    objetos_detalle = []
+    for objeto in get_all_objetos():
+        if objeto['nombre'] in contenido['objetos']:
+            objetos_detalle.append({
+                'nombre': objeto['nombre'],
+                'descripcion': objeto['descripcion'],
+                'otros': objeto['otros'],  
+            })
+
+    estados_detalle = []
+    for estado in get_all_estados():
+        if estado['nombre'] in contenido['estados']:
+            estados_detalle.append({
+                'nombre': estado['nombre'],
+                'efecto': estado['efecto'],
+            })
+
 
     return render_template(
         'ver_ficha.html',
         nombre_ficha=nombre_ficha,
-        contenido=contenido
+        contenido=contenido,
+        habilidades_detalle=habilidades_detalle,
+        armas_detalle=armas_detalle,
+        armaduras_detalle=armaduras_detalle,
+        objetos_detalle=objetos_detalle,
+        estados_detalle=estados_detalle,
     )
 
 @app.route('/fichas/modificar/<nombre_ficha>', methods=['GET', 'POST'])
@@ -126,11 +193,22 @@ def modificar_ficha(nombre_ficha):
     username = session['username']
 
     if request.method == 'GET':
-        contenido = obtener_contenido_de_archivo(username, nombre_ficha)
+        habilidades = [h['nombre'] for h in get_all_habilidades()]
+        estados = [e['nombre'] for e in get_all_estados()]
+        
+        lista_armas = [arma['nombre'] for arma in get_all_armas()]
+        lista_armaduras = [armadura['nombre'] for armadura in get_all_armaduras()]
+
+        nombres_objetos = lista_armas + lista_armaduras + [objeto['nombre'] for objeto in get_all_objetos()]
+        contenido = obtener_contenido_de_archivo(username, nombre_ficha)    
         return render_template(
             'modificar_ficha.html',
             nombre_ficha=nombre_ficha,
             contenido=contenido,
+            lista_habilidades=habilidades,
+            lista_estados=estados,
+            nombres_objetos=nombres_objetos,
+
         )
 
     if request.method == 'POST':
@@ -143,7 +221,7 @@ def modificar_ficha(nombre_ficha):
         alineamiento = request.form.get('alineamiento', 'Neutral')
         historia = request.form.get('historia', 'No')
         notas = request.form.get('notas', '')
-
+        
 
         fotoname = ""
         # Verificar si se subió una nueva foto
@@ -152,7 +230,7 @@ def modificar_ficha(nombre_ficha):
         # Si se sube una nueva foto
         if foto:
             # Crear el nombre de archivo con un formato único (usando el username y nombre del personaje)
-            fotoname = f"{username}_{request.form.get('nombreFicha')}.{foto.filename.split('.')[-1].lower()}"
+            fotoname = f"{username}_{nombre}.{foto.filename.split('.')[-1].lower()}"
             foto.save(os.path.join(UPLOAD_FOLDER, fotoname))  # Guardar la foto en la carpeta de subida
         else:
             # Si no se sube una nueva foto, mantener la foto anterior
@@ -167,36 +245,24 @@ def modificar_ficha(nombre_ficha):
         mana_maximo = int(request.form.get('mana_maxima', 10))
         stamina_actual = int(request.form.get('resistencia_actual', 10))
         stamina_maximo = int(request.form.get('resistencia_maxima', 10))
-
         sobrecarga = int(request.form.get('sobrecarga', 0))
         velocidad = int(request.form.get('velocidad', 30))
         armadura = int(request.form.get('armadura', 10))
         iniciativa = int(request.form.get('iniciativa', 0))
 
-        # Listas: espera que lleguen como cadenas separadas por comas
-        proficiencias_str = request.form.get('proficiencias', '15,15,15,15,15,15,15,15,15')
-        proficiencias = [int(x) for x in proficiencias_str.split(',') if x.strip().isdigit()]
+        proficiencias = request.form.getlist('proficiencias[]')
+        estadisticas = request.form.getlist('estadisticas[]')
 
-        estadisticas = [int(request.form.get(f'estadisticas[{i}]', '0')) for i in range(9)]
 
         ficha_publica = 'ficha_publica' in request.form
-        # Listas complejas que probablemente deban venir en JSON string
-        import json
-        habilidades = []
-        estados = []
-        objetos = []
-        equipamiento = []
-        dinero = [0, 0, 0, 0]
 
-        try:
-            habilidades = json.loads(request.form.get('habilidades', '[]'))
-            estados = json.loads(request.form.get('estados', '[]'))
-            objetos = json.loads(request.form.get('objetos', '[]'))
-            equipamiento = json.loads(request.form.get('equipamiento', '[]'))
-            dinero = json.loads(request.form.get('dinero', '[0,0,0,0]'))
-        except Exception:
-            pass  # Si no viene bien, quedan vacíos o default
+        habilidades = request.form.getlist('habilidades[]')
+        estados = request.form.getlist('estados[]')
+        objetos = request.form.getlist('objetos[]')
+        equipo = request.form.getlist('equipo[]')
+        dinero = request.form.getlist('dinero[]')
 
+        print(habilidades)
         datos_ficha = {
             "nombre": nombre,
             "nivel": nivel,
@@ -219,7 +285,7 @@ def modificar_ficha(nombre_ficha):
             "habilidades": habilidades,
             "estados": estados,
             "objetos": objetos,
-            "equipamiento": equipamiento,
+            "equipamiento": equipo,
             "dinero": dinero
         }
 
