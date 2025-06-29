@@ -28,32 +28,67 @@ async function crearFicha() {
         magia: 'Ninguna',
         talento: 'Ninguno',
         alineamiento: 'Neutral',
-        vida: { actual: 10, maximo: 10 },
-        mana: { actual: 10, maximo: 10 },
-        stamina: { actual: 10, maximo: 10 },
-        especial: { nombre: "", actual: 10, maximo: 10 },
+
+        vida: {
+            heridas_posibles: [0,0,0],
+            heridas: {
+                cabeza:       [{ leves: 0, graves: 0, letales: 0 }],
+                torso:        [{ leves: 0, graves: 0, letales: 0 }],
+                brazo_izquierdo: [{ leves: 0, graves: 0, letales: 0 }],
+                brazo_derecho:  [{ leves: 0, graves: 0, letales: 0 }],
+                pierna_izquierda: [{ leves: 0, graves: 0, letales: 0 }],
+                pierna_derecha:   [{ leves: 0, graves: 0, letales: 0 }]
+            }
+        },
+
+        mana: {
+            reservas: "Medias",
+            acciones: {
+                actuales: 0,
+                maximas: 0
+            }
+        },
+
+        stamina: {
+            reservas: "Altas",
+            acciones: {
+                actuales: 0,
+                maximas: 0
+            }
+        },
+
+        especial: {
+            nombre: "",
+            actual: 10,
+            maximo: 10
+        },
+
         sobrecarga: 0,
         velocidad: 30,
         armadura: 10,
         iniciativa: 0,
-        historia: 'No',
-        foto : "",
-        notas : "",
+        historia: "No",
+        foto: "",
+        notas: "",
+
         Proficiencias: [
-            15,15,15,
-            15,15,15,
-            15,15,15,
+            15, 15, 15,
+            15, 15, 15,
+            15, 15, 15
         ],
+
         estadisticas: [
-            0,0,0,
-            0,0,0,
-            0,0,0
+            0, 0, 0,
+            0, 0, 0,
+            0, 0, 0
         ],
+
         habilidades: [],
         estados: [],
         objetos: [],
         equipamiento: [],
-        dinero: [0, 0, 0, 0] //[cobre, plata, oro, platino]
+
+        dinero: [0, 0, 0, 0] // cobre, plata, oro, platino
     };
 
     // Enviar solicitud AJAX para crear la ficha con contenido inicial

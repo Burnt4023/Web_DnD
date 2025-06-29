@@ -67,36 +67,63 @@
           <div>
             <h2 class="text-2xl font-semibold mb-4 border-b border-gray-600 pb-2">Estadísticas de Vida</h2>
             <!-- Vida -->
-            <div class="mb-4">
-              <label for="vida_actual" class="block text-sm font-medium">Vida Actual:</label>
-              <input type="number" id="vida_actual" name="vida_actual" value="{{ contenido['vida']['actual'] }}" required class="w-full p-2 mt-1 bg-gray-700 rounded-lg">
-            </div>
-            <div class="mb-4">
-              <label for="vida_maxima" class="block text-sm font-medium">Vida Máxima:</label>
-              <input type="number" id="vida_maxima" name="vida_maxima" value="{{ contenido['vida']['maximo'] }}" required class="w-full p-2 mt-1 bg-gray-700 rounded-lg">
-            </div>
-            <h2 class="text-2xl font-semibold mt-8 mb-4 border-b border-gray-600 pb-2">Maná y Stamina</h2>
-            <!-- Maná -->
-            <div class="mb-4 grid grid-cols-2 gap-4">
+             <div class="mt-4 mb-6">
+            <h3 class="font-bold mb-2">Heridas posibles</h3>
+            <div class="grid grid-cols-3 gap-4 max-w-xs">
               <div>
-                <label for="mana_actual" class="block text-sm font-medium">Maná Actual:</label>
-                <input type="number" id="mana_actual" name="mana_actual" value="{{ contenido['mana']['actual'] }}" required class="w-full p-2 mt-1 bg-gray-700 rounded-lg">
+                <label for="heridas_leves_posibles" class="block text-sm capitalize">Leves:</label>
+                <input type="number" id="heridas_leves_posibles" name="heridas_leves_posibles" value="{{ contenido['vida']['heridas_posibles'][0] }}" class="w-full p-1 bg-gray-700 rounded">
               </div>
               <div>
-                <label for="mana_maximo" class="block text-sm font-medium">Maná Máximo:</label>
-                <input type="number" id="mana_maximo" name="mana_maximo" value="{{ contenido['mana']['maximo'] }}" required class="w-full p-2 mt-1 bg-gray-700 rounded-lg">
+                <label for="heridas_graves_posibles" class="block text-sm capitalize">Graves:</label>
+                <input type="number" id="heridas_graves_posibles" name="heridas_graves_posibles" value="{{ contenido['vida']['heridas_posibles'][1] }}" class="w-full p-1 bg-gray-700 rounded">
+              </div>
+              <div>
+                <label for="heridas_letales_posibles" class="block text-sm capitalize">Letales:</label>
+                <input type="number" id="heridas_letales_posibles" name="heridas_letales_posibles" value="{{ contenido['vida']['heridas_posibles'][2] }}" class="w-full p-1 bg-gray-700 rounded">
+              </div>
+            </div>
+          </div>
+
+
+            <div class="grid grid-cols-3 gap-4">
+              {% for zona in ['cabeza','torso','brazo_izquierdo','brazo_derecho','pierna_izquierda','pierna_derecha'] %}
+                <div>
+                  <h3 class="font-bold mb-2 capitalize">{{ zona.replace('_',' ') }}</h3>
+                  {% for tipo in ['leves','graves','letales'] %}
+                    <label for="herida_{{ zona }}_{{ tipo }}" class="block text-sm">{{ tipo.capitalize() }}:</label>
+                    <input type="number" id="herida_{{ zona }}_{{ tipo }}" name="herida_{{ zona }}_{{ tipo }}" value="{{ contenido['vida']['heridas'][zona][0][tipo] }}" class="w-full p-1 mb-2 bg-gray-700 rounded">
+                  {% endfor %}
+                </div>
+              {% endfor %}
+            </div>
+
+
+            <!-- Maná -->
+            <h2 class="text-2xl font-semibold mt-8 mb-4 border-b border-gray-600 pb-2">Maná y Stamina</h2>
+            
+            
+            <div class="mb-4 grid grid-cols-3 gap-4">
+              <div>
+                <label for="mana_acciones_actuales" class="block text-sm font-medium">Acciones Maná Actuales:</label>
+                <input type="number" id="acciones_mana_actuales" name="acciones_mana_actuales" value="{{ contenido['mana']['acciones']['actuales'] }}" required class="w-full p-2 mt-1 bg-gray-700 rounded-lg">
+              </div>
+              <div>
+                <label for="mana_acciones_maximas" class="block text-sm font-medium">Acciones Maná Máximas:</label>
+                <input type="number" id="acciones_mana_maximas" name="acciones_mana_maximas" value="{{ contenido['mana']['acciones']['maximas'] }}" required class="w-full p-2 mt-1 bg-gray-700 rounded-lg">
               </div>
             </div>
             <!-- Stamina -->
-            <div class="mb-4 grid grid-cols-2 gap-4">
+            <div class="mb-4 grid grid-cols-3 gap-4">
               <div>
-                <label for="resistencia_actual" class="block text-sm font-medium">Stamina Actual:</label>
-                <input type="number" id="resistencia_actual" name="resistencia_actual" value="{{ contenido['stamina']['actual'] }}" required class="w-full p-2 mt-1 bg-gray-700 rounded-lg">
+                <label for="stamina_acciones_actuales" class="block text-sm font-medium">Acciones Stamina Actuales:</label>
+                <input type="number" id="acciones_stamina_actuales" name="acciones_stamina_actuales" value="{{ contenido['stamina']['acciones']['actuales'] }}" required class="w-full p-2 mt-1 bg-gray-700 rounded-lg">
               </div>
               <div>
-                <label for="resistencia_maxima" class="block text-sm font-medium">Stamina Máxima:</label>
-                <input type="number" id="resistencia_maxima" name="resistencia_maxima" value="{{ contenido['stamina']['maximo'] }}" required class="w-full p-2 mt-1 bg-gray-700 rounded-lg">
+                <label for="stamina_acciones_maximas" class="block text-sm font-medium">Acciones Stamina Máximas:</label>
+                <input type="number" id="acciones_stamina_maximas" name="acciones_stamina_maximas" value="{{ contenido['stamina']['acciones']['maximas'] }}" required class="w-full p-2 mt-1 bg-gray-700 rounded-lg">
               </div>
+            </div>
               <!-- Estados -->
               <h2 class="text-2xl font-semibold mt-8 mb-4 border-b border-gray-600 pb-2">Estados</h2>
               <div></div>

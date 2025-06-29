@@ -64,9 +64,30 @@
       <div class="flex-1">
         <h2 class="text-2xl font-semibold border-b pb-2 mb-4">Datos adicionales</h2>
         <div class="grid grid-cols-3 gap-4">
-          <p><span class="font-bold">Vida:</span><br> {{ contenido['vida']['actual'] }} / {{ contenido['vida']['maximo'] }}</p>
-          <p><span class="font-bold">Mana:</span><br> {{ contenido['mana']['actual'] }} / {{ contenido['mana']['maximo'] }}</p>
-          <p><span class="font-bold">Stamina:</span> <br>{{ contenido['stamina']['actual'] }} / {{ contenido['stamina']['maximo'] }}</p>
+          
+          <!-- Vida -->
+          <ul>
+            <p><strong>Heridas posibles:</strong> leves {{ contenido['vida']['heridas_posibles'][0] }}, graves {{ contenido['vida']['heridas_posibles'][1] }}, letales {{ contenido['vida']['heridas_posibles'][2] }}</p>
+            {% for zona, lista_heridas in contenido['vida']['heridas'].items() %}
+              {% set heridas = lista_heridas[0] %}
+              <li>
+                {{ zona.replace('_', ' ').capitalize() }}: leves {{ heridas.leves }}, graves {{ heridas.graves }}, letales {{ heridas.letales }}
+              </li>
+            {% endfor %}
+          </ul>
+          <!-- Maná -->
+          <p><span class="font-bold">Mana:</span><br>
+            {{ contenido['mana']['acciones']['actuales'] }} / {{ contenido['mana']['acciones']['maximas'] }} 
+            <br>
+            <em>Reservas:</em> {{ contenido['mana']['reservas'] }}
+          <!-- Stamina -->
+          <p><span class="font-bold">Stamina:</span><br>
+            {{ contenido['stamina']['acciones']['actuales'] }} / {{ contenido['stamina']['acciones']['maximas'] }}
+            <br>
+            <em>Reservas:</em> {{ contenido['stamina']['reservas'] }}
+          </p>
+
+
           <p><span class="font-bold">Sobrecarga:</span> <br>{{ contenido['sobrecarga'] }}</p>
           <p><span class="font-bold">Velocidad:</span> <br>{{ contenido['velocidad'] }}</p>
           <p><span class="font-bold">Iniciativa:</span> <br>{{ contenido['iniciativa'] }}</p>

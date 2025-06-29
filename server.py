@@ -111,8 +111,6 @@ def ver_ficha(owner_username, nombre_ficha):
 
     contenido = obtener_contenido_de_archivo(owner_username, nombre_ficha)
 
-
-    
     if contenido is None:
         return "Ficha no encontrada o archivo corrupto", 404
 
@@ -131,8 +129,6 @@ def ver_ficha(owner_username, nombre_ficha):
             }
 
     talento = get_talento(contenido['talento'])
-
-    print(talento)
     # Obtener todos los objetos de la base de datos (armas, armaduras, objetos)
     armas_detalle = []
     for arma in get_all_armas():
@@ -186,6 +182,7 @@ def ver_ficha(owner_username, nombre_ficha):
         estados_detalle=estados_detalle,
         talento=talento,
     )
+
 
 @app.route('/fichas/modificar/<nombre_ficha>', methods=['GET', 'POST'])
 def modificar_ficha(nombre_ficha):
@@ -241,17 +238,42 @@ def modificar_ficha(nombre_ficha):
 
         
 
-        # Campos compuestos
-        vida_actual = int(request.form.get('vida_actual', 10))
-        vida_maximo = int(request.form.get('vida_maxima', 10))
-        mana_actual = int(request.form.get('mana_actual', 10))
-        mana_maximo = int(request.form.get('mana_maxima', 10))
-        stamina_actual = int(request.form.get('resistencia_actual', 10))
-        stamina_maximo = int(request.form.get('resistencia_maxima', 10))
-        sobrecarga = int(request.form.get('sobrecarga', 0))
-        velocidad = int(request.form.get('velocidad', 30))
-        armadura = int(request.form.get('armadura', 10))
-        iniciativa = int(request.form.get('iniciativa', 0))
+
+        # Maná
+        acciones_mana_actuales = int(request.form.get('acciones_mana_actuales', 0))
+        acciones_mana_maximas = int(request.form.get('acciones_mana_maximas', 0))
+
+        porcentaje_mana = (acciones_mana_actuales / acciones_mana_maximas) * 100 if acciones_mana_maximas > 0 else 0
+
+        if porcentaje_mana == 0:
+            reservas_mana = "Vacías"
+        elif porcentaje_mana <= 30:
+            reservas_mana = "Bajas"
+        elif porcentaje_mana <= 70:
+            reservas_mana = "Medias"
+        else:
+            reservas_mana = "Altas"
+
+        # Stamina
+        acciones_stamina_actuales = int(request.form.get('acciones_stamina_actuales', 0))
+        acciones_stamina_maximas = int(request.form.get('acciones_stamina_maximas', 0))
+
+        porcentaje_stamina = (acciones_stamina_actuales / acciones_stamina_maximas) * 100 if acciones_stamina_maximas > 0 else 0
+
+        if porcentaje_stamina == 0:
+            reservas_stamina = "Vacías"
+        elif porcentaje_stamina <= 30:
+            reservas_stamina = "Bajas"
+        elif porcentaje_stamina <= 70:
+            reservas_stamina = "Medias"
+        else:
+            reservas_stamina = "Altas"
+
+
+        sobrecarga = request.form.get('sobrecarga', 0)
+        velocidad = request.form.get('velocidad', 30)
+        armadura = request.form.get('armadura', 10)
+        iniciativa = request.form.get('iniciativa', 0)
 
         proficiencias = request.form.getlist('proficiencias[]')
         estadisticas = request.form.getlist('estadisticas[]')
@@ -265,7 +287,6 @@ def modificar_ficha(nombre_ficha):
         equipo = request.form.getlist('equipo[]')
         dinero = request.form.getlist('dinero[]')
 
-        print(habilidades)
         datos_ficha = {
             "nombre": nombre,
             "nivel": nivel,
@@ -273,10 +294,64 @@ def modificar_ficha(nombre_ficha):
             "magia": magia,
             "talento": talento,
             "alineamiento": alineamiento,
-            "vida": {"actual": vida_actual, "maximo": vida_maximo},
-            "mana": {"actual": mana_actual, "maximo": mana_maximo},
-            "stamina": {"actual": stamina_actual, "maximo": stamina_maximo},
-            "especial": {"nombre": especial_nombre, "actual": especial_actual, "maximo": especial_maximo},
+
+        "vida" : {
+            "heridas_posibles": [int(request.form.get("heridas_leves_posibles", 0)), int(request.form.get("heridas_graves_posibles", 0)), int(request.form.get("heridas_letales_posibles", 0))],
+            "heridas": {
+                "cabeza": [{
+                    "leves": int(request.form.get("herida_cabeza_leves", 0)),
+                    "graves": int(request.form.get("herida_cabeza_graves", 0)),
+                    "letales": int(request.form.get("herida_cabeza_letales", 0))
+                }],
+                "torso": [{
+                    "leves": int(request.form.get("herida_torso_leves", 0)),
+                    "graves": int(request.form.get("herida_torso_graves", 0)),
+                    "letales": int(request.form.get("herida_torso_letales", 0))
+                }],
+                "brazo_izquierdo": [{
+                    "leves": int(request.form.get("herida_brazo_izquierdo_leves", 0)),
+                    "graves": int(request.form.get("herida_brazo_izquierdo_graves", 0)),
+                    "letales": int(request.form.get("herida_brazo_izquierdo_letales", 0))
+                }],
+                "brazo_derecho": [{
+                    "leves": int(request.form.get("herida_brazo_derecho_leves", 0)),
+                    "graves": int(request.form.get("herida_brazo_derecho_graves", 0)),
+                    "letales": int(request.form.get("herida_brazo_derecho_letales", 0))
+                }],
+                "pierna_izquierda": [{
+                    "leves": int(request.form.get("herida_pierna_izquierda_leves", 0)),
+                    "graves": int(request.form.get("herida_pierna_izquierda_graves", 0)),
+                    "letales": int(request.form.get("herida_pierna_izquierda_letales", 0))
+                }],
+                "pierna_derecha": [{
+                    "leves": int(request.form.get("herida_pierna_derecha_leves", 0)),
+                    "graves": int(request.form.get("herida_pierna_derecha_graves", 0)),
+                    "letales": int(request.form.get("herida_pierna_derecha_letales", 0))
+                }]
+            }
+        },
+            "mana": {
+                "reservas": reservas_mana,
+                "acciones": {
+                    "actuales": acciones_mana_actuales,
+                    "maximas": acciones_mana_maximas
+                }
+            },
+
+            "stamina": {
+                "reservas": reservas_stamina,
+                "acciones": {
+                    "actuales": acciones_stamina_actuales,
+                    "maximas": acciones_stamina_maximas
+                }
+            },
+
+            "especial": {
+                "nombre": especial_nombre,
+                "actual": especial_actual,
+                "maximo": especial_maximo
+            },
+
             "sobrecarga": sobrecarga,
             "velocidad": velocidad,
             "armadura": armadura,
@@ -290,8 +365,8 @@ def modificar_ficha(nombre_ficha):
             "estados": estados,
             "objetos": objetos,
             "equipamiento": equipo,
-            "dinero": dinero
-        }
+            "dinero": dinero  # [cobre, plata, oro, platino]
+    }
 
         # Guardar el JSON con función que implementes
         exito = actualizar_ficha_en_bd(username, nombre_ficha, datos_ficha, ficha_publica, fotoname)
@@ -697,24 +772,6 @@ def wiki_magia_vacia():
         return redirect(url_for('login'))  # Redirigir al login
     return render_template('wiki/magias/magia_vacia.html')
 
-
-
-
-
-
-
-@app.route('/wiki/magia/<magia_nombre>')
-def wiki_magia_hechizos(magia_nombre):
-    if 'username' not in session:
-        flash('No has iniciado sesión.', 'error')
-        return redirect(url_for('login'))
-    print(magia_nombre)
-    hechizos = get_hechizos_magia(magia_nombre)  # Obtener hechizos de la magia
-    if not hechizos:
-        flash(f"No se encontraron hechizos para '{magia_nombre}'.", 'error')
-        return redirect(url_for('wiki_magia_vacia'))  # Redirigir a la lista de magias
-
-    return render_template('wiki/magias/magia_hechizos.html', hechizos=hechizos, magia_nombre=magia_nombre)
 
 
 ######################### WIKI PARA RAZAS ###################################

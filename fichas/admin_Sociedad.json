@@ -6,26 +6,79 @@
     "talento": "Modo Sexo",
     "alineamiento": "Neutral",
     "vida": {
-        "actual": 10,
-        "maximo": 1111
+        "heridas_posibles": [
+            1,
+            1,
+            1
+        ],
+        "heridas": {
+            "cabeza": [
+                {
+                    "leves": 1,
+                    "graves": 1,
+                    "letales": 1
+                }
+            ],
+            "torso": [
+                {
+                    "leves": 1,
+                    "graves": 1,
+                    "letales": 1
+                }
+            ],
+            "brazo_izquierdo": [
+                {
+                    "leves": 0,
+                    "graves": 0,
+                    "letales": 0
+                }
+            ],
+            "brazo_derecho": [
+                {
+                    "leves": 0,
+                    "graves": 0,
+                    "letales": 0
+                }
+            ],
+            "pierna_izquierda": [
+                {
+                    "leves": 0,
+                    "graves": 0,
+                    "letales": 0
+                }
+            ],
+            "pierna_derecha": [
+                {
+                    "leves": 0,
+                    "graves": 0,
+                    "letales": 0
+                }
+            ]
+        }
     },
     "mana": {
-        "actual": 10,
-        "maximo": 10
+        "reservas": "Altas",
+        "acciones": {
+            "actuales": 1,
+            "maximas": 1
+        }
     },
     "stamina": {
-        "actual": 10,
-        "maximo": 11
+        "reservas": "Altas",
+        "acciones": {
+            "actuales": 1,
+            "maximas": 1
+        }
     },
     "especial": {
         "nombre": "Caosidad",
         "actual": 15,
         "maximo": 20
     },
-    "sobrecarga": 5,
-    "velocidad": 30,
+    "sobrecarga": "5",
+    "velocidad": "30",
     "armadura": 10,
-    "iniciativa": 2,
+    "iniciativa": "2",
     "historia": "No",
     "foto": "admin_Sociedad.png",
     "notas": "aaa",
