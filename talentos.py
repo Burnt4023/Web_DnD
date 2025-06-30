@@ -13,11 +13,8 @@ def crear_tabla_talentos():
                 coste TEXT NOT NULL,
                 rango INTEGER NOT NULL,
                 duracion TEXT NOT NULL,
-                casteo TEXT NOT NULL,
-                descripcion TEXT NOT NULL,
-                clase TEXT,
-                raza TEXT,
-                otro TEXT
+                tipo TEXT NOT NULL,
+                descripcion TEXT NOT NULL
             )
         ''')
         conn.commit()
